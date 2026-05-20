@@ -62,11 +62,13 @@ export const contributeLight = async (id) => {
       headers: { 'Content-Type': 'application/json' },
     });
     return handleResponse(response);
-  } catch {
-    // Fallback for GitHub Pages - just increment locally for demo
-    const currentLights = JSON.parse(localStorage.getItem('memoryStore:fallbackLights') || JSON.stringify(FALLBACK_LIGHTS));
+  } catch (error) {
+    // Fallback for GitHub Pages/Netlify - just increment locally for demo
+    console.warn('API call failed, using local fallback:', error);
+    const fallbackKey = 'memoryStore:fallbackLights';
+    const currentLights = JSON.parse(localStorage.getItem(fallbackKey) || JSON.stringify(FALLBACK_LIGHTS));
     currentLights[id] = (currentLights[id] || 0) + 1;
-    localStorage.setItem('memoryStore:fallbackLights', JSON.stringify(currentLights));
+    localStorage.setItem(fallbackKey, JSON.stringify(currentLights));
     return { light: currentLights[id] };
   }
 };

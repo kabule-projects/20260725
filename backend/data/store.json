@@ -188,7 +188,7 @@
       "description": "A memory not yet made. The future awaits its story to be written. Contribute light to unlock what lies ahead.",
       "image": "/images/2026.jpg",
       "gameType": "scratch",
-      "light": 0,
+      "light": 2,
       "brightness": 0,
       "locked": true,
       "moreInfo": {
@@ -215,6 +215,9 @@
     },
     "2020:::1": {
       "timestamp": 1779284779988
+    },
+    "2026:::1": {
+      "timestamp": 1779289728570
     }
   }
 }

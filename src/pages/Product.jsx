@@ -58,12 +58,17 @@ const Product = ({ lights, setLights }) => {
       // Save cooldown timestamp to localStorage
       localStorage.setItem(COOLDOWN_KEY(id), Date.now().toString());
       // setCooldown(600);
-setCooldown(30);
+      setCooldown(30);
+      // Reset gameCompleted after successful contribution
+      setGameCompleted(false);
     } catch (error) {
       // handle backend cooldown as fallback
       if (error.status === 429) {
         localStorage.setItem(COOLDOWN_KEY(id), (Date.now() - error.remaining * 1000).toString());
         setCooldown(error.remaining);
+      } else {
+        // Reset game state on failure so user can try again
+        setGameCompleted(false);
       }
       console.error('Failed to contribute light:', error);
     } finally {
