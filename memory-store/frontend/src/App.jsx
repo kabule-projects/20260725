@@ -1,9 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Product from './pages/Product';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
+
+function ScrollToTop() {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
+}
 
 function App() {
   const [lights, setLights] = useState({});
@@ -42,7 +50,8 @@ function App() {
       </div>
 
       <div className="relative z-10">
-        <Routes>
+        <ScrollToTop />
+      <Routes>
           <Route path="/" element={<Home lights={lights} />} />
           <Route path="/product/:id" element={<Product lights={lights} setLights={setLights} />} />
         </Routes>
