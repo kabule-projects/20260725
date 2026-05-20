@@ -48,7 +48,7 @@ const isOnCooldown = (productId, ip) => {
   if (!cooldown) return false;
 
   const elapsed = Date.now() - cooldown.timestamp;
-  return elapsed < 10 * 60 * 1000;
+  return elapsed < 30 * 1000; // return elapsed < 10 * 60 * 1000;
 };
 
 const getRemainingCooldown = (productId, ip) => {
@@ -59,7 +59,7 @@ const getRemainingCooldown = (productId, ip) => {
   if (!cooldown) return 0;
 
   const elapsed = Date.now() - cooldown.timestamp;
-  const remaining = Math.max(0, 10 * 60 * 1000 - elapsed);
+  const remaining = Math.max(0, 30 * 1000 - elapsed); // const remaining = Math.max(0, 10 * 60 * 1000 - elapsed);
   return Math.ceil(remaining / 1000);
 };
 

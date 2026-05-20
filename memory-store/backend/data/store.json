@@ -23,7 +23,7 @@
       "description": "Voices multiplying, echoes reaching further. The first steps toward something extraordinary, each note building castles in the air.",
       "image": "/images/2015.jpg",
       "gameType": "drag",
-      "light": 1,
+      "light": 2,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2015-reveal.jpg",
@@ -199,7 +199,7 @@
   ],
   "cooldowns": {
     "2015:::1": {
-      "timestamp": 1779271819927
+      "timestamp": 1779280391252
     },
     "2016:::1": {
       "timestamp": 1779210787113

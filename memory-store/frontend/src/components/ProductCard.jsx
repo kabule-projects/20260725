@@ -76,7 +76,8 @@ const ProductCard = ({ product, light = 0, index }) => {
                 <motion.div
                   className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
                   initial={{ width: 0 }}
-                  animate={{ width: `${Math.min((light / 500) * 100, 100)}%` }}
+                  // animate={{ width: `${Math.min((light / 500) * 100, 100)}%` }}
+                  animate={{ width: `${Math.min((light / 5) * 100, 100)}%` }}
                   transition={{ duration: 0.8 }}
                 />
               </div>

@@ -5,6 +5,23 @@ import Product from './pages/Product';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
 
+const VERSION = 1;
+const VERSION_KEY = 'memoryStore:version';
+
+function clearOldData() {
+  Object.keys(localStorage)
+    .filter(k => k.startsWith('memoryStore:'))
+    .forEach(k => localStorage.removeItem(k));
+  localStorage.setItem(VERSION_KEY, VERSION.toString());
+}
+
+function checkVersion() {
+  const stored = localStorage.getItem(VERSION_KEY);
+  if (stored === null || parseInt(stored) < VERSION) {
+    clearOldData();
+  }
+}
+
 function ScrollToTop() {
   const location = useLocation();
   useEffect(() => {
@@ -15,6 +32,10 @@ function ScrollToTop() {
 
 function App() {
   const [lights, setLights] = useState({});
+
+  useEffect(() => {
+    checkVersion();
+  }, []);
 
   const updateLights = async () => {
     try {

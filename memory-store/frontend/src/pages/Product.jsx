@@ -36,6 +36,8 @@ const Product = ({ lights, setLights }) => {
         setCooldown((prev) => Math.max(0, prev - 1));
       }, 1000);
       return () => clearInterval(timer);
+    } else if (cooldown === 0) {
+      setGameCompleted(false);
     }
   }, [cooldown]);
 
