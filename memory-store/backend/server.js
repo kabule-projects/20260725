@@ -122,7 +122,7 @@ app.post('/api/products/:id/light', (req, res) => {
     const clientIP = getClientIP(req);
 
     if (isOnCooldown(productId, clientIP)) {
-      const remaining = 10 * 60 * 1000 - (Date.now() - readData().cooldowns[`${productId}:${clientIP}`].timestamp);
+      const remaining = 30 * 1000 - (Date.now() - readData().cooldowns[`${productId}:${clientIP}`].timestamp); // const remaining = 10 * 60 * 1000 - (Date.now() - readData().cooldowns[`${productId}:${clientIP}`].timestamp);
       return res.status(429).json({
         error: 'Cooldown active',
         remaining: Math.ceil(remaining / 1000)

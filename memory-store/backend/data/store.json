@@ -23,7 +23,7 @@
       "description": "Voices multiplying, echoes reaching further. The first steps toward something extraordinary, each note building castles in the air.",
       "image": "/images/2015.jpg",
       "gameType": "drag",
-      "light": 2,
+      "light": 5,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2015-reveal.jpg",
@@ -98,7 +98,7 @@
       "description": "Stars that shine even when the world sleeps. In silence, new dimensions of sound were discovered.",
       "image": "/images/2020.jpg",
       "gameType": "hold",
-      "light": 1,
+      "light": 4,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2020-reveal.jpg",
@@ -199,7 +199,7 @@
   ],
   "cooldowns": {
     "2015:::1": {
-      "timestamp": 1779280391252
+      "timestamp": 1779281778571
     },
     "2016:::1": {
       "timestamp": 1779210787113
@@ -208,10 +208,13 @@
       "timestamp": 1779210886763
     },
     "2015:::ffff:127.0.0.1": {
-      "timestamp": 1779212379602
+      "timestamp": 1779282070290
     },
     "2020:::ffff:127.0.0.1": {
-      "timestamp": 1779215773320
+      "timestamp": 1779282180860
+    },
+    "2020:::1": {
+      "timestamp": 1779281412000
     }
   }
 }

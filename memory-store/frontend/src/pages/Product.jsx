@@ -19,6 +19,7 @@ const Product = ({ lights, setLights }) => {
   const [contributing, setContributing] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [localFeedback, setLocalFeedback] = useState(false);
+  const [cooldownRestored, setCooldownRestored] = useState(false);
 
   useEffect(() => {
     // Check localStorage for local cooldown
@@ -28,6 +29,7 @@ const Product = ({ lights, setLights }) => {
       const remaining = Math.max(0, Math.ceil((COOLDOWN_DURATION - elapsed) / 1000));
       setCooldown(remaining);
     }
+    setCooldownRestored(true);
   }, [id]);
 
   useEffect(() => {
@@ -194,10 +196,11 @@ setCooldown(30);
             </div>
           )}
 
-          <div className="memory-card rounded-xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-memory-accent font-medium">帮助回忆</h2>
-            </div>
+          {!isFullyIlluminated && (
+            <div className="memory-card rounded-xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-memory-accent font-medium">加入回忆</h2>
+              </div>
 
             {product.locked ? (
               <div className="text-center py-8 space-y-4">
@@ -230,6 +233,10 @@ setCooldown(30);
                   ✧
                 </motion.div>
                 <p className="text-memory-glow mt-4">米子星正在发光...</p>
+              </div>
+            ) : !cooldownRestored ? (
+              <div className="text-center py-8 space-y-4">
+                <p className="text-memory-muted">检查中...</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -265,27 +272,30 @@ setCooldown(30);
               </div>
             )}
           </div>
+          )}
 
-          <div className="memory-card rounded-xl p-4">
-            <div className="flex items-center gap-3">
-              <span className="text-memory-accent">✧</span>
-              <div className="flex-1">
-                <div className="h-2 bg-memory-dark rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
-                    initial={{ width: 0 }}
-                    animate={{
-                      width: `${Math.min((currentLight / 5) * 100, 100)}%` // width: `${Math.min((currentLight / 500) * 100, 100)}%`,
-                    }}
-                    transition={{ duration: 0.8 }}
-                  />
+          {!isFullyIlluminated && (
+            <div className="memory-card rounded-xl p-4">
+              <div className="flex items-center gap-3">
+                <span className="text-memory-accent">✧</span>
+                <div className="flex-1">
+                  <div className="h-2 bg-memory-dark rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${Math.min((currentLight / 5) * 100, 100)}%` // width: `${Math.min((currentLight / 500) * 100, 100)}%`,
+                      }}
+                      transition={{ duration: 0.8 }}
+                    />
+                  </div>
                 </div>
+                <span className="text-memory-muted text-xs">
+                  已刻印{Math.min(Math.round((currentLight / 5) * 100), 100)}%
+                </span> 
               </div>
-              <span className="text-memory-muted text-xs">
-                已刻印{Math.min(Math.round((currentLight / 5) * 100), 100)}%
-              </span> 
             </div>
-          </div>
+          )}
         </motion.div>
       </main>
     </div>
