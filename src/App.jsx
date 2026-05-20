@@ -5,7 +5,7 @@ import Product from './pages/Product';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
 
-const VERSION = 4;
+const VERSION = 5;
 const VERSION_KEY = 'memoryStore:version';
 
 function clearOldData() {
