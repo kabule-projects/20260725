@@ -38,7 +38,7 @@
       "description": "Stars aligning, constellations forming. A year where artistry blossomed into something cosmic and unreachable.",
       "image": "/images/2016.jpg",
       "gameType": "hold",
-      "light": 0,
+      "light": 1,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2016-reveal.jpg",
@@ -202,7 +202,7 @@
       "timestamp": 1779281778571
     },
     "2016:::1": {
-      "timestamp": 1779210787113
+      "timestamp": 1779287889835
     },
     "2017:::1": {
       "timestamp": 1779210886763
