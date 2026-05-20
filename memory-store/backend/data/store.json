@@ -1,0 +1,217 @@
+{
+  "products": [
+    {
+      "id": "2014",
+      "year": 2014,
+      "title": "The First Light",
+      "branch": "Debut Year",
+      "description": "Where it all began. A quiet beginning that would soon illuminate the world. The first whisper of a voice that would become a chorus.",
+      "image": "/images/2014.jpg",
+      "gameType": "scratch",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2014-reveal.jpg",
+        "text": "A debut performance that caught the industry by surprise. The voice that would define a generation made its first mark, singing at a small venue where only 50 people witnessed the birth of a legend. Those 50 became the first of millions."
+      }
+    },
+    {
+      "id": "2015",
+      "year": 2015,
+      "title": "Rising Echoes",
+      "branch": "Breakthrough",
+      "description": "Voices multiplying, echoes reaching further. The first steps toward something extraordinary, each note building castles in the air.",
+      "image": "/images/2015.jpg",
+      "gameType": "drag",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2015-reveal.jpg",
+        "text": "The breakout year. Music awards began to notice, and songs started appearing on charts across Asia. The voice that was once a secret shared among a few became a phenomenon that radio stations couldn't ignore."
+      }
+    },
+    {
+      "id": "2016",
+      "year": 2016,
+      "title": "Constellation Bloom",
+      "branch": "Artistic Expansion",
+      "description": "Stars aligning, constellations forming. A year where artistry blossomed into something cosmic and unreachable.",
+      "image": "/images/2016.jpg",
+      "gameType": "hold",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2016-reveal.jpg",
+        "text": "Collaborations with legendary composers. Experimental sounds that defied categorization. This was the year the artistic identity truly solidified—not just a voice, but a complete artistic vision that blending tradition with innovation."
+      }
+    },
+    {
+      "id": "2017",
+      "year": 2017,
+      "title": "Midnight Garden",
+      "branch": "Deep Connection",
+      "description": "A garden that blooms only at midnight, where each flower holds a secret melody. Something precious grew in the darkness.",
+      "image": "/images/2017.jpg",
+      "gameType": "hidden",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2017-reveal.jpg",
+        "text": "Sold-out concerts where every seat was filled with someone who understood. The midnight metaphor became real—performances that ended in the small hours, where the audience and artist seemed to exist in their own private universe."
+      }
+    },
+    {
+      "id": "2018",
+      "year": 2018,
+      "title": "Phoenix Rise",
+      "branch": "Triumphant Return",
+      "description": "From ashes, a phoenix sings. A year of rebirth and revelation, when old flames transformed into new light.",
+      "image": "/images/2018.jpg",
+      "gameType": "scratch",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2018-reveal.jpg",
+        "text": "After a period of silence, the return was nothing short of triumphant. Every performance felt like a resurrection, every note carrying the weight of what was overcome. The phoenix metaphor wasn't just artistic— it was personal."
+      }
+    },
+    {
+      "id": "2019",
+      "year": 2019,
+      "title": "Ocean of Dreams",
+      "branch": "Global Recognition",
+      "description": "Waves carrying dreams across oceans. The world began to listen to a voice that transcended boundaries and languages.",
+      "image": "/images/2019.jpg",
+      "gameType": "drag",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2019-reveal.jpg",
+        "text": "International collaborations. Performances at global festivals. The dreams didn't just stay local anymore—they traveled across oceans, finding resonance in hearts that had never heard this voice before. A true global citizen of music."
+      }
+    },
+    {
+      "id": "2020",
+      "year": 2020,
+      "title": "Silent Stars",
+      "branch": "Solitude & Reflection",
+      "description": "Stars that shine even when the world sleeps. In silence, new dimensions of sound were discovered.",
+      "image": "/images/2020.jpg",
+      "gameType": "hold",
+      "light": 1,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2020-reveal.jpg",
+        "text": "The year the world stood still, but creativity didn't. Intimate studio sessions, stripped-down performances, and songs written in solitude that connected millions who were also alone. Light found even in the darkest silence."
+      }
+    },
+    {
+      "id": "2021",
+      "year": 2021,
+      "title": "Eternal Spring",
+      "branch": "Renewal",
+      "description": "When winter ends, spring returns eternally. Hope bloomed in every corner, and music became medicine for the soul.",
+      "image": "/images/2021.jpg",
+      "gameType": "hidden",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2021-reveal.jpg",
+        "text": "The return to stages felt like a religious experience. Every reunion with the audience was a celebration of survival. Songs about renewal took on new meanings, and the word 'spring' became synonymous with hope."
+      }
+    },
+    {
+      "id": "2022",
+      "year": 2022,
+      "title": "Quantum Voice",
+      "branch": "Infinite Possibilities",
+      "description": "A voice that exists in multiple dimensions simultaneously. Where science meets poetry, and sound becomes infinite.",
+      "image": "/images/2022.jpg",
+      "gameType": "scratch",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2022-reveal.jpg",
+        "text": "Virtual performances. Sound experiments that pushed technological boundaries. The voice existed not just in physical spaces but in digital realms, reaching fans in ways that transcended the limitations of traditional concerts."
+      }
+    },
+    {
+      "id": "2023",
+      "year": 2023,
+      "title": "Nebula Heart",
+      "branch": "Cosmic Love",
+      "description": "Love expanding like a nebula, filling spaces between stars. A heart that contains galaxies of compassion.",
+      "image": "/images/2023.jpg",
+      "gameType": "drag",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2023-reveal.jpg",
+        "text": "Charity concerts that touched continents. Love expressed not just in lyrics but in actions—disaster relief, educational support, and a presence that reminded the world that artists can be forces for genuine good."
+      }
+    },
+    {
+      "id": "2024",
+      "year": 2024,
+      "title": "Timeless Archive",
+      "branch": "Legacy",
+      "description": "Memories preserved in amber, timeless and precious. Every moment catalogued in the archive of existence.",
+      "image": "/images/2024.jpg",
+      "gameType": "hold",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2024-reveal.jpg",
+        "text": "Anniversaries celebrated. A decade of music preserved and revisited. This wasn't just looking back—it was acknowledging that certain voices become permanent fixtures in the cultural archive, timeless by design."
+      }
+    },
+    {
+      "id": "2025",
+      "year": 2025,
+      "title": "Aurora Whisper",
+      "branch": "Transcendence",
+      "description": "The northern lights speak in whispers, carrying secrets between earth and sky. A bridge between the mundane and magical.",
+      "image": "/images/2025.jpg",
+      "gameType": "hidden",
+      "light": 0,
+      "brightness": 0,
+      "moreInfo": {
+        "image": "/images/2025-reveal.jpg",
+        "text": "Where does the voice go when it transcends? This year explored that question through performances that seemed to touch the divine. The aurora isn't just a light show—it's a metaphor for voices that bridge earthly and celestial."
+      }
+    },
+    {
+      "id": "2026",
+      "year": 2026,
+      "title": "Future Memory",
+      "branch": "Preorder - Locked",
+      "description": "A memory not yet made. The future awaits its story to be written. Contribute light to unlock what lies ahead.",
+      "image": "/images/2026.jpg",
+      "gameType": "scratch",
+      "light": 0,
+      "brightness": 0,
+      "locked": true,
+      "moreInfo": {
+        "image": "/images/2026-reveal.jpg",
+        "text": "The story continues. What memories will 2026 bring? Only the collective light of all who believe can illuminate this final chapter. Every contribution writes a piece of the future."
+      }
+    }
+  ],
+  "cooldowns": {
+    "2015:::1": {
+      "timestamp": 1779210661734
+    },
+    "2016:::1": {
+      "timestamp": 1779210787113
+    },
+    "2017:::1": {
+      "timestamp": 1779210886763
+    },
+    "2015:::ffff:127.0.0.1": {
+      "timestamp": 1779212379602
+    },
+    "2020:::ffff:127.0.0.1": {
+      "timestamp": 1779215773320
+    }
+  }
+}
