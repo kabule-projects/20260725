@@ -6,9 +6,11 @@ import { contributeLight } from '../services/api';
 import { calculateBrightness, getBrightnessClass, formatCooldown } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
 
-const ILLUMINATE_THRESHOLD = 500;
+// const ILLUMINATE_THRESHOLD = 500;
+const ILLUMINATE_THRESHOLD = 5;
 const COOLDOWN_KEY = (id) => `memoryStore:cooldown:${id}`;
-const COOLDOWN_DURATION = 10 * 60 * 1000; // 10 minutes
+// const COOLDOWN_DURATION = 10 * 60 * 1000; // 10 minutes
+const COOLDOWN_DURATION = 30 * 1000;
 
 const Product = ({ lights, setLights }) => {
   const { id } = useParams();
@@ -51,9 +53,10 @@ const Product = ({ lights, setLights }) => {
       }));
       // Save cooldown timestamp to localStorage
       localStorage.setItem(COOLDOWN_KEY(id), Date.now().toString());
-      setCooldown(600);
+      // setCooldown(600);
+setCooldown(30);
     } catch (error) {
-      // Still handle backend cooldown as fallback (optional)
+      // handle backend cooldown as fallback
       if (error.status === 429) {
         localStorage.setItem(COOLDOWN_KEY(id), (Date.now() - error.remaining * 1000).toString());
         setCooldown(error.remaining);
@@ -270,15 +273,15 @@ const Product = ({ lights, setLights }) => {
                     className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
                     initial={{ width: 0 }}
                     animate={{
-                      width: `${Math.min((currentLight / 500) * 100, 100)}%`,
+                      width: `${Math.min((currentLight / 5) * 100, 100)}%` // width: `${Math.min((currentLight / 500) * 100, 100)}%`,
                     }}
                     transition={{ duration: 0.8 }}
                   />
                 </div>
               </div>
               <span className="text-memory-muted text-xs">
-                已刻印{Math.min(Math.round((currentLight / 500) * 100), 100)}% 
-              </span>
+                已刻印{Math.min(Math.round((currentLight / 5) * 100), 100)}%
+              </span> 
             </div>
           </div>
         </motion.div>
@@ -286,5 +289,7 @@ const Product = ({ lights, setLights }) => {
     </div>
   );
 };
+
+// 已刻印{Math.min(Math.round((currentLight / 500) * 100), 100)}%
 
 export default Product;
