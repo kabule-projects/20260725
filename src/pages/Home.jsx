@@ -29,7 +29,7 @@ const Home = ({ lights }) => {
         >
           <span className="text-memory-accent text-lg">✧</span>
           <span className="text-memory-glow text-sm">
-            已收集的光芒：{' '}
+            已收集的记忆碎片：{' '}
             <span className="text-memory-accent font-medium">{totalLight}</span>
           </span>
         </motion.div>

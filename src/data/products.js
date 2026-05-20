@@ -6,7 +6,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2014.jpg",
-    gameType: "scratch",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2014-reveal.jpg",
@@ -62,7 +62,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2018.jpg",
-    gameType: "scratch",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2018-reveal.jpg",
@@ -118,7 +118,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2022.jpg",
-    gameType: "scratch",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2022-reveal.jpg",
@@ -174,7 +174,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2026.jpg",
-    gameType: "scratch",
+    gameType: "hold",
     locked: true,
     moreInfo: {
       image: "/images/2026-reveal.jpg",
