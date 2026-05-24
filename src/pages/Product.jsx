@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import MiniGame from '../components/MiniGame';
 import { contributeLight } from '../services/api';
-import { calculateBrightness, getBrightnessClass, formatCooldown } from '../utils/brightness';
+import { calculateBrightness, getBrightnessClass, formatCooldown, calculateThreshold, is2026Unlocked } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
 
 // const ILLUMINATE_THRESHOLD = 500;
@@ -44,7 +44,9 @@ const Product = ({ lights, setLights }) => {
   }, [cooldown]);
 
   const handleGameComplete = useCallback(async () => {
-    if (contributing || product?.locked) return;
+    const isUnlocked = product?.year !== 2026 || is2026Unlocked(lights, PRODUCTS);
+    const effectiveLocked = product?.locked || !isUnlocked;
+    if (contributing || effectiveLocked) return;
 
     setContributing(true);
     setLocalFeedback(true);
@@ -75,14 +77,18 @@ const Product = ({ lights, setLights }) => {
       setContributing(false);
       setTimeout(() => setLocalFeedback(false), 2000);
     }
-  }, [product, contributing, setLights, id]);
+  }, [product, contributing, setLights, id, lights, PRODUCTS]);
 
   if (!product) return null;
 
+  const isUnlocked = product.year !== 2026 || is2026Unlocked(lights, PRODUCTS);
+  const effectiveLocked = product.locked || !isUnlocked;
+
   const currentLight = lights[product.id] || 0;
-  const brightness = calculateBrightness(currentLight, product.locked);
+  const threshold = calculateThreshold(product.year);
+  const brightness = calculateBrightness(currentLight, effectiveLocked);
   const brightnessClass = getBrightnessClass(brightness);
-  const isFullyIlluminated = currentLight >= ILLUMINATE_THRESHOLD;
+  const isFullyIlluminated = currentLight >= threshold;
 
   return (
     <div className="min-h-screen pb-12">
@@ -119,7 +125,7 @@ const Product = ({ lights, setLights }) => {
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-6xl text-memory-glow/30">
-                {product.locked ? '🔒' : '✧'}
+                {effectiveLocked ? '🔒' : '✧'}
               </span>
             </div>
 
@@ -189,7 +195,7 @@ const Product = ({ lights, setLights }) => {
                     className="h-full bg-gradient-to-r from-memory-muted/50 to-memory-accent/50"
                     initial={{ width: 0 }}
                     animate={{
-                      width: `${Math.min((currentLight / ILLUMINATE_THRESHOLD) * 100, 100)}%`,
+                      width: `${Math.min((currentLight / threshold) * 100, 100)}%`,
                     }}
                     transition={{ duration: 0.8 }}
                   />
@@ -207,13 +213,13 @@ const Product = ({ lights, setLights }) => {
                 <h2 className="text-memory-accent font-medium">加入回忆</h2>
               </div>
 
-            {product.locked ? (
+            {effectiveLocked ? (
               <div className="text-center py-8 space-y-4">
                 <p className="text-memory-muted">
                   他说想再荡个秋千
                 </p>
                 <p className="text-memory-muted/60 text-sm">
-                  2026的故事未完待续
+                  {product.year === 2026 ? '完成所有年份的回忆收集后解锁' : '记忆有些模糊'}
                 </p>
               </div>
             ) : cooldown > 0 ? (
@@ -289,14 +295,14 @@ const Product = ({ lights, setLights }) => {
                       className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
                       initial={{ width: 0 }}
                       animate={{
-                        width: `${Math.min((currentLight / 5) * 100, 100)}%` // width: `${Math.min((currentLight / 500) * 100, 100)}%`,
+                        width: `${Math.min((currentLight / threshold) * 100, 100)}%`,
                       }}
                       transition={{ duration: 0.8 }}
                     />
                   </div>
                 </div>
                 <span className="text-memory-muted text-xs">
-                  已刻印{Math.min(Math.round((currentLight / 5) * 100), 100)}%
+                  已刻印{Math.min(Math.round((currentLight / threshold) * 100), 100)}%
                 </span> 
               </div>
             </div>

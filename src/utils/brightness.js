@@ -25,3 +25,30 @@ export const formatCooldown = (seconds) => {
   const secs = seconds % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
+
+export const calculateThreshold = (year) => {
+  const currentYear = 2026;
+  const earliestYear = 2014;
+  const minThreshold = 5;
+  const maxThreshold = 20;
+  
+  const yearDifference = currentYear - year;
+  const maxDifference = currentYear - earliestYear;
+  
+  if (yearDifference <= 0) return minThreshold;
+  
+  const ratio = yearDifference / maxDifference;
+  const threshold = minThreshold + (maxThreshold - minThreshold) * ratio;
+  
+  return Math.round(threshold);
+};
+
+export const is2026Unlocked = (lights, products) => {
+  const non2026Products = products.filter(p => p.year !== 2026);
+  
+  return non2026Products.every(product => {
+    const light = lights[product.id] || 0;
+    const threshold = calculateThreshold(product.year);
+    return light >= threshold;
+  });
+};

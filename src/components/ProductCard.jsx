@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { calculateBrightness, getBrightnessClass } from '../utils/brightness';
+import { calculateBrightness, getBrightnessClass, calculateThreshold } from '../utils/brightness';
 
 const ProductCard = ({ product, light = 0, index }) => {
+  const threshold = calculateThreshold(product.year);
   const brightness = calculateBrightness(light, product.locked);
   const brightnessClass = getBrightnessClass(brightness);
 
@@ -76,8 +77,7 @@ const ProductCard = ({ product, light = 0, index }) => {
                 <motion.div
                   className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
                   initial={{ width: 0 }}
-                  // animate={{ width: `${Math.min((light / 500) * 100, 100)}%` }}
-                  animate={{ width: `${Math.min((light / 5) * 100, 100)}%` }}
+                  animate={{ width: `${Math.min((light / threshold) * 100, 100)}%` }}
                   transition={{ duration: 0.8 }}
                 />
               </div>

@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import { PRODUCTS } from '../data/products';
+import { is2026Unlocked } from '../utils/brightness';
 
 const Home = ({ lights }) => {
   const totalLight = Object.values(lights).reduce((sum, val) => sum + val, 0);
+  const unlocked2026 = is2026Unlocked(lights, PRODUCTS);
+
+  const productsWithDynamicLock = PRODUCTS.map(product => {
+    if (product.year === 2026) {
+      return { ...product, locked: !unlocked2026 };
+    }
+    return product;
+  });
 
   return (
     <div className="min-h-screen pb-12">
@@ -37,7 +46,7 @@ const Home = ({ lights }) => {
 
       <main className="px-4 md:px-6">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {PRODUCTS.map((product, index) => (
+          {productsWithDynamicLock.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 10 }}
