@@ -72,16 +72,19 @@ const ProductCard = ({ product, light = 0, index }) => {
               {product.title}
             </h3>
 
-            <div className="flex items-center gap-2 pt-2">
-              <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min((light / threshold) * 100, 100)}%` }}
-                  transition={{ duration: 0.8 }}
-                />
+            {product.year !== 2026 && (
+              <div className="flex items-center gap-2 pt-2">
+                <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min((light / threshold) * 100, 100)}%` }}
+                    transition={{ duration: 0.8 }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+            {product.year === 2026 && <div className="pt-3" />}
           </div>
         </motion.div>
       </Link>

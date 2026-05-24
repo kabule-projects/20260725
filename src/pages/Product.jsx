@@ -180,7 +180,7 @@ const Product = ({ lights, setLights }) => {
             )}
           </AnimatePresence>
 
-          {!isFullyIlluminated && product.moreInfo && (
+          {!isFullyIlluminated && product.moreInfo && product.year !== 2026 && (
             <div className="memory-card rounded-xl p-6 border-memory-muted/20">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-memory-muted/50 text-sm">✧</span>
@@ -285,7 +285,7 @@ const Product = ({ lights, setLights }) => {
           </div>
           )}
 
-          {!isFullyIlluminated && (
+          {!isFullyIlluminated && product.year !== 2026 && (
             <div className="memory-card rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <span className="text-memory-accent">✧</span>
