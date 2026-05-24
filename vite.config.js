@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/20260725/',
   server: {
     port: 3000,
     proxy: {
@@ -14,6 +14,7 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'docs',
     rollupOptions: {
       output: {
         manualChunks: undefined,
