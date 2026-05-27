@@ -1,4 +1,4 @@
-const API_BASE = 'https://two0260725-backend.onrender.com/api';
+const API_BASE = '/api';
 
 const FALLBACK_LIGHTS = {
   "2014": 5,
