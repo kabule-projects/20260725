@@ -98,7 +98,7 @@
       "description": "Stars that shine even when the world sleeps. In silence, new dimensions of sound were discovered.",
       "image": "/images/2020.jpg",
       "gameType": "hold",
-      "light": 5,
+      "light": 7,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2020-reveal.jpg",
@@ -214,7 +214,7 @@
       "timestamp": 1779282180860
     },
     "2020:::1": {
-      "timestamp": 1779284779988
+      "timestamp": 1780057277892
     },
     "2026:::1": {
       "timestamp": 1779289728570

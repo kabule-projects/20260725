@@ -3,6 +3,7 @@ import ScratchGame from './games/ScratchGame';
 import DragGame from './games/DragGame';
 import HoldGame from './games/HoldGame';
 import HiddenGame from './games/HiddenGame';
+import CatchGame from './games/CatchGame';
 
 const MiniGame = ({ gameType, onComplete }) => {
   const [initialized, setInitialized] = useState(false);
@@ -30,6 +31,8 @@ const MiniGame = ({ gameType, onComplete }) => {
         return <HoldGame onComplete={onComplete} />;
       case 'hidden':
         return <HiddenGame onComplete={onComplete} />;
+      case 'catch':
+        return <CatchGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }

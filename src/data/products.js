@@ -90,7 +90,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2020.jpg",
-    gameType: "hold",
+    gameType: "catch",
     locked: false,
     moreInfo: {
       image: "/images/2020-reveal.jpg",
