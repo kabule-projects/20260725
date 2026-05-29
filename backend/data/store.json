@@ -68,7 +68,7 @@
       "description": "From ashes, a phoenix sings. A year of rebirth and revelation, when old flames transformed into new light.",
       "image": "/images/2018.jpg",
       "gameType": "scratch",
-      "light": 0,
+      "light": 2,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2018-reveal.jpg",
@@ -218,6 +218,9 @@
     },
     "2026:::1": {
       "timestamp": 1779289728570
+    },
+    "2018:::1": {
+      "timestamp": 1780061814002
     }
   }
 }

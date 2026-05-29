@@ -163,6 +163,15 @@ app.get('/api/all-lights', (req, res) => {
   }
 });
 
+app.get('/api/export', (req, res) => {
+  try {
+    const data = readData();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to export data' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Memory Store backend running on port ${PORT}`);
 });

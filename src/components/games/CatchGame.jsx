@@ -23,8 +23,8 @@ const CatchGame = ({ onComplete }) => {
   const GAME_WIDTH = 300;
   const GAME_HEIGHT = 300;
   const BLOCK_SPAWN_INTERVAL = 1000;
-  const FALL_SPEED = 1.5;
-  const WIN_HEIGHT = 350;
+  const FALL_SPEED = 2;
+  const WIN_HEIGHT = 300;
 
   const spawnBlock = useCallback(() => {
     const size = 20 + Math.random() * 30;

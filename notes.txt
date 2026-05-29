@@ -21,3 +21,9 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
+
+
+
+
+在 20260725 从服务器获取 store.json
+curl http://43.129.250.140/api/export > backend/data/store.json

@@ -62,7 +62,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2018.jpg",
-    gameType: "hold",
+    gameType: "peek",
     locked: false,
     moreInfo: {
       image: "/images/2018-reveal.jpg",
