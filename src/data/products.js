@@ -76,7 +76,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2019.jpg",
-    gameType: "drag",
+    gameType: "hidden",
     locked: false,
     moreInfo: {
       image: "/images/2019-reveal.jpg",
@@ -104,7 +104,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2021.jpg",
-    gameType: "hidden",
+    gameType: "drag",
     locked: false,
     moreInfo: {
       image: "/images/2021-reveal.jpg",
@@ -132,7 +132,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2023.jpg",
-    gameType: "drag",
+    gameType: "echo",
     locked: false,
     moreInfo: {
       image: "/images/2023-reveal.jpg",

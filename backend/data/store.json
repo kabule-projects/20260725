@@ -143,7 +143,7 @@
       "description": "Love expanding like a nebula, filling spaces between stars. A heart that contains galaxies of compassion.",
       "image": "/images/2023.jpg",
       "gameType": "drag",
-      "light": 0,
+      "light": 1,
       "brightness": 0,
       "moreInfo": {
         "image": "/images/2023-reveal.jpg",
@@ -221,6 +221,9 @@
     },
     "2018:::1": {
       "timestamp": 1780061814002
+    },
+    "2023:::1": {
+      "timestamp": 1780159561166
     }
   }
 }
