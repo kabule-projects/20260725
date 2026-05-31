@@ -209,7 +209,7 @@ const Product = ({ lights, setLights }) => {
             </div>
           )}
 
-          {!isFullyIlluminated && (
+          {product.year !== 2026 && (
             <div className="memory-card rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-memory-accent font-medium">加入回忆</h2>

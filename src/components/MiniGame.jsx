@@ -4,6 +4,8 @@ import DragGame from './games/DragGame';
 import HoldGame from './games/HoldGame';
 import HiddenGame from './games/HiddenGame';
 import CatchGame from './games/CatchGame';
+import PeekGame from './games/PeekGame';
+import EchoGame from './games/EchoGame';
 
 const MiniGame = ({ gameType, onComplete }) => {
   const [initialized, setInitialized] = useState(false);
@@ -33,6 +35,10 @@ const MiniGame = ({ gameType, onComplete }) => {
         return <HiddenGame onComplete={onComplete} />;
       case 'catch':
         return <CatchGame onComplete={onComplete} />;
+      case 'peek':
+        return <PeekGame onComplete={onComplete} />;
+      case 'echo':
+        return <EchoGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
