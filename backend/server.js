@@ -41,6 +41,7 @@ const getClientIP = (req) => {
 };
 
 const isOnCooldown = (productId, ip) => {
+  cleanExpiredCooldowns();
   const data = readData();
   const key = `${productId}:${ip}`;
   const cooldown = data.cooldowns[key];
@@ -52,6 +53,7 @@ const isOnCooldown = (productId, ip) => {
 };
 
 const getRemainingCooldown = (productId, ip) => {
+  cleanExpiredCooldowns();
   const data = readData();
   const key = `${productId}:${ip}`;
   const cooldown = data.cooldowns[key];
@@ -64,10 +66,31 @@ const getRemainingCooldown = (productId, ip) => {
 };
 
 const setCooldown = (productId, ip) => {
+  cleanExpiredCooldowns();
   const data = readData();
   const key = `${productId}:${ip}`;
   data.cooldowns[key] = { timestamp: Date.now() };
   writeData(data);
+};
+
+const cleanExpiredCooldowns = () => {
+  const data = readData();
+  const now = Date.now();
+  const expireTime = 5 * 60 * 1000;
+  let changed = false;
+
+  for (const key in data.cooldowns) {
+    if (data.cooldowns[key].timestamp) {
+      if (now - data.cooldowns[key].timestamp > expireTime) {
+        delete data.cooldowns[key];
+        changed = true;
+      }
+    }
+  }
+
+  if (changed) {
+    writeData(data);
+  }
 };
 
 app.get('/api/products', (req, res) => {

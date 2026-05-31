@@ -82,13 +82,15 @@ const Product = ({ lights, setLights }) => {
   if (!product) return null;
 
   const isUnlocked = product.year !== 2026 || is2026Unlocked(lights, PRODUCTS);
-  const effectiveLocked = product.locked || !isUnlocked;
+  const effectiveLocked = (product.year !== 2026 && product.locked) || !isUnlocked;
 
   const currentLight = lights[product.id] || 0;
   const threshold = calculateThreshold(product.year);
-  const brightness = calculateBrightness(currentLight, effectiveLocked);
+  
+  const is2026UnlockedNow = product.year === 2026 && isUnlocked;
+  const brightness = is2026UnlockedNow ? 1.0 : calculateBrightness(currentLight, effectiveLocked);
   const brightnessClass = getBrightnessClass(brightness);
-  const isFullyIlluminated = currentLight >= threshold;
+  const isFullyIlluminated = is2026UnlockedNow || currentLight >= threshold;
 
   return (
     <div className="min-h-screen pb-12">
@@ -180,7 +182,7 @@ const Product = ({ lights, setLights }) => {
             )}
           </AnimatePresence>
 
-          {!isFullyIlluminated && product.moreInfo && product.year !== 2026 && (
+          {!isFullyIlluminated && product.moreInfo && (
             <div className="memory-card rounded-xl p-6 border-memory-muted/20">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-memory-muted/50 text-sm">✧</span>
@@ -285,7 +287,7 @@ const Product = ({ lights, setLights }) => {
           </div>
           )}
 
-          {!isFullyIlluminated && product.year !== 2026 && (
+          {!isFullyIlluminated && (
             <div className="memory-card rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <span className="text-memory-accent">✧</span>
