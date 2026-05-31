@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { calculateBrightness, getBrightnessClass, calculateThreshold, is2026Unlocked } from '../utils/brightness';
-import { PRODUCTS } from '../data/products';
+import { calculateBrightness, getBrightnessClass, calculateThreshold } from '../utils/brightness';
 
-const ProductCard = ({ product, light = 0, index, lights }) => {
+const ProductCard = ({ product, light = 0, index }) => {
   const threshold = calculateThreshold(product.year);
-  const isFullyIlluminated = product.year === 2026 && is2026Unlocked(lights || {}, PRODUCTS) ? true : light >= threshold;
+  const isFullyIlluminated = product.year === 2026 && !product.locked ? true : light >= threshold;
   const brightness = isFullyIlluminated ? 1.0 : calculateBrightness(light, product.locked);
   const brightnessClass = getBrightnessClass(brightness);
 

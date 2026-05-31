@@ -57,7 +57,6 @@ const Home = ({ lights }) => {
                 product={product}
                 light={lights[product.id] || 0}
                 index={index}
-                lights={lights}
               />
             </motion.div>
           ))}
