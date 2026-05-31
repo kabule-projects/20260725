@@ -25,7 +25,9 @@ function checkVersion() {
 function ScrollToTop() {
   const location = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (location.pathname.startsWith('/product/')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [location]);
   return null;
 }

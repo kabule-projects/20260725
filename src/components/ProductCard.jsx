@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { calculateBrightness, getBrightnessClass, calculateThreshold } from '../utils/brightness';
+import { calculateBrightness, getBrightnessClass, calculateThreshold, is2026Unlocked } from '../utils/brightness';
+import { PRODUCTS } from '../data/products';
 
-const ProductCard = ({ product, light = 0, index }) => {
+const ProductCard = ({ product, light = 0, index, lights }) => {
   const threshold = calculateThreshold(product.year);
-  const isFullyIlluminated = product.year === 2026 && !product.locked ? true : light >= threshold;
+  const isFullyIlluminated = product.year === 2026 && is2026Unlocked(lights || {}, PRODUCTS) ? true : light >= threshold;
   const brightness = isFullyIlluminated ? 1.0 : calculateBrightness(light, product.locked);
   const brightnessClass = getBrightnessClass(brightness);
 
@@ -73,15 +74,17 @@ const ProductCard = ({ product, light = 0, index }) => {
               {product.title}
             </h3>
 
-            <div className="flex items-center gap-2 pt-2">
-              <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${isFullyIlluminated ? 100 : Math.min((light / threshold) * 100, 100)}%` }}
-                  transition={{ duration: 0.8 }}
-                />
-              </div>
+            <div className="flex items-center gap-2 pt-2 h-3">
+              {!isFullyIlluminated && (
+                <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min((light / threshold) * 100, 100)}%` }}
+                    transition={{ duration: 0.8 }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

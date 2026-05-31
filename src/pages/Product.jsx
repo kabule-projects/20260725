@@ -22,6 +22,10 @@ const Product = ({ lights, setLights }) => {
   const [cooldownRestored, setCooldownRestored] = useState(false);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
+
+  useEffect(() => {
     // Check localStorage for local cooldown
     const savedCooldown = localStorage.getItem(COOLDOWN_KEY(id));
     if (savedCooldown) {
