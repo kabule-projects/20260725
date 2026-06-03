@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DIALOGUES = [
@@ -47,7 +47,8 @@ const DIALOGUES = [
 const EchoGame = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDialogue, setShowDialogue] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
+  const isAnimatingRef = useRef(false);
 
   const currentDialogue = DIALOGUES[currentIndex];
 
@@ -59,9 +60,16 @@ const EchoGame = ({ onComplete }) => {
   }, []);
 
   const handleAnswer = (answer) => {
+    if (isAnimatingRef.current) return;
+    
     if (currentDialogue.correctAnswer && answer !== currentDialogue.correctAnswer) {
+      isAnimatingRef.current = true;
       setShowDialogue(false);
-      setTimeout(() => setShowDialogue(true), 300);
+      setTimeout(() => {
+        setShowDialogue(true);
+        setAnimationKey(prev => prev + 1);
+        isAnimatingRef.current = false;
+      }, 300);
       return;
     }
 
@@ -69,14 +77,18 @@ const EchoGame = ({ onComplete }) => {
   };
 
   const advanceDialogue = () => {
+    if (isAnimatingRef.current) return;
+    
     if (currentDialogue.nextIndex === -1) {
-      setCompleted(true);
       onComplete();
     } else {
+      isAnimatingRef.current = true;
       setShowDialogue(false);
       setTimeout(() => {
         setCurrentIndex(currentDialogue.nextIndex);
         setShowDialogue(true);
+        setAnimationKey(prev => prev + 1);
+        isAnimatingRef.current = false;
       }, 300);
     }
   };
@@ -105,7 +117,7 @@ const EchoGame = ({ onComplete }) => {
           <AnimatePresence mode="wait">
             {showDialogue && (
               <motion.div
-                key={currentIndex}
+                key={animationKey}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}

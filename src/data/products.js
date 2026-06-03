@@ -118,7 +118,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2022.jpg",
-    gameType: "hold",
+    gameType: "echo",
     locked: false,
     moreInfo: {
       image: "/images/2022-reveal.jpg",
@@ -132,7 +132,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2023.jpg",
-    gameType: "echo",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2023-reveal.jpg",
