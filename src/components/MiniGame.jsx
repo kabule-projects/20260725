@@ -5,6 +5,7 @@ import HiddenGame from './games/HiddenGame';
 import CatchGame from './games/CatchGame';
 import PeekGame from './games/PeekGame';
 import EchoGame from './games/EchoGame';
+import SpotlightGame from './games/SpotlightGame';
 
 const MiniGame = ({ gameType, onComplete }) => {
   const [initialized, setInitialized] = useState(true);
@@ -23,6 +24,8 @@ const MiniGame = ({ gameType, onComplete }) => {
         return <PeekGame onComplete={onComplete} />;
       case 'echo':
         return <EchoGame onComplete={onComplete} />;
+      case 'spotlight':
+        return <SpotlightGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
