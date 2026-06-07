@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { calculateBrightness, getBrightnessClass, calculateThreshold } from '../utils/brightness';
+import { calculateThreshold } from '../utils/brightness';
+import ProductImage from './ProductImage';
 
 const ProductCard = ({ product, light = 0, index }) => {
   const threshold = calculateThreshold(product.year);
   const isFullyIlluminated = product.year === 2026 && !product.locked ? true : light >= threshold;
-  const brightness = isFullyIlluminated ? 1.0 : calculateBrightness(light, product.locked);
-  const brightnessClass = getBrightnessClass(brightness);
 
   return (
     <motion.div
@@ -23,32 +22,30 @@ const ProductCard = ({ product, light = 0, index }) => {
           whileTap={{ scale: 0.98 }}
         >
           <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-            <div
-              className={`absolute inset-0 bg-gradient-to-br from-memory-glow/10 to-memory-accent/20 ${brightnessClass}`}
-              style={{
-                filter: `brightness(${brightness})`,
-              }}
-            >
+            {/* 使用图层图片组件 */}
+            <ProductImage
+              year={product.year}
+              light={light}
+              threshold={threshold}
+              isFullyIlluminated={isFullyIlluminated}
+            />
+
+            {/* 如果没有图片则显示占位符 */}
+            {!isFullyIlluminated && product.locked && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <span
-                  className={`text-4xl ${
-                    product.locked
-                      ? 'text-memory-muted'
-                      : 'text-memory-glow/40'
-                  }`}
-                >
-                  {product.locked ? '🔒' : '✧'}
+                <span className="text-4xl text-memory-muted">
+                  🔒
                 </span>
               </div>
+            )}
 
-              {!product.locked && light > 0 && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-memory-accent/20 to-transparent"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                />
-              )}
-            </div>
+            {!product.locked && light > 0 && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-memory-accent/20 to-transparent"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              />
+            )}
 
             {product.locked && (
               <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">

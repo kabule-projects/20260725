@@ -3,8 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import MiniGame from '../components/MiniGame';
 import { contributeLight } from '../services/api';
-import { calculateBrightness, getBrightnessClass, formatCooldown, calculateThreshold, is2026Unlocked } from '../utils/brightness';
+import { formatCooldown, calculateThreshold, is2026Unlocked } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
+import ProductImage from '../components/ProductImage';
+import ProductDetailImage from '../components/ProductDetailImage';
 
 // const ILLUMINATE_THRESHOLD = 500;
 const ILLUMINATE_THRESHOLD = 5;
@@ -92,8 +94,6 @@ const Product = ({ lights, setLights }) => {
   const threshold = calculateThreshold(product.year);
   
   const is2026UnlockedNow = product.year === 2026 && isUnlocked;
-  const brightness = is2026UnlockedNow ? 1.0 : calculateBrightness(currentLight, effectiveLocked);
-  const brightnessClass = getBrightnessClass(brightness);
   const isFullyIlluminated = is2026UnlockedNow || currentLight >= threshold;
 
   return (
@@ -126,14 +126,24 @@ const Product = ({ lights, setLights }) => {
           </div>
 
           <div
-            className={`relative aspect-[4/3] rounded-xl overflow-hidden bg-memory-dark/50 surreal-border ${brightnessClass}`}
-            style={{ filter: `brightness(${brightness})` }}
+            className="relative aspect-[4/3] rounded-xl overflow-hidden bg-memory-dark/50 surreal-border"
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-6xl text-memory-glow/30">
-                {effectiveLocked ? '🔒' : '✧'}
-              </span>
-            </div>
+            {/* 使用图层图片组件 */}
+            <ProductImage
+              year={product.year}
+              light={currentLight}
+              threshold={threshold}
+              isFullyIlluminated={isFullyIlluminated}
+            />
+
+            {/* 如果没有图片则显示占位符 */}
+            {!isFullyIlluminated && effectiveLocked && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-6xl text-memory-glow/30">
+                  🔒
+                </span>
+              </div>
+            )}
 
             <AnimatePresence>
               {localFeedback && (
@@ -172,11 +182,8 @@ const Product = ({ lights, setLights }) => {
                     <span className="text-memory-accent">★</span>
                   </div>
 
-                  <div className="relative aspect-video rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl text-memory-glow/20">✧</span>
-                    </div>
-                  </div>
+                  {/* 详情图 */}
+                  <ProductDetailImage year={product.year} />
 
                   <p className="text-memory-glow/80 leading-relaxed">
                     {product.moreInfo.text}

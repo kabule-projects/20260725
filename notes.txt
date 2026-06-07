@@ -49,11 +49,11 @@ npm install
 # 5. 构建
 npm run build
 
-# 6. 复制到 Nginx 目录
-sudo rm -rf /var/www/20260725
-sudo cp -r docs /var/www/20260725
-sudo chown -R www-data:www-data /var/www/20260725
-sudo chmod -R 755 /var/www/20260725
+# 复制 dist 到网站目录
+sudo mkdir -p /var/www/20260725
+sudo cp -r /root/20260725/dist/* /var/www/20260725/
+sudo chown -R www-data:www-data /var/www/20260725/
+sudo chmod -R 755 /var/www/20260725/
 
-# 7. 重载 Nginx
+# 重载 Nginx
 sudo systemctl reload nginx
