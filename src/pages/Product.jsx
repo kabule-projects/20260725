@@ -5,6 +5,7 @@ import MiniGame from '../components/MiniGame';
 import { contributeLight } from '../services/api';
 import { formatCooldown, calculateThreshold, is2026Unlocked } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
+import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
 import ProductDetailImage from '../components/ProductDetailImage';
 
@@ -280,6 +281,7 @@ const Product = ({ lights, setLights }) => {
                 ) : (
                   <MiniGame
                     gameType={product.gameType}
+                    config={GAME_CONFIGS[product.id]}
                     onComplete={() => setGameCompleted(true)}
                   />
                 )}

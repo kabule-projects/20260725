@@ -20,7 +20,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2015.jpg",
-    gameType: "color",
+    gameType: "colour",
     locked: false,
     moreInfo: {
       image: "/images/2015-reveal.jpg",
