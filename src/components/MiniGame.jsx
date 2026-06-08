@@ -7,6 +7,7 @@ import PeekGame from './games/PeekGame';
 import EchoGame from './games/EchoGame';
 import SpotlightGame from './games/SpotlightGame';
 import ColourGame from './games/ColourGame';
+import TetrisGame from './games/TetrisGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -29,6 +30,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <SpotlightGame onComplete={onComplete} />;
       case 'colour':
         return config ? <ColourGame config={config} onComplete={onComplete} /> : <HoldGame onComplete={onComplete} />;
+      case 'tetris':
+        return <TetrisGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }

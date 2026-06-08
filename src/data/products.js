@@ -146,7 +146,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2024.jpg",
-    gameType: "hold",
+    gameType: "tetris",
     locked: false,
     moreInfo: {
       image: "/images/2024-reveal.jpg",
