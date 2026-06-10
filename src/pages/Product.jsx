@@ -102,16 +102,29 @@ const Product = ({ lights, setLights }) => {
 
   if (!product) return null;
 
-  const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+  // 判断 lights 是否已加载（非空对象）
+  const isLightsLoaded = Object.keys(lights).length > 0;
+  
+  // 只有在 lights 加载完成后才进行权限判断
+  const accessStatus = isLightsLoaded ? getProductAccessStatus(product, lights, PRODUCTS) : 'loading';
   const isLocked = accessStatus === 'locked';
   const isUnlocked = accessStatus === 'unlocked';
 
-  // 锁定状态下重定向回首页
+  // 锁定状态下重定向回首页（仅在数据加载完成后）
   useEffect(() => {
-    if (isLocked) {
+    if (isLightsLoaded && isLocked) {
       window.location.href = '/';
     }
-  }, [isLocked]);
+  }, [isLightsLoaded, isLocked]);
+
+  // 数据未加载完成时显示加载状态
+  if (!isLightsLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-memory-glow text-lg">加载中...</div>
+      </div>
+    );
+  }
 
   const currentLight = lights[product.id] || 0;
   const threshold = calculateThreshold(product.year);

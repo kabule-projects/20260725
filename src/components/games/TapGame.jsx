@@ -113,28 +113,12 @@ const TapGame = ({ onComplete }) => {
 
   // 游戏完成界面
   if (gameState === 'win') {
-    return (
-      <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none flex flex-col items-center justify-center min-h-[300px]">
-        <motion.div
-          className="text-center space-y-4"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
-          <p className="text-memory-accent text-lg">✧ 记忆已刻印 ✧</p>
-          <p className="text-memory-muted text-sm">我们听到了 我们看到了</p>
-        </motion.div>
-      </div>
-    );
+    return
   }
 
   return (
     <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-      {/* 标题 */}
-      {/* <div className="flex justify-center mb-4">
-        <h2 className="text-memory-glow text-lg">节奏游戏</h2>
-      </div> */}
 
-      {/* 轮次信息 */}
       <div className="text-center mb-4">
         <p className="text-memory-accent text-sm">第 {currentRound + 1} / {ROUNDS.length} 轮</p>
         <p className="text-memory-glow/80 text-sm mt-1">{ROUNDS[currentRound]?.title}</p>

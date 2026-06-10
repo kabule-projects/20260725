@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import DragGame from './games/DragGame';
 import HoldGame from './games/HoldGame';
-import HiddenGame from './games/HiddenGame';
 import CatchGame from './games/CatchGame';
 import PeekGame from './games/PeekGame';
 import EchoGame from './games/EchoGame';
@@ -10,18 +8,15 @@ import ColourGame from './games/ColourGame';
 import TetrisGame from './games/TetrisGame';
 import WordGame from './games/WordGame';
 import TapGame from './games/TapGame';
+import MemoryGame from './games/MemoryGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
 
   const renderGame = () => {
     switch (gameType) {
-      case 'drag':
-        return <DragGame onComplete={onComplete} />;
       case 'hold':
         return <HoldGame onComplete={onComplete} />;
-      case 'hidden':
-        return <HiddenGame onComplete={onComplete} />;
       case 'catch':
         return <CatchGame onComplete={onComplete} />;
       case 'peek':
@@ -38,6 +33,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <WordGame onComplete={onComplete} />;
       case 'tap':
         return <TapGame onComplete={onComplete} />;
+      case 'memory':
+        return <MemoryGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
