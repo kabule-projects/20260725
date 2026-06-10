@@ -118,7 +118,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2022.jpg",
-    gameType: "hidden",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2022-reveal.jpg",
@@ -146,7 +146,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2024.jpg",
-    gameType: "tetris",
+    gameType: "tap",
     locked: false,
     moreInfo: {
       image: "/images/2024-reveal.jpg",
@@ -160,7 +160,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2025.jpg",
-    gameType: "hidden",
+    gameType: "hold",
     locked: false,
     moreInfo: {
       image: "/images/2025-reveal.jpg",

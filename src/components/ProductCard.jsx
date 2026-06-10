@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { calculateThreshold } from '../utils/brightness';
+import { getProductAccessStatus } from '../utils/accessControl';
 import ProductImage from './ProductImage';
+import { PRODUCTS } from '../data/products';
 
-const ProductCard = ({ product, light = 0, index }) => {
+const ProductCard = ({ product, light = 0, index, lights }) => {
   const threshold = calculateThreshold(product.year);
-  const isFullyIlluminated = product.year === 2026 && !product.locked ? true : light >= threshold;
+  const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+  const isLocked = accessStatus === 'locked';
+  const isFullyIlluminated = accessStatus === 'unlocked';
 
   return (
     <motion.div
@@ -16,10 +20,10 @@ const ProductCard = ({ product, light = 0, index }) => {
       <Link to={`/product/${product.id}`}>
         <motion.div
           className={`memory-card rounded-xl p-4 cursor-pointer relative overflow-hidden ${
-            product.locked ? 'opacity-60' : ''
+            isLocked ? 'opacity-60' : ''
           }`}
-          whileHover={{ y: -5, scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={isLocked ? {} : { y: -5, scale: 1.02 }}
+          whileTap={isLocked ? {} : { scale: 0.98 }}
         >
           <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
             {/* 使用图层图片组件 */}
@@ -31,7 +35,7 @@ const ProductCard = ({ product, light = 0, index }) => {
             />
 
             {/* 如果没有图片则显示占位符 */}
-            {!isFullyIlluminated && product.locked && (
+            {!isFullyIlluminated && isLocked && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-4xl text-memory-muted">
                   🔒
@@ -39,7 +43,7 @@ const ProductCard = ({ product, light = 0, index }) => {
               </div>
             )}
 
-            {!product.locked && light > 0 && (
+            {!isLocked && light > 0 && (
               <motion.div
                 className="absolute inset-0 bg-gradient-to-t from-memory-accent/20 to-transparent"
                 initial={{ opacity: 0 }}
@@ -47,7 +51,7 @@ const ProductCard = ({ product, light = 0, index }) => {
               />
             )}
 
-            {product.locked && (
+            {isLocked && (
               <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">
                 <span className="text-memory-muted text-xs uppercase tracking-widest">
                   预售

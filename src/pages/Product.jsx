@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import MiniGame from '../components/MiniGame';
 import { contributeLight } from '../services/api';
-import { formatCooldown, calculateThreshold, is2026Unlocked } from '../utils/brightness';
+import { formatCooldown, calculateThreshold } from '../utils/brightness';
+import { getProductAccessStatus } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
@@ -64,9 +65,9 @@ const Product = ({ lights, setLights }) => {
   }, [cooldown]);
 
   const handleGameComplete = useCallback(async () => {
-    const isUnlocked = product?.year !== 2026 || is2026Unlocked(lights, PRODUCTS);
-    const effectiveLocked = product?.locked || !isUnlocked;
-    if (contributing || effectiveLocked) return;
+    if (!product) return;
+    const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+    if (contributing || accessStatus === 'locked') return;
 
     setContributing(true);
     setLocalFeedback(true);
@@ -101,14 +102,20 @@ const Product = ({ lights, setLights }) => {
 
   if (!product) return null;
 
-  const isUnlocked = product.year !== 2026 || is2026Unlocked(lights, PRODUCTS);
-  const effectiveLocked = (product.year !== 2026 && product.locked) || !isUnlocked;
+  const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+  const isLocked = accessStatus === 'locked';
+  const isUnlocked = accessStatus === 'unlocked';
+
+  // 锁定状态下重定向回首页
+  useEffect(() => {
+    if (isLocked) {
+      window.location.href = '/';
+    }
+  }, [isLocked]);
 
   const currentLight = lights[product.id] || 0;
   const threshold = calculateThreshold(product.year);
-  
-  const is2026UnlockedNow = product.year === 2026 && isUnlocked;
-  const isFullyIlluminated = is2026UnlockedNow || currentLight >= threshold;
+  const isFullyIlluminated = isUnlocked;
 
   return (
     <div className="min-h-screen pb-12">
@@ -151,7 +158,7 @@ const Product = ({ lights, setLights }) => {
             />
 
             {/* 如果没有图片则显示占位符 */}
-            {!isFullyIlluminated && effectiveLocked && (
+            {isLocked && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-6xl text-memory-glow/30">
                   🔒
@@ -179,7 +186,7 @@ const Product = ({ lights, setLights }) => {
           </div>
 
           <AnimatePresence>
-            {isFullyIlluminated && product.moreInfo && (
+            {isUnlocked && product.moreInfo && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -207,7 +214,7 @@ const Product = ({ lights, setLights }) => {
             )}
           </AnimatePresence>
 
-          {!isFullyIlluminated && product.moreInfo && (
+          {!isLocked && !isUnlocked && product.moreInfo && (
             <div className="memory-card rounded-xl p-6 border-memory-muted/20">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-memory-muted/50 text-sm">✧</span>
@@ -234,9 +241,9 @@ const Product = ({ lights, setLights }) => {
             </div>
           )}
 
-          {product.year !== 2026 && (
+          {(product.year !== 2026 || !isLocked) && (
             <div className="memory-card rounded-xl p-6">
-              {effectiveLocked ? (
+              {isLocked ? (
                 <div className="text-center py-8 space-y-4">
                   <p className="text-memory-muted">
                     他说想再荡个秋千
@@ -306,7 +313,7 @@ const Product = ({ lights, setLights }) => {
             </div>
           )}
 
-          {!isFullyIlluminated && (
+          {!isLocked && !isUnlocked && (
             <div className="memory-card rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <span className="text-memory-accent">✧</span>

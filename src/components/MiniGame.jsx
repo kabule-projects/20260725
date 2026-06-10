@@ -9,6 +9,7 @@ import SpotlightGame from './games/SpotlightGame';
 import ColourGame from './games/ColourGame';
 import TetrisGame from './games/TetrisGame';
 import WordGame from './games/WordGame';
+import TapGame from './games/TapGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -35,6 +36,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <TetrisGame onComplete={onComplete} />;
       case 'word':
         return <WordGame onComplete={onComplete} />;
+      case 'tap':
+        return <TapGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
