@@ -87,9 +87,7 @@ const TapGame = ({ onComplete }) => {
     } else {
       // 通关
       setGameState('win');
-      setTimeout(() => {
-        onComplete();
-      }, 1500);
+      onComplete();
     }
   }, [currentRound, onComplete]);
 

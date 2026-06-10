@@ -42,9 +42,7 @@ const MemoryGame = ({ onComplete }) => {
   useEffect(() => {
     if (cards.length > 0 && cards.every(card => card.isMatched)) {
       setGameState('win');
-      setTimeout(() => {
-        onComplete();
-      }, 1500);
+      onComplete();
     }
   }, [cards, onComplete]);
 

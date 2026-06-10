@@ -174,7 +174,7 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: "/images/2026.jpg",
-    gameType: "hold",
+    gameType: "whack",
     locked: true,
     moreInfo: {
       image: "/images/2026-reveal.jpg",

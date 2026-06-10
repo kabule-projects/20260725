@@ -9,6 +9,7 @@ import TetrisGame from './games/TetrisGame';
 import WordGame from './games/WordGame';
 import TapGame from './games/TapGame';
 import MemoryGame from './games/MemoryGame';
+import WhackGame from './games/WhackGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -35,6 +36,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <TapGame onComplete={onComplete} />;
       case 'memory':
         return <MemoryGame onComplete={onComplete} />;
+      case 'whack':
+        return <WhackGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
