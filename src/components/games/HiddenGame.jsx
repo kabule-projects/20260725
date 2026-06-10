@@ -48,7 +48,7 @@ const HiddenGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full aspect-square max-w-xs mx-auto bg-memory-dark/50 rounded-lg surreal-border overflow-hidden">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
         <p className="text-memory-glow/60 text-sm text-center px-4">
           找到隐藏的记忆碎片

@@ -105,7 +105,7 @@ const SpotlightGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
       <AnimatePresence mode="wait">
         {view === 1 && (
           <motion.div

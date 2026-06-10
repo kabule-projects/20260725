@@ -94,7 +94,7 @@ const EchoGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-xs mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
       <p className="text-memory-glow/60 text-sm text-center mb-2 select-none">
         回声
       </p>

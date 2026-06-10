@@ -324,7 +324,7 @@ const TetrisGame = ({ onComplete }) => {
   const displayBoard = renderBoard();
 
   return (
-    <div className="relative w-full max-w-sm mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
       {/* 标题和分数 */}
       <div className="flex justify-between items-center mb-3">
         <div className="text-memory-glow font-mono text-sm">

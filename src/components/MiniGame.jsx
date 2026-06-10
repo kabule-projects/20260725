@@ -8,6 +8,7 @@ import EchoGame from './games/EchoGame';
 import SpotlightGame from './games/SpotlightGame';
 import ColourGame from './games/ColourGame';
 import TetrisGame from './games/TetrisGame';
+import WordGame from './games/WordGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -32,15 +33,17 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return config ? <ColourGame config={config} onComplete={onComplete} /> : <HoldGame onComplete={onComplete} />;
       case 'tetris':
         return <TetrisGame onComplete={onComplete} />;
+      case 'word':
+        return <WordGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
   };
 
   return (
-    <div className="w-full">
+    <>
       {initialized && renderGame()}
-    </div>
+    </>
   );
 };
 

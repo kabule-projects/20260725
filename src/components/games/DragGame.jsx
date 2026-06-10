@@ -45,7 +45,7 @@ const DragGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full aspect-square max-w-xs mx-auto bg-memory-dark/50 rounded-lg overflow-hidden surreal-border">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg overflow-hidden surreal-border">
       <div className="absolute inset-0 flex items-center justify-center">
         <p className="text-memory-glow/60 text-sm text-center px-4 mb-8">
           拖动光点到目标位置

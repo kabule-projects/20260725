@@ -29,8 +29,8 @@ const ColourGame = ({ config, onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-      <div className="relative w-full aspect-[4/3] bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden mb-4">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+      <div className="relative w-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden mb-4">
         {config.baseImage ? (
           <img 
             src={config.baseImage} 

@@ -23,10 +23,23 @@ const Product = ({ lights, setLights }) => {
   const [cooldown, setCooldown] = useState(0);
   const [localFeedback, setLocalFeedback] = useState(false);
   const [cooldownRestored, setCooldownRestored] = useState(false);
+  const [showFullscreenGame, setShowFullscreenGame] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id]);
+
+  // 全屏游戏时禁止滚动
+  useEffect(() => {
+    if (showFullscreenGame) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showFullscreenGame]);
 
   useEffect(() => {
     // Check localStorage for local cooldown
@@ -223,51 +236,46 @@ const Product = ({ lights, setLights }) => {
 
           {product.year !== 2026 && (
             <div className="memory-card rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-memory-accent font-medium">加入回忆</h2>
-              </div>
-
-            {effectiveLocked ? (
-              <div className="text-center py-8 space-y-4">
-                <p className="text-memory-muted">
-                  他说想再荡个秋千
-                </p>
-                <p className="text-memory-muted/60 text-sm">
-                  {product.year === 2026 ? '完成所有年份的回忆收集后解锁' : '记忆有些模糊'}
-                </p>
-              </div>
-            ) : cooldown > 0 ? (
-              <div className="text-center py-8 space-y-4">
-                <p className="text-memory-muted">
-                  正在拼凑记忆碎片...
-                </p>
-                <p className="text-memory-accent text-2xl font-mono">
-                  {formatCooldown(cooldown)}
-                </p>
-                <p className="text-memory-muted/60 text-sm">
-                  这刹那的感受足够算不朽，稍后再回来吧
-                </p>
-              </div>
-            ) : contributing ? (
-              <div className="text-center py-8">
-                <motion.div
-                  className="text-memory-accent text-2xl"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                >
-                  ✧
-                </motion.div>
-                <p className="text-memory-glow mt-4">米子星正在发光...</p>
-              </div>
-            ) : !cooldownRestored ? (
-              <div className="text-center py-8 space-y-4">
-                <p className="text-memory-muted">检查中...</p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {gameCompleted ? (
+              {effectiveLocked ? (
+                <div className="text-center py-8 space-y-4">
+                  <p className="text-memory-muted">
+                    他说想再荡个秋千
+                  </p>
+                  <p className="text-memory-muted/60 text-sm">
+                    {product.year === 2026 ? '完成所有年份的回忆收集后解锁' : '记忆有些模糊'}
+                  </p>
+                </div>
+              ) : cooldown > 0 ? (
+                <div className="text-center py-8 space-y-4">
+                  <p className="text-memory-muted">
+                    正在拼凑记忆碎片...
+                  </p>
+                  <p className="text-memory-accent text-2xl font-mono">
+                    {formatCooldown(cooldown)}
+                  </p>
+                  <p className="text-memory-muted/60 text-sm">
+                    这刹那的感受足够算不朽，稍后再回来吧
+                  </p>
+                </div>
+              ) : contributing ? (
+                <div className="text-center py-8">
                   <motion.div
-                    className="text-center py-8 space-y-4"
+                    className="text-memory-accent text-2xl"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  >
+                    ✧
+                  </motion.div>
+                  <p className="text-memory-glow mt-4">米子星正在发光...</p>
+                </div>
+              ) : !cooldownRestored ? (
+                <div className="text-center py-8 space-y-4">
+                  <p className="text-memory-muted">检查中...</p>
+                </div>
+              ) : gameCompleted ? (
+                <div className="text-center space-y-4">
+                  <motion.div
+                    className="py-8 space-y-4"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                   >
@@ -278,15 +286,6 @@ const Product = ({ lights, setLights }) => {
                       我们听到了 我们看到了
                     </p>
                   </motion.div>
-                ) : (
-                  <MiniGame
-                    gameType={product.gameType}
-                    config={GAME_CONFIGS[product.id]}
-                    onComplete={() => setGameCompleted(true)}
-                  />
-                )}
-
-                {gameCompleted && (
                   <motion.button
                     className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
                     onClick={handleGameComplete}
@@ -294,10 +293,17 @@ const Product = ({ lights, setLights }) => {
                   >
                     不朽的 永恒了 我们记得
                   </motion.button>
-                )}
-              </div>
-            )}
-          </div>
+                </div>
+              ) : (
+                <motion.button
+                  className="w-full py-6 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
+                  onClick={() => setShowFullscreenGame(true)}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  加入回忆
+                </motion.button>
+              )}
+            </div>
           )}
 
           {!isFullyIlluminated && (
@@ -324,6 +330,64 @@ const Product = ({ lights, setLights }) => {
           )}
         </motion.div>
       </main>
+
+      {/* 全屏游戏模态框 */}
+      <AnimatePresence>
+        {showFullscreenGame && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-memory-dark"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* 返回按钮 - 游戏进行中显示 */}
+            {!gameCompleted && (
+              <motion.button
+                className="absolute top-4 left-4 px-4 py-2 text-memory-glow/70 hover:text-memory-glow transition-colors z-10"
+                onClick={() => setShowFullscreenGame(false)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← 返回
+              </motion.button>
+            )}
+
+            {/* 游戏内容 */}
+            <div className="h-screen flex items-center justify-center px-4 py-3">
+              {gameCompleted ? (
+                <motion.div
+                  className="text-center space-y-8"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <p className="text-memory-accent text-2xl">
+                    ✧ 记忆已刻印 ✧
+                  </p>
+                  <p className="text-memory-muted text-lg">
+                    我们听到了 我们看到了
+                  </p>
+                  <motion.button
+                    className="px-8 py-4 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
+                    onClick={() => {
+                      handleGameComplete();
+                      setShowFullscreenGame(false);
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    不朽的 永恒了 我们记得
+                  </motion.button>
+                </motion.div>
+              ) : (
+                <MiniGame
+                  gameType={product.gameType}
+                  config={GAME_CONFIGS[product.id]}
+                  onComplete={() => setGameCompleted(true)}
+                />
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -54,7 +54,7 @@ const HoldGame = ({ onComplete }) => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-xs mx-auto bg-memory-dark/50 rounded-lg surreal-border flex flex-col items-center justify-center p-6">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border flex flex-col items-center justify-center p-6">
       <p className="text-memory-glow/60 text-sm text-center mb-8">
         按住以稳定光芒
       </p>
