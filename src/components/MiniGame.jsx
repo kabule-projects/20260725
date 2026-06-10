@@ -10,6 +10,7 @@ import WordGame from './games/WordGame';
 import TapGame from './games/TapGame';
 import MemoryGame from './games/MemoryGame';
 import WhackGame from './games/WhackGame';
+import LyricGame from './games/LyricGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -38,6 +39,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <MemoryGame onComplete={onComplete} />;
       case 'whack':
         return <WhackGame onComplete={onComplete} />;
+      case 'lyric':
+        return <LyricGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }
