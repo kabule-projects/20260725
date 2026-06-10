@@ -397,6 +397,18 @@ const Product = ({ lights, setLights }) => {
                     不朽的 永恒了 我们记得
                   </motion.button>
                 </motion.div>
+              ) : product.videoUrl ? (
+                // B站视频嵌入模式
+                <div className="w-full max-w-3xl aspect-video">
+                  <iframe
+                    src={product.videoUrl}
+                    className="w-full h-full rounded-lg"
+                    allow="autoplay; fullscreen"
+                    scrolling="no"
+                    frameBorder="0"
+                    title="B站视频"
+                  />
+                </div>
               ) : (
                 <MiniGame
                   gameType={product.gameType}

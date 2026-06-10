@@ -175,6 +175,7 @@ export const PRODUCTS = [
     description: "[占位文本]",
     image: "/images/2026.jpg",
     gameType: "whack",
+    videoUrl: "https://player.bilibili.com/player.html?bvid=BV1RdVG68Ey8&page=1",
     locked: true,
     moreInfo: {
       image: "/images/2026-reveal.jpg",
