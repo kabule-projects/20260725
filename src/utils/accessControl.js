@@ -11,9 +11,9 @@ export const PHASES = [
   { id: 'phase7', years: [2025, 2026], unlockDate: null },
 ];
 
-// 基础开放日期（北京时间2026年7月18日零点）
+// 基础开放日期（北京时间2026年7月17日零点）
 // 留空则不启用日期解锁机制（用于测试）
-export const BASE_UNLOCK_DATE = null; // '2026-07-18T00:00:00+08:00';
+export const BASE_UNLOCK_DATE = null; // '2026-07-17T00:00:00+08:00';
 
 // 获取商品所在阶段
 export const getProductPhase = (year) => {
