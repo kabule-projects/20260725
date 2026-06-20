@@ -73,7 +73,8 @@ const LyricGame = ({ onComplete }) => {
   // 游戏完成界面
   if (gameState === 'win') {
     return (
-      <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none flex flex-col items-center justify-center min-h-[300px]">
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none flex flex-col items-center justify-center min-h-[300px]">
         <motion.div
           className="text-center space-y-4"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -81,12 +82,14 @@ const LyricGame = ({ onComplete }) => {
         >
           <p className="text-memory-accent text-lg">✧ 记忆已刻印 ✧</p>
         </motion.div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
       {/* 标题 */}
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">疯狂提词器</h2>
@@ -183,6 +186,7 @@ const LyricGame = ({ onComplete }) => {
       {/* 游戏说明 */}
       <div className="mt-4 text-center">
         <p className="text-memory-muted/60 text-xs">判断周深背的歌词是否正确</p>
+      </div>
       </div>
     </div>
   );

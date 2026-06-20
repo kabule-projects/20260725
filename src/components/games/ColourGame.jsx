@@ -29,7 +29,8 @@ const ColourGame = ({ config, onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
       <div className="relative w-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden mb-4">
         {config.baseImage ? (
           <img 
@@ -145,6 +146,7 @@ const ColourGame = ({ config, onComplete }) => {
           </motion.button>
         </motion.div>
       )}
+      </div>
     </div>
   );
 };

@@ -182,13 +182,15 @@ const TapGame = ({ onComplete }) => {
   }, []);
 
   // ========== 蓄力游戏组件 ==========
-  const HoldChallenge = () => (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-      <div className="text-center mb-4">
-        <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
-        <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
-        <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
-      </div>
+  const HoldChallenge = () => {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="relative w-full max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
+          <div className="text-center mb-4">
+            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
+            <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
+            <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
+          </div>
 
       <div className="flex justify-center gap-2 mb-4">
         {ROUNDS.map((_, index) => (
@@ -265,128 +267,134 @@ const TapGame = ({ onComplete }) => {
       <p className="mt-6 text-center text-memory-muted text-xs">
         {holdCompleted ? "蓄力完成！" : isHolding ? "蓄力中..." : "按住蓄力"}
       </p>
-    </div>
-  );
+        </div>
+      </div>
+    );
+  };
 
   // ========== 见缝插针游戏组件 ==========
-  const TapChallenge = () => (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-      <div className="text-center mb-4">
-        <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
-        <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
-        <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
-      </div>
-
-      <div className="flex justify-center gap-2 mb-4">
-        {ROUNDS.map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index < currentRoundIndex
-                ? 'bg-memory-accent'
-                : index === currentRoundIndex
-                ? 'bg-memory-glow'
-                : 'bg-memory-muted/30'
-            }`}
-          />
-        ))}
-      </div>
-
-      <div className="relative">
-        <div className="relative w-full h-8 bg-memory-dark/80 rounded-full overflow-hidden border border-memory-accent/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-memory-accent/10 via-memory-accent/20 to-memory-accent/10" />
-          
-          <motion.div
-            className="absolute top-0 h-full bg-memory-glow/30 rounded-full"
-            style={{
-              left: `${50 - TARGET_ZONE_WIDTH / 2}%`,
-              width: `${TARGET_ZONE_WIDTH}%`,
-            }}
-            animate={{ opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-memory-glow text-xs font-medium">目标</span>
-            </div>
-          </motion.div>
-        </div>
-
-        <motion.div
-          className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 select-none pointer-events-none"
-          style={{ left: `${arrowPosition}%` }}
-        >
-          <div className="w-8 h-8 flex items-center justify-center">
-            <svg viewBox="0 0 24 24" className="w-full h-full text-memory-glow">
-              <path
-                fill="currentColor"
-                d="M12 2L16 8h-3v10h-2V8H8L12 2z"
-              />
-            </svg>
+  const TapChallenge = () => {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="relative w-full max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
+          <div className="text-center mb-4">
+            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
+            <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
+            <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
           </div>
-        </motion.div>
-      </div>
 
-      {isPlaying && !isPaused && (
-        <div className="mt-12">
-          <motion.button
-            className="w-full py-4 rounded-lg bg-memory-accent/30 text-memory-accent hover:bg-memory-accent/40 transition-colors text-lg font-medium border border-memory-accent/40"
-            onClick={handleTap}
-            whileTap={{ scale: 0.95 }}
-          >
-            停！
-          </motion.button>
-        </div>
-      )}
+          <div className="flex justify-center gap-2 mb-4">
+            {ROUNDS.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index < currentRoundIndex
+                    ? 'bg-memory-accent'
+                    : index === currentRoundIndex
+                    ? 'bg-memory-glow'
+                    : 'bg-memory-muted/30'
+                }`}
+              />
+            ))}
+          </div>
 
-      <div className="text-center mt-12">
-        {!isPlaying ? (
-          <motion.button
-            className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
-            onClick={startGame}
-            whileTap={{ scale: 0.98 }}
-          >
-            开始游戏
-          </motion.button>
-        ) : !isPaused ? (
-          <p className="text-memory-muted/60 text-sm">点击箭头停下</p>
-        ) : (
-          <AnimatePresence>
+          <div className="relative">
+            <div className="relative w-full h-8 bg-memory-dark/80 rounded-full overflow-hidden border border-memory-accent/20">
+              <div className="absolute inset-0 bg-gradient-to-r from-memory-accent/10 via-memory-accent/20 to-memory-accent/10" />
+              
+              <motion.div
+                className="absolute top-0 h-full bg-memory-glow/30 rounded-full"
+                style={{
+                  left: `${50 - TARGET_ZONE_WIDTH / 2}%`,
+                  width: `${TARGET_ZONE_WIDTH}%`,
+                }}
+                animate={{ opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-memory-glow text-xs font-medium">目标</span>
+                </div>
+              </motion.div>
+            </div>
+
             <motion.div
-              className="space-y-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 select-none pointer-events-none"
+              style={{ left: `${arrowPosition}%` }}
             >
-              {roundResult === 'success' ? (
-                <>
-                  <p className="text-memory-accent text-lg">✧ 成功！✧</p>
-                  <motion.button
-                    className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
-                    onClick={handleNextRound}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {currentRoundIndex < ROUNDS.length - 1 ? '下一轮' : '完成'}
-                  </motion.button>
-                </>
-              ) : (
-                <>
-                  <p className="text-memory-error text-lg">失败...</p>
-                  <p className="text-memory-muted/60 text-sm">再试一次吧！</p>
-                  <motion.button
-                    className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
-                    onClick={handleRetry}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    再试一次
-                  </motion.button>
-                </>
-              )}
+              <div className="w-8 h-8 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-full h-full text-memory-glow">
+                  <path
+                    fill="currentColor"
+                    d="M12 2L16 8h-3v10h-2V8H8L12 2z"
+                  />
+                </svg>
+              </div>
             </motion.div>
-          </AnimatePresence>
-        )}
+          </div>
+
+          {isPlaying && !isPaused && (
+            <div className="mt-12">
+              <motion.button
+                className="w-full py-4 rounded-lg bg-memory-accent/30 text-memory-accent hover:bg-memory-accent/40 transition-colors text-lg font-medium border border-memory-accent/40"
+                onClick={handleTap}
+                whileTap={{ scale: 0.95 }}
+              >
+                停！
+              </motion.button>
+            </div>
+          )}
+
+          <div className="text-center mt-12">
+            {!isPlaying ? (
+              <motion.button
+                className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                onClick={startGame}
+                whileTap={{ scale: 0.98 }}
+              >
+                开始游戏
+              </motion.button>
+            ) : !isPaused ? (
+              <p className="text-memory-muted/60 text-sm">点击箭头停下</p>
+            ) : (
+              <AnimatePresence>
+                <motion.div
+                  className="space-y-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  {roundResult === 'success' ? (
+                    <>
+                      <p className="text-memory-accent text-lg">✧ 成功！✧</p>
+                      <motion.button
+                        className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                        onClick={handleNextRound}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {currentRoundIndex < ROUNDS.length - 1 ? '下一轮' : '完成'}
+                      </motion.button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-memory-error text-lg">失败...</p>
+                      <p className="text-memory-muted/60 text-sm">再试一次吧！</p>
+                      <motion.button
+                        className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                        onClick={handleRetry}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        再试一次
+                      </motion.button>
+                    </>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // ========== 主渲染 ==========
   if (!isPlaying) {
