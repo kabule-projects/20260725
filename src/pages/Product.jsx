@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import MiniGame from '../components/MiniGame';
+import PhotoGallery from '../components/PhotoGallery';
 import { contributeLight } from '../services/api';
 import { formatCooldown, calculateThreshold } from '../utils/brightness';
 import { getProductAccessStatus } from '../utils/accessControl';
@@ -9,6 +10,22 @@ import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
 import ProductDetailImage from '../components/ProductDetailImage';
+
+// 2014年图集图片
+const GALLERY_IMAGES_2014 = [
+  '/images/2014-gallery-1.jpg',
+  '/images/2014-gallery-2.jpg',
+  '/images/2014-gallery-3.jpg',
+  '/images/2014-gallery-4.jpg',
+  '/images/2014-gallery-5.jpg',
+  '/images/2014-gallery-6.jpg',
+  '/images/2014-gallery-7.jpg',
+  '/images/2014-gallery-8.jpg',
+  '/images/2014-gallery-9.jpg',
+  '/images/2014-gallery-10.jpg',
+  '/images/2014-gallery-11.jpg',
+  '/images/2014-gallery-12.jpg',
+];
 
 // const ILLUMINATE_THRESHOLD = 500;
 const ILLUMINATE_THRESHOLD = 5;
@@ -254,7 +271,7 @@ const Product = ({ lights, setLights }) => {
             </div>
           )}
 
-          {(product.year !== 2026 || !isLocked) && (
+          {(product.year !== 2026 || !isLocked) && product.year !== 2014 && (
             <div className="memory-card rounded-xl p-6">
               {isLocked ? (
                 <div className="text-center py-8 space-y-4">
@@ -348,78 +365,91 @@ const Product = ({ lights, setLights }) => {
               </div>
             </div>
           )}
+
+          {/* 2014年图集 */}
+          {product.year === 2014 && (
+            <motion.div
+              className="mt-48"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-memory-accent text-lg mb-6 text-center">记忆刻印</h3>
+              <PhotoGallery images={GALLERY_IMAGES_2014} />
+            </motion.div>
+          )}
         </motion.div>
       </main>
 
       {/* 全屏游戏模态框 */}
       <AnimatePresence>
-        {showFullscreenGame && (
-          <motion.div
-            className="fixed inset-0 z-50 bg-memory-dark"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {/* 返回按钮 - 游戏进行中显示 */}
-            {!gameCompleted && (
-              <motion.button
-                className="absolute top-4 left-4 px-4 py-2 text-memory-glow/70 hover:text-memory-glow transition-colors z-10"
-                onClick={() => setShowFullscreenGame(false)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                ← 返回
-              </motion.button>
-            )}
-
-            {/* 游戏内容 */}
-            <div className="h-screen flex items-center justify-center px-4 py-3">
-              {gameCompleted ? (
-                <motion.div
-                  className="text-center space-y-8"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
+          {showFullscreenGame && (
+            <motion.div
+              className="fixed inset-0 z-50 bg-memory-dark"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* 返回按钮 - 游戏进行中显示 */}
+              {!gameCompleted && (
+                <motion.button
+                  className="absolute top-4 left-4 px-4 py-2 text-memory-glow/70 hover:text-memory-glow transition-colors z-10"
+                  onClick={() => setShowFullscreenGame(false)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <p className="text-memory-accent text-2xl">
-                    ✧ 记忆已刻印 ✧
-                  </p>
-                  <p className="text-memory-muted text-lg">
-                    我们听到了 我们看到了
-                  </p>
-                  <motion.button
-                    className="px-8 py-4 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
-                    onClick={() => {
-                      handleGameComplete();
-                      setShowFullscreenGame(false);
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    不朽的 永恒了 我们记得
-                  </motion.button>
-                </motion.div>
-              ) : product.videoUrl ? (
-                // B站视频嵌入模式
-                <div className="w-full max-w-3xl aspect-video">
-                  <iframe
-                    src={product.videoUrl}
-                    className="w-full h-full rounded-lg"
-                    allow="autoplay; fullscreen"
-                    scrolling="no"
-                    frameBorder="0"
-                    title="B站视频"
-                  />
-                </div>
-              ) : (
-                <MiniGame
-                  gameType={product.gameType}
-                  config={GAME_CONFIGS[product.id]}
-                  onComplete={() => setGameCompleted(true)}
-                />
+                  ← 返回
+                </motion.button>
               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              {/* 游戏内容 */}
+              <div className="h-screen flex items-center justify-center px-4 py-3">
+                {gameCompleted ? (
+                  <motion.div
+                    className="text-center space-y-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                  >
+                    <p className="text-memory-accent text-2xl">
+                      ✧ 记忆已刻印 ✧
+                    </p>
+                    <p className="text-memory-muted text-lg">
+                      我们听到了 我们看到了
+                    </p>
+                    <motion.button
+                      className="px-8 py-4 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
+                      onClick={() => {
+                        handleGameComplete();
+                        setShowFullscreenGame(false);
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      不朽的 永恒了 我们记得
+                    </motion.button>
+                  </motion.div>
+                ) : product.videoUrl ? (
+                  // B站视频嵌入模式
+                  <div className="w-full max-w-3xl aspect-video">
+                    <iframe
+                      src={product.videoUrl}
+                      className="w-full h-full rounded-lg"
+                      allow="autoplay; fullscreen"
+                      scrolling="no"
+                      frameBorder="0"
+                      title="B站视频"
+                    />
+                  </div>
+                ) : (
+                  <MiniGame
+                    gameType={product.gameType}
+                    config={GAME_CONFIGS[product.id]}
+                    onComplete={() => setGameCompleted(true)}
+                  />
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
     </div>
   );
 };

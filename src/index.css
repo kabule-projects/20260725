@@ -48,6 +48,29 @@ body {
   background: #e8d5b7;
 }
 
+/* 细滚动条样式 */
+.thin-scrollbar::-webkit-scrollbar {
+  height: 3px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.5);
+  border-radius: 2px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.8);
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.5) transparent;
+}
+
 .surreal-glow {
   box-shadow:
     0 0 20px rgba(212, 175, 55, 0.1),
