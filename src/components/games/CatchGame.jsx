@@ -165,8 +165,8 @@ const CatchGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4">
+    <div className="w-full h-full px-[12%] py-[12%] flex items-center justify-center">
+      <div className="relative max-w-lg bg-memory-dark/50 rounded-lg surreal-border p-4">
       <p className="text-memory-glow/60 text-sm text-center mb-2">
         移动接住方块
       </p>

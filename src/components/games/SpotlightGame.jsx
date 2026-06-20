@@ -105,7 +105,7 @@ const SpotlightGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
       <AnimatePresence mode="wait">
         {view === 1 && (
           <motion.div
@@ -115,6 +115,13 @@ const SpotlightGame = ({ onComplete }) => {
             exit={{ opacity: 0 }}
             className="relative"
           >
+            {/* 提示词 */}
+            {!completed && (
+              <p className="text-memory-accent text-sm text-center mb-2 select-none">
+                快速点击为幺蛾子聚光
+              </p>
+            )}
+            
             <div 
               className="relative w-full aspect-[4/3] bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden cursor-pointer"
               onClick={handleSpotlightClick}

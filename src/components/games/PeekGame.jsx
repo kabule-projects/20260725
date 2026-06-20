@@ -171,7 +171,7 @@ const PeekGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
       <p className="text-memory-glow/60 text-sm text-center mb-2 select-none">
         拖动寻找隐藏的星星
       </p>
