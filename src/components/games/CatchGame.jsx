@@ -5,6 +5,7 @@ const CatchGame = ({ onComplete }) => {
   const [started, setStarted] = useState(false);
   const [won, setWon] = useState(false);
   const [caughtHeight, setCaughtHeight] = useState(0);
+  const [fireCount, setFireCount] = useState(0);
 
   const playerXRef = useRef(150);
   const [playerX, setPlayerX] = useState(150);
@@ -17,31 +18,93 @@ const CatchGame = ({ onComplete }) => {
   const isDraggingRef = useRef(false);
   const wonRef = useRef(false);
   const caughtHeightRef = useRef(0);
+  const fireCountRef = useRef(0);
 
-  const PLAYER_WIDTH = 80;
-  const PLAYER_HEIGHT = 20;
+  const PLAYER_WIDTH = 60;
+  const PLAYER_HEIGHT = 70;
   const GAME_WIDTH = 300;
-  const GAME_HEIGHT = 300;
+  const GAME_HEIGHT = 400; // 3:4 比例
   const BLOCK_SPAWN_INTERVAL = 1000;
   const FALL_SPEED = 2;
   const WIN_HEIGHT = 300;
+  const WIN_FIRE_COUNT = 3; // 需要接到3个火苗
 
-  const spawnBlock = useCallback(() => {
-    const size = 20 + Math.random() * 30;
-    const x = Math.random() * (GAME_WIDTH - size);
+  // ========== 贴图配置区域 ==========
+  // 将你的贴图文件放在 /public/images/catch/ 目录下
+  
+  // 普通物品贴图 - 会随机选择
+  const NORMAL_BLOCK_TEXTURES = [
+    '/images/catch/item-1.png',
+    '/images/catch/item-2.png',
+    '/images/catch/item-3.png',
+    '/images/catch/item-4.png',
+    '/images/catch/item-5.png',
+    '/images/catch/item-6.png',
+    '/images/catch/item-7.png',
+    '/images/catch/item-8.png'
+  ];
+  
+  // 火苗贴图 - 会随机选择
+  const FIRE_BLOCK_TEXTURES = [
+    '/images/catch/fire-1.png',
+    '/images/catch/fire-2.png'
+  ];
+  
+  // 举盆小人贴图
+  const PLAYER_TEXTURE = '/images/catch/player.png';
+  
+  // 掉落物类型 - 只保留普通物品和火苗
+  const BLOCK_TYPES = [
+    { type: 'normal', color: '#e8d5b7', probability: 0.8 },
+    { type: 'fire', color: '#ff6b35', probability: 0.2 },
+  ];
+
+  const spawnBlock = useCallback((gameWidth = GAME_WIDTH) => {
+    // 掉落物宽度范围：最小20px，最大45px
+    const MIN_BLOCK_SIZE = 30;
+    const MAX_BLOCK_SIZE = 50;
+    const size = MIN_BLOCK_SIZE + Math.random() * (MAX_BLOCK_SIZE - MIN_BLOCK_SIZE);
+    const x = Math.random() * (gameWidth - size);
+    
+    // 根据概率选择掉落物类型
+    const rand = Math.random();
+    let cumulative = 0;
+    let selectedType = BLOCK_TYPES[0];
+    
+    for (const blockType of BLOCK_TYPES) {
+      cumulative += blockType.probability;
+      if (rand <= cumulative) {
+        selectedType = blockType;
+        break;
+      }
+    }
+    
+    // 为掉落物随机选择贴图
+    let texture = null;
+    if (selectedType.type === 'normal') {
+      const randomIndex = Math.floor(Math.random() * NORMAL_BLOCK_TEXTURES.length);
+      texture = NORMAL_BLOCK_TEXTURES[randomIndex];
+    } else if (selectedType.type === 'fire') {
+      const randomIndex = Math.floor(Math.random() * FIRE_BLOCK_TEXTURES.length);
+      texture = FIRE_BLOCK_TEXTURES[randomIndex];
+    }
+    
     return {
       id: Date.now() + Math.random(),
       x,
       y: -size,
       size,
-      caught: false
+      caught: false,
+      type: selectedType.type,
+      color: selectedType.color,
+      texture: texture
     };
   }, []);
 
-  const checkCollision = useCallback((block, pX) => {
+  const checkCollision = useCallback((block, pX, gameHeight) => {
     const blockBottom = block.y + block.size;
     const blockTop = block.y;
-    const playerTop = GAME_HEIGHT - PLAYER_HEIGHT - 10;
+    const playerTop = gameHeight - PLAYER_HEIGHT - 10;
 
     if (blockBottom >= playerTop && blockTop <= playerTop + PLAYER_HEIGHT) {
       const blockLeft = block.x;
@@ -58,10 +121,14 @@ const CatchGame = ({ onComplete }) => {
     if (!lastTimeRef.current) lastTimeRef.current = timestamp;
     if (!spawnTimeRef.current) spawnTimeRef.current = timestamp;
 
+    // 获取容器实际尺寸
+    const gameHeight = containerRef.current ? containerRef.current.offsetHeight : GAME_HEIGHT;
+    const gameWidth = containerRef.current ? containerRef.current.offsetWidth : GAME_WIDTH;
+
     const spawnDelta = timestamp - spawnTimeRef.current;
 
     if (spawnDelta > BLOCK_SPAWN_INTERVAL) {
-      setBlocks(prev => [...prev, spawnBlock()]);
+      setBlocks(prev => [...prev, spawnBlock(gameWidth)]);
       spawnTimeRef.current = timestamp;
     }
 
@@ -71,16 +138,23 @@ const CatchGame = ({ onComplete }) => {
         const newY = block.y + FALL_SPEED;
         return { ...block, y: newY };
       }).filter(block => {
-        if (block.y > GAME_HEIGHT) return false;
+        if (block.y > gameHeight) return false;
         return true;
       });
 
       let newHeight = 0;
+      let newFires = 0;
+      
       updatedBlocks.forEach(block => {
-        if (!block.caught && block.y + block.size >= GAME_HEIGHT - PLAYER_HEIGHT - 10) {
-          if (checkCollision(block, playerXRef.current)) {
+        if (!block.caught && block.y + block.size >= gameHeight - PLAYER_HEIGHT - 10) {
+          if (checkCollision(block, playerXRef.current, gameHeight)) {
             block.caught = true;
             newHeight += block.size * 0.5;
+            
+            // 如果接到的是火苗，增加火苗计数
+            if (block.type === 'fire') {
+              newFires += 1;
+            }
           }
         }
       });
@@ -88,12 +162,20 @@ const CatchGame = ({ onComplete }) => {
       if (newHeight > 0) {
         caughtHeightRef.current += newHeight;
         setCaughtHeight(caughtHeightRef.current);
+      }
 
-        if (caughtHeightRef.current >= WIN_HEIGHT && !wonRef.current) {
-          wonRef.current = true;
-          setWon(true);
-          onComplete();
-        }
+      if (newFires > 0) {
+        fireCountRef.current += newFires;
+        setFireCount(fireCountRef.current);
+      }
+
+      // 通关条件：同时满足高度和火苗数量
+      if (caughtHeightRef.current >= WIN_HEIGHT && 
+          fireCountRef.current >= WIN_FIRE_COUNT && 
+          !wonRef.current) {
+        wonRef.current = true;
+        setWon(true);
+        onComplete();
       }
 
       lastTimeRef.current = timestamp;
@@ -122,8 +204,9 @@ const CatchGame = ({ onComplete }) => {
     if (!started || won) return;
     isDraggingRef.current = true;
     const rect = containerRef.current.getBoundingClientRect();
+    const gameWidth = rect.width;
     const x = e.clientX - rect.left - PLAYER_WIDTH / 2;
-    playerXRef.current = Math.max(0, Math.min(GAME_WIDTH - PLAYER_WIDTH, x));
+    playerXRef.current = Math.max(0, Math.min(gameWidth - PLAYER_WIDTH, x));
     setPlayerX(playerXRef.current);
   }, [started, won]);
 
@@ -134,28 +217,32 @@ const CatchGame = ({ onComplete }) => {
   const handleMouseMove = useCallback((e) => {
     if (!containerRef.current || !isDraggingRef.current || won) return;
     const rect = containerRef.current.getBoundingClientRect();
+    const gameWidth = rect.width;
     const x = e.clientX - rect.left - PLAYER_WIDTH / 2;
-    playerXRef.current = Math.max(0, Math.min(GAME_WIDTH - PLAYER_WIDTH, x));
+    playerXRef.current = Math.max(0, Math.min(gameWidth - PLAYER_WIDTH, x));
     setPlayerX(playerXRef.current);
   }, [won]);
 
   const handleTouchMove = useCallback((e) => {
     if (!containerRef.current || won) return;
     const rect = containerRef.current.getBoundingClientRect();
+    const gameWidth = rect.width;
     const x = e.touches[0].clientX - rect.left - PLAYER_WIDTH / 2;
-    playerXRef.current = Math.max(0, Math.min(GAME_WIDTH - PLAYER_WIDTH, x));
+    playerXRef.current = Math.max(0, Math.min(gameWidth - PLAYER_WIDTH, x));
     setPlayerX(playerXRef.current);
   }, [won]);
 
   const restartGame = () => {
     setBlocks([]);
     setCaughtHeight(0);
+    setFireCount(0);
     setWon(false);
     setStarted(false);
     setPlayerX(150);
     playerXRef.current = 150;
     wonRef.current = false;
     caughtHeightRef.current = 0;
+    fireCountRef.current = 0;
     lastTimeRef.current = 0;
     spawnTimeRef.current = 0;
     isDraggingRef.current = false;
@@ -166,47 +253,99 @@ const CatchGame = ({ onComplete }) => {
 
   return (
     <div className="w-full h-full px-[12%] py-[12%] flex items-center justify-center">
-      <div className="relative max-w-lg bg-memory-dark/50 rounded-lg surreal-border p-4">
+      <div className="relative w-full bg-memory-dark/50 rounded-lg surreal-border p-4">
+      {/* 进度显示 */}
+      <div className="flex justify-between items-center mb-2 px-2">
+        <div className="text-memory-glow/60 text-sm">
+          火苗: {fireCount}/{WIN_FIRE_COUNT}
+        </div>
+        <div className="text-memory-glow/60 text-sm">
+          高度: {Math.floor(caughtHeight)}/{WIN_HEIGHT}
+        </div>
+      </div>
       <p className="text-memory-glow/60 text-sm text-center mb-2">
-        移动接住方块
+        移动接住方块和火苗
       </p>
 
       <div
         ref={containerRef}
-        className="relative w-full aspect-square bg-memory-dark/30 rounded overflow-hidden cursor-none"
-        style={{ height: GAME_HEIGHT }}
+        className="relative w-full max-w-lg aspect-[3/4] bg-memory-dark/30 rounded overflow-hidden select-none mx-auto"
+        style={{
+          maxHeight: 'calc(80vh - 80px)',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none',
+          userSelect: 'none',
+          WebkitTouchCallout: 'none',
+        }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onMouseMove={handleMouseMove}
         onTouchMove={handleTouchMove}
+        onDragStart={(e) => e.preventDefault()}
       >
         {blocks.map(block => (
           block.caught ? null : (
             <motion.div
               key={block.id}
-              className="absolute bg-memory-glow/60 rounded"
+              className="absolute"
               style={{
                 left: block.x,
                 top: block.y,
                 width: block.size,
-                height: block.size,
+                // 高度设为auto，让贴图自然显示其原始比例
               }}
-              initial={{ opacity: 0.8 }}
-              animate={{ opacity: 1 }}
-            />
+              initial={{ opacity: 0.8, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              {/* 使用贴图显示掉落物 - 宽度与block对齐，高度自适应 */}
+              <img
+                src={block.texture}
+                alt={block.type === 'fire' ? '火苗' : '物品'}
+                className="w-full"
+                draggable="false"
+                style={{
+                  // 宽度填满容器，高度自动按比例缩放
+                  width: '100%',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  pointerEvents: 'none'
+                }}
+                onDragStart={(e) => e.preventDefault()}
+              />
+            </motion.div>
           )
         ))}
 
+        {/* 举盆小人 - 接触判定区在上边缘 */}
         <div
-          className="absolute bg-memory-glow rounded"
+          className="absolute overflow-hidden"
           style={{
             left: playerX,
             bottom: 10,
             width: PLAYER_WIDTH,
-            height: PLAYER_HEIGHT,
+            // 移除固定高度，让容器自适应贴图高度
           }}
-        />
+        >
+          {/* 盆（接收块）- 上边缘作为接触判定区 */}
+          <div 
+            className="absolute top-0 left-0 right-0 h-4"
+            style={{
+              // 这个区域的上边缘就是接触判定区
+              // 需要与掉落物的碰撞检测对齐
+            }}
+          />
+          {/* 举盆小人主体 - 使用贴图，宽度与接收块对齐，高度自适应 */}
+          <img 
+            src={PLAYER_TEXTURE}
+            alt="举盆小人"
+            className="w-full h-auto"
+            draggable="false"
+            style={{ width: '100%', pointerEvents: 'none' }}
+            onDragStart={(e) => e.preventDefault()}
+          />
+        </div>
 
         <div
           className="absolute bottom-0 left-0 right-0 bg-memory-glow/20 transition-all duration-300"

@@ -185,7 +185,7 @@ const TapGame = ({ onComplete }) => {
   const HoldChallenge = () => {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <div className="relative w-full max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
+        <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
           <div className="text-center mb-4">
             <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
             <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
@@ -276,7 +276,7 @@ const TapGame = ({ onComplete }) => {
   const TapChallenge = () => {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <div className="relative w-full max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
+        <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
           <div className="text-center mb-4">
             <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
             <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>

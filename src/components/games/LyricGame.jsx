@@ -74,7 +74,7 @@ const LyricGame = ({ onComplete }) => {
   if (gameState === 'win') {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none flex flex-col items-center justify-center min-h-[300px]">
+        <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none flex flex-col items-center justify-center min-h-[300px]">
         <motion.div
           className="text-center space-y-4"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -89,7 +89,7 @@ const LyricGame = ({ onComplete }) => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <div className="relative max-w-lg px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
+      <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
       {/* 标题 */}
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">疯狂提词器</h2>
