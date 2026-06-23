@@ -19,6 +19,7 @@ const CatchGame = ({ onComplete }) => {
   const wonRef = useRef(false);
   const caughtHeightRef = useRef(0);
   const fireCountRef = useRef(0);
+  const fireAddedThisFrameRef = useRef(false);
 
   const PLAYER_WIDTH = 60;
   const PLAYER_HEIGHT = 70;
@@ -26,13 +27,10 @@ const CatchGame = ({ onComplete }) => {
   const GAME_HEIGHT = 400; // 3:4 比例
   const BLOCK_SPAWN_INTERVAL = 1000;
   const FALL_SPEED = 2;
-  const WIN_HEIGHT = 300;
-  const WIN_FIRE_COUNT = 3; // 需要接到3个火苗
+  const WIN_HEIGHT = 520;
+  const WIN_FIRE_COUNT = 6;
 
-  // ========== 贴图配置区域 ==========
-  // 将你的贴图文件放在 /public/images/catch/ 目录下
-  
-  // 普通物品贴图 - 会随机选择
+
   const NORMAL_BLOCK_TEXTURES = [
     '/images/catch/item-1.png',
     '/images/catch/item-2.png',
@@ -44,23 +42,19 @@ const CatchGame = ({ onComplete }) => {
     '/images/catch/item-8.png'
   ];
   
-  // 火苗贴图 - 会随机选择
   const FIRE_BLOCK_TEXTURES = [
     '/images/catch/fire-1.png',
     '/images/catch/fire-2.png'
   ];
   
-  // 举盆小人贴图
   const PLAYER_TEXTURE = '/images/catch/player.png';
   
-  // 掉落物类型 - 只保留普通物品和火苗
   const BLOCK_TYPES = [
     { type: 'normal', color: '#e8d5b7', probability: 0.8 },
     { type: 'fire', color: '#ff6b35', probability: 0.2 },
   ];
 
   const spawnBlock = useCallback((gameWidth = GAME_WIDTH) => {
-    // 掉落物宽度范围：最小20px，最大45px
     const MIN_BLOCK_SIZE = 30;
     const MAX_BLOCK_SIZE = 50;
     const size = MIN_BLOCK_SIZE + Math.random() * (MAX_BLOCK_SIZE - MIN_BLOCK_SIZE);
@@ -125,6 +119,9 @@ const CatchGame = ({ onComplete }) => {
     const gameHeight = containerRef.current ? containerRef.current.offsetHeight : GAME_HEIGHT;
     const gameWidth = containerRef.current ? containerRef.current.offsetWidth : GAME_WIDTH;
 
+    // 重置每帧的火苗计数标志
+    fireAddedThisFrameRef.current = false;
+
     const spawnDelta = timestamp - spawnTimeRef.current;
 
     if (spawnDelta > BLOCK_SPAWN_INTERVAL) {
@@ -145,19 +142,30 @@ const CatchGame = ({ onComplete }) => {
       let newHeight = 0;
       let newFires = 0;
       
-      updatedBlocks.forEach(block => {
-        if (!block.caught && block.y + block.size >= gameHeight - PLAYER_HEIGHT - 10) {
+      for (const block of updatedBlocks) {
+        if (block.caught) continue;
+        
+        // 只有当块到达玩家区域时才进行碰撞检测
+        const blockBottom = block.y + block.size;
+        const playerTop = gameHeight - PLAYER_HEIGHT - 10;
+        
+        if (blockBottom >= playerTop && blockBottom <= playerTop + PLAYER_HEIGHT + 20) {
           if (checkCollision(block, playerXRef.current, gameHeight)) {
             block.caught = true;
             newHeight += block.size * 0.5;
             
-            // 如果接到的是火苗，增加火苗计数
-            if (block.type === 'fire') {
-              newFires += 1;
+            // 只有真正接到的火苗才计数（每帧最多增加1个）
+            if (block.type === 'fire' && newFires === 0) {
+              newFires = 1;
             }
           }
         }
-      });
+        
+        // 每帧最多处理一个火苗
+        if (newFires >= 1) {
+          break;
+        }
+      }
 
       if (newHeight > 0) {
         caughtHeightRef.current += newHeight;
@@ -165,8 +173,9 @@ const CatchGame = ({ onComplete }) => {
       }
 
       if (newFires > 0) {
-        fireCountRef.current += newFires;
-        setFireCount(fireCountRef.current);
+        const newFireCount = fireCountRef.current + 1;
+        fireCountRef.current = newFireCount;
+        setFireCount(newFireCount);
       }
 
       // 通关条件：同时满足高度和火苗数量
@@ -257,14 +266,16 @@ const CatchGame = ({ onComplete }) => {
       {/* 进度显示 */}
       <div className="flex justify-between items-center mb-2 px-2">
         <div className="text-memory-glow/60 text-sm">
-          火苗: {fireCount}/{WIN_FIRE_COUNT}
+          {fireCount === 0 ? '公司起什么名字好呢？' :
+           fireCount <= 2 ? '劲火？' : 
+           fireCount <= 4 ? '劲炎？' : '劲焱！'}
         </div>
         <div className="text-memory-glow/60 text-sm">
           高度: {Math.floor(caughtHeight)}/{WIN_HEIGHT}
         </div>
       </div>
       <p className="text-memory-glow/60 text-sm text-center mb-2">
-        移动接住方块和火苗
+        接不接？接什么？先接！
       </p>
 
       <div
@@ -359,7 +370,7 @@ const CatchGame = ({ onComplete }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <p className="text-memory-glow text-lg mb-4">就凭我 无名闯繁城</p>
+          <p className="text-memory-glow text-lg mb-4">这里或许能写点什么</p>
           <motion.button
             className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
             whileHover={{ scale: 1.05 }}
