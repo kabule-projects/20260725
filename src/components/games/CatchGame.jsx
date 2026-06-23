@@ -50,8 +50,8 @@ const CatchGame = ({ onComplete }) => {
   const PLAYER_TEXTURE = '/images/catch/player.png';
   
   const BLOCK_TYPES = [
-    { type: 'normal', color: '#e8d5b7', probability: 0.8 },
-    { type: 'fire', color: '#ff6b35', probability: 0.2 },
+    { type: 'normal', color: '#e8d5b7', probability: 0.7 },
+    { type: 'fire', color: '#ff6b35', probability: 0.3 },
   ];
 
   const spawnBlock = useCallback((gameWidth = GAME_WIDTH) => {
@@ -280,7 +280,7 @@ const CatchGame = ({ onComplete }) => {
 
       <div
         ref={containerRef}
-        className="relative w-full max-w-lg aspect-[3/4] bg-memory-dark/30 rounded overflow-hidden select-none mx-auto"
+        className="relative w-full max-w-lg aspect-[3/4] rounded overflow-hidden select-none mx-auto"
         style={{
           maxHeight: 'calc(80vh - 80px)',
           WebkitUserSelect: 'none',
@@ -288,6 +288,10 @@ const CatchGame = ({ onComplete }) => {
           msUserSelect: 'none',
           userSelect: 'none',
           WebkitTouchCallout: 'none',
+          backgroundImage: 'url(/images/catch/background.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
