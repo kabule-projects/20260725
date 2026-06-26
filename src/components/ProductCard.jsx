@@ -26,13 +26,8 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
           whileTap={isLocked ? {} : { scale: 0.98 }}
         >
           <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-            {/* 使用图层图片组件 */}
-            <ProductImage
-              year={product.year}
-              light={light}
-              threshold={threshold}
-              isFullyIlluminated={isFullyIlluminated}
-            />
+            {/* 使用商品图片组件 */}
+            <ProductImage year={product.year} />
 
             {/* 如果没有图片则显示占位符 */}
             {!isFullyIlluminated && isLocked && (

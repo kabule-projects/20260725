@@ -179,13 +179,8 @@ const Product = ({ lights, setLights }) => {
           <div
             className="relative aspect-[4/3] rounded-xl overflow-hidden bg-memory-dark/50 surreal-border"
           >
-            {/* 使用图层图片组件 */}
-            <ProductImage
-              year={product.year}
-              light={currentLight}
-              threshold={threshold}
-              isFullyIlluminated={isFullyIlluminated}
-            />
+            {/* 使用商品图片组件 */}
+            <ProductImage year={product.year} />
 
             {/* 如果没有图片则显示占位符 */}
             {isLocked && (
