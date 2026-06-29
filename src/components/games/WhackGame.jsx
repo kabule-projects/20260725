@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 // 游戏配置
 const GRID_SIZE = 5; // 5x5 格盘
@@ -10,11 +11,15 @@ const DURATION_DECREASE = 30; // 每次成功后减少的时长
 
 const WhackGame = ({ onComplete }) => {
   const [activeCell, setActiveCell] = useState(null); // 当前亮起的格子 { row, col }
+  const [activeImage, setActiveImage] = useState(null); // 当前显示的图片文件名
   const [score, setScore] = useState(0); // 成功次数
   const [isPlaying, setIsPlaying] = useState(false);
   const [gameState, setGameState] = useState('playing'); // 'playing' | 'win'
   const [isClicked, setIsClicked] = useState(false); // 是否已点击当前格子
   const timeoutRef = useRef(null);
+  const currentImageRef = useRef(null);
+  
+  const imageFiles = ['1.png', '2.png', '3.png', 'bomb.png'];
 
   // 计算当前亮灯时长
   const getCurrentDuration = useCallback(() => {
@@ -33,19 +38,25 @@ const WhackGame = ({ onComplete }) => {
     if (gameState !== 'playing') return;
     
     const newCell = getRandomCell();
+    const randomImage = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+    currentImageRef.current = randomImage;
     setActiveCell(newCell);
+    setActiveImage(randomImage);
     setIsClicked(false);
     
     // 设置超时，如果用户没点击则游戏失败
     const duration = getCurrentDuration();
     timeoutRef.current = setTimeout(() => {
       if (!isClicked) {
-        // 超时未点击，重置分数
-        setScore(0);
+        if (currentImageRef.current !== 'bomb.png') {
+          // 超时未点击普通图片，重置分数
+          setScore(0);
+        }
+        // 超时未点击炸弹，不重置分数
         showNextCell();
       }
     }, duration);
-  }, [gameState, getRandomCell, getCurrentDuration, isClicked]);
+  }, [gameState, getRandomCell, getCurrentDuration, isClicked, imageFiles]);
 
   // 开始游戏
   const startGame = useCallback(() => {
@@ -63,26 +74,31 @@ const WhackGame = ({ onComplete }) => {
     if (activeCell && activeCell.row === row && activeCell.col === col) {
       setIsClicked(true);
       clearTimeout(timeoutRef.current);
-      setActiveCell(null); // 立即取消发光
+      setActiveCell(null);
       
-      const newScore = score + 1;
-      setScore(newScore);
-      
-      // 检查是否通关
-      if (newScore >= TOTAL_SUCCESS) {
-        setGameState('win');
-        onComplete();
+      if (activeImage === 'bomb.png') {
+        // 点击炸弹，分数清零
+        setScore(0);
       } else {
-        // 继续下一轮
-        setTimeout(() => {
-          showNextCell();
-        }, 100);
+        // 点击普通图片，分数增加
+        const newScore = score + 1;
+        setScore(newScore);
+        
+        // 检查是否通关
+        if (newScore >= TOTAL_SUCCESS) {
+          setGameState('win');
+          onComplete();
+          return;
+        }
       }
-    } else {
-      // 点击错误，重置分数
-      setScore(0);
+      
+      // 继续下一轮
+      setTimeout(() => {
+        showNextCell();
+      }, 100);
     }
-  }, [isPlaying, gameState, isClicked, activeCell, score, showNextCell, onComplete]);
+    // 点击非亮起格子，没有任何后果
+  }, [isPlaying, gameState, isClicked, activeCell, activeImage, score, showNextCell, onComplete]);
 
   // 清理定时器
   useEffect(() => {
@@ -128,24 +144,37 @@ const WhackGame = ({ onComplete }) => {
           const row = Math.floor(index / GRID_SIZE);
           const col = index % GRID_SIZE;
           const isActive = activeCell && activeCell.row === row && activeCell.col === col;
+          const isBomb = isActive && activeImage === 'bomb.png';
           
           return (
             <motion.div
               key={index}
-              className="aspect-square rounded-md cursor-pointer border border-memory-accent/20"
+              className="relative aspect-square rounded-md cursor-pointer border border-memory-accent/20 overflow-hidden"
               onClick={() => handleCellClick(row, col)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               animate={{
                 backgroundColor: isActive 
-                  ? 'rgba(175, 220, 233, 0.8)' 
+                  ? isBomb 
+                    ? 'rgba(255, 150, 150, 0.8)' 
+                    : 'rgba(175, 220, 233, 0.8)' 
                   : 'rgba(26, 26, 46, 0.5)',
                 boxShadow: isActive 
-                  ? '0 0 20px rgba(175, 220, 233, 0.6)' 
+                  ? isBomb 
+                    ? '0 0 20px rgba(255, 150, 150, 0.6)' 
+                    : '0 0 20px rgba(175, 220, 233, 0.6)' 
                   : '0 0 0px rgba(175, 220, 233, 0)',
               }}
               transition={{ duration: 0.15 }}
-            />
+            >
+              {isActive && activeImage && (
+                <img
+                  src={`${IMAGE_BASE_URL}whack/${activeImage}`}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-contain p-1"
+                />
+              )}
+            </motion.div>
           );
         })}
       </div>

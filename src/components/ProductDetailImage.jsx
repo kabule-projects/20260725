@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { IMAGE_BASE_URL } from '../config/imageConfig';
 
 const ProductDetailImage = ({ year }) => {
   const [images, setImages] = useState([]);
@@ -19,7 +20,7 @@ const ProductDetailImage = ({ year }) => {
           return;
         }
 
-        const url = `/images/${year}-detail-${index}.${formats[fmtIdx]}`;
+        const url = `${IMAGE_BASE_URL}${year}-detail-${index}.${formats[fmtIdx]}`;
         const img = new Image();
         img.onload = () => {
           detailImages.push(url);

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 const SpotlightGame = ({ onComplete }) => {
   const [view, setView] = useState(1);
@@ -136,7 +137,7 @@ const SpotlightGame = ({ onComplete }) => {
               >
               {/* 远景底图：根据maskRemoved状态选择 */}
               <img
-                src={maskRemoved ? '/images/spotlight/无打光无面具.jpg' : '/images/spotlight/无打光面具.jpg'}
+                src={maskRemoved ? `${IMAGE_BASE_URL}spotlight/无打光无面具.jpg` : `${IMAGE_BASE_URL}spotlight/无打光面具.jpg`}
                 alt="远景"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -144,7 +145,7 @@ const SpotlightGame = ({ onComplete }) => {
               {/* 打光面具图层 */}
               <motion.img
                 key={`mask-${view}`}
-                src="/images/spotlight/打光面具.jpg"
+                src={`${IMAGE_BASE_URL}spotlight/打光面具.jpg`}
                 alt="打光效果"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 initial={{ opacity: 0 }}
@@ -155,7 +156,7 @@ const SpotlightGame = ({ onComplete }) => {
               {/* 打光无面具图层 */}
               <motion.img
                 key={`no-mask-${view}`}
-                src="/images/spotlight/打光无面具.jpg"
+                src={`${IMAGE_BASE_URL}spotlight/打光无面具.jpg`}
                 alt="打光效果"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 initial={{ opacity: 0 }}
@@ -189,7 +190,7 @@ const SpotlightGame = ({ onComplete }) => {
             >
               {/* 近景：显示面具或人 */}
               <img
-                src={maskRemoved ? '/images/spotlight/人.png' : '/images/spotlight/面具.png'}
+                src={maskRemoved ? `${IMAGE_BASE_URL}spotlight/人.png` : `${IMAGE_BASE_URL}spotlight/面具.png`}
                 alt="近景"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -218,7 +219,7 @@ const SpotlightGame = ({ onComplete }) => {
             <div className="relative w-full max-w-lg aspect-[3/4] rounded-lg overflow-hidden mx-auto">
               {/* 毕业 */}
               <img
-                src="/images/spotlight/毕业.jpg"
+                src={`${IMAGE_BASE_URL}spotlight/毕业.jpg`}
                 alt="毕业"
                 className="absolute inset-0 w-full h-full object-cover"
               />

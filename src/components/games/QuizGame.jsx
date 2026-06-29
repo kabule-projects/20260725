@@ -1,39 +1,40 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 // 题目数据（需要替换为实际图片和选项）
 const QUESTIONS = [
   {
     id: 1,
-    image: '/images/quiz-1.jpg',
+    image: `${IMAGE_BASE_URL}quiz/quiz-1.jpg`,
     question: '这是哪次舞台？',
     options: ['选这个', '选项B', '选项C', '选项D'],
     correctAnswer: 0,
   },
   {
     id: 2,
-    image: '/images/quiz-2.jpg',
+    image: `${IMAGE_BASE_URL}quiz/quiz-2.jpg`,
     question: '这是哪次舞台？',
     options: ['选项A', '选这个', '选项C', '选项D'],
     correctAnswer: 1,
   },
   {
     id: 3,
-    image: '/images/quiz-3.jpg',
+    image: `${IMAGE_BASE_URL}quiz/quiz-3.jpg`,
     question: '这是哪次舞台？',
     options: ['选项A', '选项B', '选这个', '选项D'],
     correctAnswer: 2,
   },
   {
     id: 4,
-    image: '/images/quiz-4.jpg',
+    image: `${IMAGE_BASE_URL}quiz/quiz-4.jpg`,
     question: '这是哪次舞台？',
     options: ['选项A', '选项B', '选项C', '选这个'],
     correctAnswer: 3,
   },
   {
     id: 5,
-    image: '/images/quiz-5.jpg',
+    image: `${IMAGE_BASE_URL}quiz/quiz-5.jpg`,
     question: '这是哪次舞台？',
     options: ['选这个', '选项B', '选项C', '选项D'],
     correctAnswer: 0,

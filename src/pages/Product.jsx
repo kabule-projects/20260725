@@ -10,21 +10,22 @@ import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
 import ProductDetailImage from '../components/ProductDetailImage';
+import { IMAGE_BASE_URL } from '../config/imageConfig';
 
 // 2014年图集图片
 const GALLERY_IMAGES_2014 = [
-  '/images/2014-gallery-1.jpg',
-  '/images/2014-gallery-2.jpg',
-  '/images/2014-gallery-3.jpg',
-  '/images/2014-gallery-4.jpg',
-  '/images/2014-gallery-5.jpg',
-  '/images/2014-gallery-6.jpg',
-  '/images/2014-gallery-7.jpg',
-  '/images/2014-gallery-8.jpg',
-  '/images/2014-gallery-9.jpg',
-  '/images/2014-gallery-10.jpg',
-  '/images/2014-gallery-11.jpg',
-  '/images/2014-gallery-12.jpg',
+  `${IMAGE_BASE_URL}2014-gallery-1.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-2.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-3.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-4.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-5.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-6.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-7.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-8.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-9.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-10.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-11.jpg`,
+  `${IMAGE_BASE_URL}2014-gallery-12.jpg`,
 ];
 
 // const ILLUMINATE_THRESHOLD = 500;
