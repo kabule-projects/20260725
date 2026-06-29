@@ -8,6 +8,7 @@ const SpotlightGame = ({ onComplete }) => {
   const [completed, setCompleted] = useState(false);
   const [view3Clickable, setView3Clickable] = useState(false);
   const [hintChanged, setHintChanged] = useState(false);
+  const [skipTransition, setSkipTransition] = useState(false);
   
   const lastClickTime = useRef(0);
   const fadeTimeoutRef = useRef(null);
@@ -27,6 +28,12 @@ const SpotlightGame = ({ onComplete }) => {
         setView3Clickable(true);
       }, 2000);
       return () => clearTimeout(timer);
+    }
+  }, [view]);
+
+  useEffect(() => {
+    if (view === 3) {
+      setSkipTransition(false);
     }
   }, [view]);
 
@@ -61,9 +68,8 @@ const SpotlightGame = ({ onComplete }) => {
         }
         
         if (maskRemoved && newProgress >= 1) {
-          setTimeout(() => {
-            setView(3);
-          }, 500);
+          setSkipTransition(true);
+          setView(3);
           return 1;
         }
         
@@ -107,13 +113,14 @@ const SpotlightGame = ({ onComplete }) => {
   return (
     <div className="w-full h-full px-[6%] py-[6%] flex items-center justify-center">
       <div className="relative w-full bg-memory-dark/50 rounded-lg p-4">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {view === 1 && (
             <motion.div
               key="view1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ exit: { duration: skipTransition ? 0 : undefined } }}
               className="relative"
             >
               {/* 提示词 */}
@@ -134,12 +141,25 @@ const SpotlightGame = ({ onComplete }) => {
                 className="absolute inset-0 w-full h-full object-cover"
               />
 
-              {/* 远景叠加层：根据maskRemoved状态选择 */}
+              {/* 打光面具图层 */}
               <motion.img
-                src={maskRemoved ? '/images/spotlight/打光无面具.jpg' : '/images/spotlight/打光面具.jpg'}
+                key={`mask-${view}`}
+                src="/images/spotlight/打光面具.jpg"
                 alt="打光效果"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                animate={{ opacity: spotlightProgress }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: !maskRemoved ? spotlightProgress : 0 }}
+                transition={{ duration: 0.3 }}
+              />
+              
+              {/* 打光无面具图层 */}
+              <motion.img
+                key={`no-mask-${view}`}
+                src="/images/spotlight/打光无面具.jpg"
+                alt="打光效果"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: maskRemoved ? spotlightProgress : 0 }}
                 transition={{ duration: 0.4 }}
               />
 
@@ -189,7 +209,7 @@ const SpotlightGame = ({ onComplete }) => {
         {view === 3 && (
           <motion.div
             key="view3"
-            initial={{ opacity: 0 }}
+            initial={skipTransition ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="relative"
