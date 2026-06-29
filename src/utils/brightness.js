@@ -29,7 +29,7 @@ export const formatCooldown = (seconds) => {
 export const calculateThreshold = (year) => {
   const currentYear = 2026;
   const earliestYear = 2014;
-  const minThreshold = 0;
+  const minThreshold = 10;
   const maxThreshold = 20;
   
   const yearDifference = currentYear - year;
@@ -44,11 +44,9 @@ export const calculateThreshold = (year) => {
 };
 
 export const is2026Unlocked = (lights, products) => {
-  const non2026Products = products.filter(p => p.year !== 2026);
+  const totalLight = products.reduce((total, product) => {
+    return total + (lights[product.id] || 0);
+  }, 0);
   
-  return non2026Products.every(product => {
-    const light = lights[product.id] || 0;
-    const threshold = calculateThreshold(product.year);
-    return light >= threshold;
-  });
+  return totalLight >= 725;
 };

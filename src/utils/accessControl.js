@@ -62,10 +62,65 @@ export const isPhaseUnlockedByProgress = (phaseId, lights, products) => {
   return true;
 };
 
+// 计算所有年份的 light 值总和
+export const calculateTotalLight = (lights, products) => {
+  return products.reduce((total, product) => {
+    return total + (lights[product.id] || 0);
+  }, 0);
+};
+
+// 计算2014年的进度：剩余商品的解锁进度
+export const calculate2014Progress = (lights, products) => {
+  const otherProducts = products.filter(p => p.year !== 2014);
+  if (otherProducts.length === 0) return 0;
+  
+  const unlockedCount = otherProducts.filter(product => {
+    const light = lights[product.id] || 0;
+    const threshold = calculateThreshold(product.year);
+    return light >= threshold;
+  }).length;
+  
+  return (unlockedCount / otherProducts.length) * 100;
+};
+
+// 判断2014是否已解锁（所有剩余商品都已解锁）
+export const is2014Unlocked = (lights, products) => {
+  const otherProducts = products.filter(p => p.year !== 2014);
+  return otherProducts.every(product => {
+    const light = lights[product.id] || 0;
+    const threshold = calculateThreshold(product.year);
+    return light >= threshold;
+  });
+};
+
+// 2026 解锁阈值：所有年份 light 值总和
+const YEAR_2026_TOTAL_THRESHOLD = 725;
+
 // 判断商品访问状态：'locked' | 'accessible' | 'unlocked'
 export const getProductAccessStatus = (product, lights, products) => {
   const phase = getProductPhase(product.year);
   if (!phase) return 'locked';
+  
+  // 2014 特殊处理：默认 accessible，解锁条件为所有其他商品都已解锁
+  if (product.year === 2014) {
+    return is2014Unlocked(lights, products) ? 'unlocked' : 'accessible';
+  }
+  
+  // 2026 特殊处理
+  if (product.year === 2026) {
+    // 检查是否可以访问（进入 phase 7）
+    const isPhase7Accessible = BASE_UNLOCK_DATE 
+      ? isPhaseUnlockedByDate(phase.id)
+      : isPhaseUnlockedByProgress(phase.id, lights, products);
+    
+    if (!isPhase7Accessible) {
+      return 'locked';
+    }
+    
+    // 检查是否已解锁（所有年份 light 值总和达到 725）
+    const totalLight = calculateTotalLight(lights, products);
+    return totalLight >= YEAR_2026_TOTAL_THRESHOLD ? 'unlocked' : 'accessible';
+  }
   
   // 检查日期解锁（仅当开放日期已定义时）
   if (BASE_UNLOCK_DATE && isPhaseUnlockedByDate(phase.id)) {

@@ -8,7 +8,6 @@ export const PRODUCTS = [
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2014.jpg`,
-    gameType: "hold",
     locked: false,
     moreInfo: {
       image: `${IMAGE_BASE_URL}2014-reveal.jpg`,

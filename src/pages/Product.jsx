@@ -5,7 +5,7 @@ import MiniGame from '../components/MiniGame';
 import PhotoGallery from '../components/PhotoGallery';
 import { contributeLight } from '../services/api';
 import { formatCooldown, calculateThreshold } from '../utils/brightness';
-import { getProductAccessStatus } from '../utils/accessControl';
+import { getProductAccessStatus, calculateTotalLight, calculate2014Progress } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
@@ -148,6 +148,18 @@ const Product = ({ lights, setLights }) => {
   const threshold = calculateThreshold(product.year);
   const isFullyIlluminated = isUnlocked;
 
+  const totalLight = calculateTotalLight(lights, PRODUCTS);
+  const YEAR_2026_TOTAL_THRESHOLD = 725;
+  let progress = 0;
+  
+  if (product.year === 2014) {
+    progress = calculate2014Progress(lights, PRODUCTS);
+  } else if (product.year === 2026) {
+    progress = Math.min((totalLight / YEAR_2026_TOTAL_THRESHOLD) * 100, 100);
+  } else {
+    progress = Math.min((currentLight / threshold) * 100, 100);
+  }
+
   return (
     <div className="min-h-screen pb-12">
       <header className="sticky top-0 z-50 bg-memory-dark/80 backdrop-blur-md border-b border-memory-accent/10">
@@ -249,18 +261,6 @@ const Product = ({ lights, setLights }) => {
                 </span>
                 <span className="text-memory-muted/50 text-sm">✧</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-memory-muted/50 to-memory-accent/50"
-                    initial={{ width: 0 }}
-                    animate={{
-                      width: `${Math.min((currentLight / threshold) * 100, 100)}%`,
-                    }}
-                    transition={{ duration: 0.8 }}
-                  />
-                </div>
-              </div>
               <p className="text-memory-muted/40 text-xs mt-3 text-center">
                 模糊的记忆碎片，或许大家还能再想起些什么……
               </p>
@@ -349,15 +349,14 @@ const Product = ({ lights, setLights }) => {
                       className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
                       initial={{ width: 0 }}
                       animate={{
-                        width: `${Math.min((currentLight / threshold) * 100, 100)}%`,
+                        width: `${progress}%`,
                       }}
                       transition={{ duration: 0.8 }}
                     />
                   </div>
                 </div>
                 <span className="text-memory-muted text-xs">
-                  已刻印{Math.min(Math.round((currentLight / threshold) * 100), 100)}%
-                </span> 
+                  已刻印{Math.round(progress)}%</span> 
               </div>
             </div>
           )}

@@ -14,7 +14,7 @@ const Home = ({ lights }) => {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-4xl md:text-5xl font-serif text-gradient mb-4">
-            <a href={import.meta.env.BASE_URL} onClick={() => window.location.href = import.meta.env.BASE_URL}>记忆商店</a>
+            <a href={import.meta.env.BASE_URL} onClick={() => window.location.href = import.meta.env.BASE_URL}>Shen'Storey</a>
           </h1>
           <p className="text-memory-glow/60 text-sm tracking-widest uppercase">
             2014-2026
