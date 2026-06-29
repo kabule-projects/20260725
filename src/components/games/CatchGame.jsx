@@ -6,6 +6,9 @@ const CatchGame = ({ onComplete }) => {
   const [won, setWon] = useState(false);
   const [caughtHeight, setCaughtHeight] = useState(0);
   const [fireCount, setFireCount] = useState(0);
+  const [showScenes, setShowScenes] = useState(true);
+  const [currentScene, setCurrentScene] = useState(0);
+  const [sceneImages, setSceneImages] = useState([]);
 
   const playerXRef = useRef(150);
   const [playerX, setPlayerX] = useState(150);
@@ -20,6 +23,56 @@ const CatchGame = ({ onComplete }) => {
   const caughtHeightRef = useRef(0);
   const fireCountRef = useRef(0);
   const fireAddedThisFrameRef = useRef(false);
+
+  const SCENE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
+
+  useEffect(() => {
+    const loadSceneImages = async () => {
+      const images = [];
+      let index = 1;
+      let found = true;
+
+      while (found) {
+        found = false;
+        for (const ext of SCENE_EXTENSIONS) {
+          const src = `/images/catch/scene/${index}.${ext}`;
+          try {
+            await new Promise((resolve, reject) => {
+              const img = new Image();
+              img.onload = () => {
+                images.push(src);
+                found = true;
+                resolve();
+              };
+              img.onerror = () => resolve();
+              img.src = src;
+            });
+            if (found) break;
+          } catch {
+            // 忽略错误
+          }
+        }
+        index++;
+        if (index > 50) break;
+      }
+
+      setSceneImages(images);
+    };
+
+    loadSceneImages();
+  }, []);
+
+  const handleSceneClick = () => {
+    if (currentScene < sceneImages.length - 1) {
+      setCurrentScene(prev => prev + 1);
+    } else {
+      setShowScenes(false);
+    }
+  };
+
+  const handleStartGame = () => {
+    setStarted(true);
+  };
 
   const PLAYER_WIDTH = 60;
   const PLAYER_HEIGHT = 70;
@@ -248,6 +301,8 @@ const CatchGame = ({ onComplete }) => {
     setWon(false);
     setStarted(false);
     setPlayerX(150);
+    setShowScenes(true);
+    setCurrentScene(0);
     playerXRef.current = 150;
     wonRef.current = false;
     caughtHeightRef.current = 0;
@@ -263,6 +318,34 @@ const CatchGame = ({ onComplete }) => {
   return (
     <div className="w-full h-full px-[12%] py-[12%] flex items-center justify-center">
       <div className="relative w-full bg-memory-dark/50 rounded-lg surreal-border p-4">
+        {showScenes && sceneImages.length > 0 && (
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center bg-black z-50 rounded-lg select-none"
+            initial={false}
+            animate={{ opacity: 1 }}
+            onClick={handleSceneClick}
+            style={{
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none',
+              userSelect: 'none',
+              WebkitTouchCallout: 'none',
+            }}
+          >
+            <img
+              src={sceneImages[currentScene]}
+              alt={`剧情 ${currentScene + 1}`}
+              className="w-full max-w-lg aspect-[3/4] object-contain rounded-lg"
+              style={{ 
+                maxHeight: 'calc(80vh - 80px)',
+                WebkitUserDrag: 'none',
+                userDrag: 'none',
+                pointerEvents: 'none',
+              }}
+            />
+          </motion.div>
+        )}
+
       {/* 进度显示 */}
       <div className="flex justify-between items-center mb-2 px-2">
         <div className="text-memory-glow/60 text-sm">
@@ -368,10 +451,10 @@ const CatchGame = ({ onComplete }) => {
         />
       </div>
 
-      {!started && !won && (
+      {!showScenes && !started && !won && (
         <motion.div
           className="absolute inset-0 bg-memory-dark/90 flex flex-col items-center justify-center rounded-lg"
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
         >
           <p className="text-memory-glow text-lg mb-4">这里或许能写点什么</p>
@@ -379,7 +462,7 @@ const CatchGame = ({ onComplete }) => {
             className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setStarted(true)}
+            onClick={handleStartGame}
           >
             开始
           </motion.button>
@@ -389,7 +472,7 @@ const CatchGame = ({ onComplete }) => {
       {won && (
         <motion.div
           className="absolute inset-0 bg-memory-dark/90 flex flex-col items-center justify-center rounded-lg"
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
         >
           <p className="text-memory-glow text-lg mb-2">成功!</p>
