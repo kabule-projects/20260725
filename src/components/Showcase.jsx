@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { IMAGE_BASE_URL } from '../config/imageConfig';
-import { getProductAccessStatus, calculateTotalLight } from '../utils/accessControl';
+import { getProductAccessStatus } from '../utils/accessControl';
 import { calculateThreshold } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
 
-const YEAR_2026_TOTAL_THRESHOLD = 725;
-
 // 商品图组件 - 支持透明底PNG
-const ProductSilhouetteImage = ({ year, isActive }) => {
+// displayStatus: 'silhouette' | 'normal' | 'unlocked-glow'
+const ProductSilhouetteImage = ({ year, displayStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const basePath = `${IMAGE_BASE_URL}${year}`;
   const formats = ['png', 'jpg', 'jpeg'];
@@ -29,15 +28,27 @@ const ProductSilhouetteImage = ({ year, isActive }) => {
     tryLoadImage(basePath, setImageSrc);
   }, [basePath]);
 
+  // 根据状态设置样式
+  const getImageStyle = () => {
+    switch (displayStatus) {
+      case 'silhouette':
+        return 'brightness-[0.3]';
+      case 'normal':
+        return 'brightness-100';
+      case 'unlocked-glow':
+        return 'brightness-100 drop-shadow-[0_0_15px_rgba(255,200,100,0.8)]';
+      default:
+        return 'brightness-100';
+    }
+  };
+
   return (
     <div className="relative w-full h-full flex items-center justify-center">
       {imageSrc ? (
         <img
           src={imageSrc}
           alt=""
-          className={`max-w-full max-h-full object-contain transition-all duration-300 ${
-            isActive ? 'drop-shadow-[0_0_20px_rgba(255,200,100,0.8)] scale-105' : ''
-          }`}
+          className={`max-w-full max-h-full object-contain transition-all duration-300 ${getImageStyle()}`}
         />
       ) : (
         <div className="w-full h-full bg-memory-dark/30 rounded" />
@@ -63,11 +74,11 @@ const getProductDisplayStatus = (product, accessStatus, light, threshold) => {
 };
 
 const Showcase = ({ lights, onProductClick }) => {
-  // 组织商品布局：1行2014 + 4行每行3个（共13个商品）
+  // 组织商品布局：1行2014 + 3行每行4个（共13个商品）
   const product2014 = PRODUCTS.find(p => p.year === 2014);
   const otherProducts = PRODUCTS.filter(p => p.year !== 2014);
   
-  // 将其他年份（12个）分成4行，每行3个
+  // 将其他年份（12个）分成3行，每行4个
   const rows = [];
   for (let i = 0; i < 12; i += 4) {
     rows.push(otherProducts.slice(i, i + 4));
@@ -108,28 +119,26 @@ const Showcase = ({ lights, onProductClick }) => {
       />
       
       {/* 商品陈列区域 */}
-      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[6%] px-[8%]">
-        {/* 第一排：2014（居中，大尺寸） */}
+      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[12%] px-[2%]">
+        {/* 第一排：2014（居中） */}
         <div className="w-full flex justify-center mb-[2%]">
           {product2014 && (
             <ShowcaseItem
               product={product2014}
               lights={lights}
-              size="large"
               onClick={() => handleProductClick(product2014)}
             />
           )}
         </div>
         
-        {/* 接下来4排，每排4个 */}
+        {/* 接下来3排，每排4个 */}
         {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="w-full flex justify-center gap-[4%] mb-[1.5%]">
+          <div key={rowIndex} className="w-full flex justify-center gap-[1%] mb-[2%]">
             {row.map((product) => (
               <ShowcaseItem
                 key={product.id}
                 product={product}
                 lights={lights}
-                size="small"
                 onClick={() => handleProductClick(product)}
               />
             ))}
@@ -141,45 +150,31 @@ const Showcase = ({ lights, onProductClick }) => {
 };
 
 // 展示单个商品
-const ShowcaseItem = ({ product, lights, size, onClick }) => {
+const ShowcaseItem = ({ product, lights, onClick }) => {
   const light = lights[product.id] || 0;
   const threshold = calculateThreshold(product.year);
   const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
-  const totalLight = calculateTotalLight(lights, PRODUCTS);
   
   const displayStatus = getProductDisplayStatus(product, accessStatus, light, threshold);
   
   const isClickable = displayStatus === 'silhouette' || displayStatus === 'normal' || displayStatus === 'unlocked-glow';
   
-  const sizeClasses = size === 'large' 
-    ? 'w-[18%] aspect-square' 
-    : 'w-[15%] aspect-square';
-
   return (
     <motion.div
-      className={`${sizeClasses} relative cursor-pointer`}
+      className="w-[18%] aspect-square relative cursor-pointer"
       onClick={isClickable ? onClick : undefined}
       whileHover={isClickable ? { scale: 1.05 } : {}}
       whileTap={isClickable ? { scale: 0.95 } : {}}
     >
-      {/* 剪影层 - 用于所有非unlocked-glow状态 */}
-      {displayStatus !== 'unlocked-glow' && (
-        <div className="absolute inset-0 bg-memory-dark/70 rounded-lg flex items-center justify-center">
-          <ProductSilhouetteImage year={product.year} isActive={false} />
-        </div>
+      {/* 背景遮罩 - 仅剪影状态 */}
+      {displayStatus === 'silhouette' && (
+        <div className="absolute inset-0 bg-memory-dark/50 rounded-lg" />
       )}
       
-      {/* 正常商品层 - 用于accessible和unlocked-glow状态 */}
-      {(displayStatus === 'normal' || displayStatus === 'unlocked-glow') && (
-        <div className="absolute inset-0 rounded-lg flex items-center justify-center">
-          <ProductSilhouetteImage year={product.year} isActive={displayStatus === 'unlocked-glow'} />
-        </div>
-      )}
-      
-      {/* 发光特效 - 仅unlocked-glow状态 */}
-      {displayStatus === 'unlocked-glow' && (
-        <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-memory-accent/30 to-transparent animate-pulse" />
-      )}
+      {/* 商品图片 */}
+      <div className="absolute inset-0 rounded-lg flex items-center justify-center overflow-hidden">
+        <ProductSilhouetteImage year={product.year} displayStatus={displayStatus} />
+      </div>
     </motion.div>
   );
 };

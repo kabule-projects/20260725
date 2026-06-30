@@ -30,18 +30,6 @@ const Home = ({ lights }) => {
           </p>
         </motion.div>
 
-        <motion.div
-          className="mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-memory-card/50 surreal-border"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <span className="text-memory-accent text-lg">✧</span>
-          <span className="text-memory-glow text-sm">
-            已收集的记忆碎片：{' '}
-            <span className="text-memory-accent font-medium">{totalLight}</span>
-          </span>
-        </motion.div>
       </header>
 
       <main className="px-4 md:px-6">
@@ -67,6 +55,22 @@ const Home = ({ lights }) => {
                 <BillboardCharacter message={dialogMessage} />
               </div>
             </div>
+          </div>
+        </motion.div>
+
+        {/* 已收集的记忆碎片 */}
+        <motion.div
+          className="max-w-6xl mx-auto mb-12 text-center"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-memory-card/50 surreal-border">
+            <span className="text-memory-accent text-lg">✧</span>
+            <span className="text-memory-glow text-sm">
+              已收集的记忆碎片：{' '}
+              <span className="text-memory-accent font-medium">{totalLight}</span>
+            </span>
           </div>
         </motion.div>
 
