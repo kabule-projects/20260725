@@ -35,7 +35,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
               isLocked ? 'opacity-60' : ''
             }`}
           >
-            <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
+            <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
               {/* 2014年在unlocked状态之前显示❔ */}
               {product.year === 2014 && accessStatus !== 'unlocked' ? (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -100,7 +100,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
             whileHover={isLocked ? {} : { y: -5, scale: 1.02 }}
             whileTap={isLocked ? {} : { scale: 0.98 }}
           >
-            <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
+            <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
               {/* 2014年在unlocked状态之前显示❔ */}
               {product.year === 2014 && accessStatus !== 'unlocked' ? (
                 <div className="absolute inset-0 flex items-center justify-center">

@@ -1,9 +1,18 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
+import Showcase from '../components/Showcase';
+import BillboardCharacter from '../components/BillboardCharacter';
 import { PRODUCTS } from '../data/products';
 
 const Home = ({ lights }) => {
+  const [dialogMessage, setDialogMessage] = useState('');
+
   const totalLight = Object.values(lights).reduce((sum, val) => sum + val, 0);
+
+  const handleProductClick = (product, message) => {
+    setDialogMessage(message);
+  };
 
   return (
     <div className="min-h-screen pb-12">
@@ -36,6 +45,32 @@ const Home = ({ lights }) => {
       </header>
 
       <main className="px-4 md:px-6">
+        {/* 橱窗和看板郎区域 */}
+        <motion.div
+          className="max-w-6xl mx-auto mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div 
+            className="relative w-full"
+            style={{ paddingBottom: '66.67%' }} // 3:2 比例
+          >
+            <div className="absolute inset-0 flex gap-2">
+              {/* 橱窗 - 60% */}
+              <div className="w-[60%] h-full">
+                <Showcase lights={lights} onProductClick={handleProductClick} />
+              </div>
+              
+              {/* 看板郎 - 40% */}
+              <div className="w-[40%] h-full">
+                <BillboardCharacter message={dialogMessage} />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* 商品卡片网格 */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
           {PRODUCTS.map((product, index) => (
             <motion.div
