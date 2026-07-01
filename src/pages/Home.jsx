@@ -7,10 +7,12 @@ import { PRODUCTS } from '../data/products';
 
 const Home = ({ lights }) => {
   const [dialogMessage, setDialogMessage] = useState('');
+  const [messageKey, setMessageKey] = useState(0);
 
   const totalLight = Object.values(lights).reduce((sum, val) => sum + val, 0);
 
   const handleProductClick = (product, message) => {
+    setMessageKey(prev => prev + 1);
     setDialogMessage(message);
   };
 
@@ -52,7 +54,7 @@ const Home = ({ lights }) => {
               
               {/* 看板郎 - 40% */}
               <div className="w-[40%] h-full">
-                <BillboardCharacter message={dialogMessage} />
+                <BillboardCharacter message={dialogMessage} key={messageKey} />
               </div>
             </div>
           </div>

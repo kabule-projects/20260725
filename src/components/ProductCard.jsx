@@ -36,27 +36,12 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
             }`}
           >
             <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-              {/* 2014年在unlocked状态之前显示❔ */}
-              {product.year === 2014 && accessStatus !== 'unlocked' ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl text-memory-muted">❔</span>
-                </div>
-              ) : (
-                <ProductImage year={product.year} />
-              )}
-
-              {!isFullyIlluminated && isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl text-memory-muted">
-                    🔒
-                  </span>
-                </div>
-              )}
+              <ProductImage year={product.year} accessStatus={accessStatus} />
 
               {isLocked && (
                 <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">
                   <span className="text-memory-muted text-xs uppercase tracking-widest">
-                    预售
+                    待上架
                   </span>
                 </div>
               )}
@@ -101,35 +86,12 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
             whileTap={isLocked ? {} : { scale: 0.98 }}
           >
             <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-              {/* 2014年在unlocked状态之前显示❔ */}
-              {product.year === 2014 && accessStatus !== 'unlocked' ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl text-memory-muted">❔</span>
-                </div>
-              ) : (
-                <ProductImage year={product.year} />
-              )}
-
-              {!isFullyIlluminated && isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-4xl text-memory-muted">
-                    🔒
-                  </span>
-                </div>
-              )}
-
-              {!isLocked && light > 0 && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-memory-accent/20 to-transparent"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                />
-              )}
+              <ProductImage year={product.year} accessStatus={accessStatus} />
 
               {isLocked && (
                 <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">
                   <span className="text-memory-muted text-xs uppercase tracking-widest">
-                    预售
+                    待上架
                   </span>
                 </div>
               )}

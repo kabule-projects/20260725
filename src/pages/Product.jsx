@@ -127,6 +127,7 @@ const Product = ({ lights, setLights }) => {
   const accessStatus = isLightsLoaded ? getProductAccessStatus(product, lights, PRODUCTS) : 'loading';
   const isLocked = accessStatus === 'locked';
   const isUnlocked = accessStatus === 'unlocked';
+  const isSilhouette = accessStatus === 'locked' || accessStatus === 'accessible';
 
   // 锁定状态下重定向回首页（仅在数据加载完成后）
   useEffect(() => {
@@ -190,10 +191,10 @@ const Product = ({ lights, setLights }) => {
           </div>
 
           <div
-            className="relative aspect-[4/3] rounded-xl overflow-hidden bg-memory-dark/50 surreal-border"
+            className="relative aspect-square rounded-xl overflow-hidden bg-memory-dark/50 surreal-border"
           >
             {/* 使用商品图片组件 */}
-            <ProductImage year={product.year} />
+            <ProductImage year={product.year} accessStatus={accessStatus} />
 
             {/* 如果没有图片则显示占位符 */}
             {isLocked && (
@@ -217,11 +218,13 @@ const Product = ({ lights, setLights }) => {
             </AnimatePresence>
           </div>
 
-          <div className="memory-card rounded-xl p-6 space-y-4">
-            <p className="text-memory-glow/90 leading-relaxed italic">
-              "{product.description}"
-            </p>
-          </div>
+          {isUnlocked && (
+            <div className="memory-card rounded-xl p-6 space-y-4">
+              <p className="text-memory-glow/90 leading-relaxed italic">
+                "{product.description}"
+              </p>
+            </div>
+          )}
 
           <AnimatePresence>
             {isUnlocked && product.moreInfo && (
@@ -255,14 +258,14 @@ const Product = ({ lights, setLights }) => {
           {!isLocked && !isUnlocked && product.moreInfo && (
             <div className="memory-card rounded-xl p-6 border-memory-muted/20">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-memory-muted/50 text-sm">✧</span>
-                <span className="text-memory-muted/50 text-sm uppercase tracking-wider">
+                <span className="text-memory-muted text-sm">✧</span>
+                <span className="text-memory-muted text-sm uppercase tracking-wider">
                   隐藏的记忆
                 </span>
-                <span className="text-memory-muted/50 text-sm">✧</span>
+                <span className="text-memory-muted text-sm">✧</span>
               </div>
-              <p className="text-memory-muted/40 text-xs mt-3 text-center">
-                模糊的记忆碎片，或许大家还能再想起些什么……
+              <p className="text-memory-muted text-xs mt-3 text-center">
+                模糊的记忆碎片，或许大家还能再想起些什么……<br />点击下方加入回忆，一起找回这件商品吧
               </p>
             </div>
           )}

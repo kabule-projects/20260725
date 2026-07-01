@@ -41,22 +41,25 @@ export const isPhaseUnlockedByDate = (phaseId) => {
 export const isPhaseUnlockedByProgress = (phaseId, lights, products) => {
   const currentPhaseIndex = getPhaseIndex(phaseId);
   
-  // 第一个阶段默认解锁
+  // 第一个阶段默认解锁（2014默认accessible）
   if (currentPhaseIndex === 0) return true;
   
-  // 检查所有前置阶段的商品是否都已解锁
+  // 检查所有前置阶段的商品是否都已解锁或可访问
   for (let i = 0; i < currentPhaseIndex; i++) {
     const prevPhase = PHASES[i];
-    const isPrevPhaseUnlocked = prevPhase.years.every(year => {
+    const isPrevPhaseAccessible = prevPhase.years.every(year => {
       const product = products.find(p => p.year === year);
       if (!product) return false;
+      
+      // 2014年特殊处理：直接视为可访问
+      if (year === 2014) return true;
       
       const light = lights[product.id] || 0;
       const threshold = calculateThreshold(product.year);
       return light >= threshold;
     });
     
-    if (!isPrevPhaseUnlocked) return false;
+    if (!isPrevPhaseAccessible) return false;
   }
   
   return true;

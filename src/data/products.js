@@ -4,9 +4,9 @@ export const PRODUCTS = [
   {
     id: "2014",
     year: 2014,
-    title: "[占位文本]",
-    branch: "[占位文本]",
-    description: "[占位文本]",
+    title: "勇气",
+    branch: "[？]",
+    description: "[description]",
     image: `${IMAGE_BASE_URL}2014.jpg`,
     locked: false,
     moreInfo: {
@@ -17,7 +17,7 @@ export const PRODUCTS = [
   {
     id: "2015",
     year: 2015,
-    title: "[占位文本]",
+    title: "小小花园",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2015.jpg`,
@@ -31,7 +31,7 @@ export const PRODUCTS = [
   {
     id: "2016",
     year: 2016,
-    title: "[占位文本]",
+    title: "塞壬的镜子",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2016.jpg`,
@@ -45,7 +45,7 @@ export const PRODUCTS = [
   {
     id: "2017",
     year: 2017,
-    title: "[占位文本]",
+    title: "安静的翅膀",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2017.jpg`,
@@ -59,7 +59,7 @@ export const PRODUCTS = [
   {
     id: "2018",
     year: 2018,
-    title: "[占位文本]",
+    title: "有形状的梦想",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2018.jpg`,
@@ -87,7 +87,7 @@ export const PRODUCTS = [
   {
     id: "2020",
     year: 2020,
-    title: "[占位文本]",
+    title: "想去的地方",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2020.jpg`,
@@ -101,7 +101,7 @@ export const PRODUCTS = [
   {
     id: "2021",
     year: 2021,
-    title: "[占位文本]",
+    title: "定制护深服",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2021.jpg`,
@@ -115,7 +115,7 @@ export const PRODUCTS = [
   {
     id: "2022",
     year: 2022,
-    title: "[占位文本]",
+    title: "旅人的馈赠",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2022.jpg`,
@@ -129,7 +129,7 @@ export const PRODUCTS = [
   {
     id: "2023",
     year: 2023,
-    title: "[占位文本]",
+    title: "真实的色彩",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2023.jpg`,
@@ -137,13 +137,13 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: `${IMAGE_BASE_URL}2023-reveal.jpg`,
-      text: "[占位文本]"
+      text: "画手：@饭老师id是什么！"
     }
   },
   {
     id: "2024",
     year: 2024,
-    title: "[占位文本]",
+    title: "世界之窗",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2024.jpg`,
@@ -157,7 +157,7 @@ export const PRODUCTS = [
   {
     id: "2025",
     year: 2025,
-    title: "[占位文本]",
+    title: "永远同行之人",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2025.jpg`,
@@ -171,7 +171,7 @@ export const PRODUCTS = [
   {
     id: "2026",
     year: 2026,
-    title: "[占位文本]",
+    title: "百年老店的非卖品",
     branch: "[占位文本]",
     description: "[占位文本]",
     image: `${IMAGE_BASE_URL}2026.jpg`,

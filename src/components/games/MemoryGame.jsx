@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
-// 游戏配置
 const SYMBOLS = [
-  { id: 1, color: 'bg-memory-accent', icon: '●' },
-  { id: 2, color: 'bg-memory-glow', icon: '■' },
-  { id: 3, color: 'bg-purple-500', icon: '▲' },
-  { id: 4, color: 'bg-green-500', icon: '★' },
-  { id: 5, color: 'bg-pink-500', icon: '♦' },
-  { id: 6, color: 'bg-yellow-500', icon: '♠' },
+  { id: 1, image: `${IMAGE_BASE_URL}memory/1.png` },
+  { id: 2, image: `${IMAGE_BASE_URL}memory/2.png` },
+  { id: 3, image: `${IMAGE_BASE_URL}memory/3.png` },
+  { id: 4, image: `${IMAGE_BASE_URL}memory/4.png` },
+  { id: 5, image: `${IMAGE_BASE_URL}memory/5.png` },
+  { id: 6, image: `${IMAGE_BASE_URL}memory/6.png` },
+  { id: 7, image: `${IMAGE_BASE_URL}memory/7.png` },
+  { id: 8, image: `${IMAGE_BASE_URL}memory/8.png` },
 ];
 
 const FLIP_DURATION = 600; // 翻牌动画时长（毫秒）
@@ -105,7 +107,7 @@ const MemoryGame = ({ onComplete }) => {
   }
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
+    <div className="relative w-full max-w-[400px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
       {/* 标题 */}
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">记忆配对</h2>
@@ -125,7 +127,7 @@ const MemoryGame = ({ onComplete }) => {
           return (
             <motion.div
               key={card.uniqueId}
-              className="aspect-square cursor-pointer"
+              className="aspect-[3/4] cursor-pointer"
               onClick={() => handleCardClick(card.uniqueId)}
               whileHover={!isFaceUp && !isChecking ? { scale: 1.05 } : {}}
               whileTap={!isFaceUp && !isChecking ? { scale: 0.95 } : {}}
@@ -148,12 +150,12 @@ const MemoryGame = ({ onComplete }) => {
               
               {/* 卡片正面（翻转后显示） */}
               <div
-                className={`absolute inset-0 rounded-lg border border-white/20 flex items-center justify-center ${card.color} ${
+                className={`absolute inset-0 rounded-lg border border-white/20 flex items-center justify-center bg-memory-dark/80 ${
                   card.isMatched ? 'opacity-50' : ''
                 }`}
                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
-                <span className="text-white text-2xl font-bold">{card.icon}</span>
+                <img src={card.image} alt="" className="w-full h-full object-cover rounded-lg" />
               </div>
             </motion.div>
           );

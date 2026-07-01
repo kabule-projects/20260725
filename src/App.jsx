@@ -39,6 +39,46 @@ function App() {
     checkVersion();
   }, []);
 
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+    document.addEventListener('contextmenu', handleContextMenu);
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
+
+  useEffect(() => {
+    const LAST_REFRESH_KEY = 'memoryStore:lastRefreshDate';
+    
+    const getTodayDate = () => {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    };
+
+    const today = getTodayDate();
+    const lastRefresh = localStorage.getItem(LAST_REFRESH_KEY);
+
+    if (lastRefresh !== today) {
+      localStorage.setItem(LAST_REFRESH_KEY, today);
+      window.location.reload();
+      return;
+    }
+
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const msUntilMidnight = midnight - now;
+
+    const timer = setTimeout(() => {
+      localStorage.setItem(LAST_REFRESH_KEY, getTodayDate());
+      window.location.reload();
+    }, msUntilMidnight);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const updateLights = async () => {
     try {
       const data = await fetchAllLights();

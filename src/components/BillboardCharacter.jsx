@@ -46,7 +46,7 @@ const BillboardCharacter = ({ message }) => {
         {showDialog && currentMessage && (
           <motion.div
             key={currentMessage}
-            className="absolute top-[15%] left-[5%] right-[5%]"
+            className="absolute top-[60%] left-[5%] right-[5%]"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}

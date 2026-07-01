@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { IMAGE_BASE_URL } from '../config/imageConfig';
 
-const ProductImage = ({ year }) => {
+const ProductImage = ({ year, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   // 图片路径（本地存储）
@@ -31,14 +31,20 @@ const ProductImage = ({ year }) => {
   // 初始化加载图片
   if (!imageSrc) tryLoadImage(basePath, setImageSrc);
 
+  const getImageStyle = () => {
+    if (accessStatus === 'locked' || accessStatus === 'accessible') {
+      return 'brightness-[0]';
+    }
+    return 'brightness-100';
+  };
+
   return (
     <div className="absolute inset-0">
       {imageSrc && (
         <img
           src={imageSrc}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1.0 }}
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${getImageStyle()}`}
         />
       )}
     </div>

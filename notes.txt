@@ -57,3 +57,22 @@ sudo chmod -R 755 /var/www/20260725/
 
 # 重载 Nginx
 sudo systemctl reload nginx
+
+
+
+
+
+brew install webp
+
+# 单个文件
+cwebp -alpha_q 100 input.png -o output.webp
+
+# 批量转换当前目录所有PNG（保留透明通道）
+for file in *.png; do
+  cwebp -alpha_q 100 "$file" -o "${file%.png}.webp"
+done
+
+# 批量转换指定目录
+find /path/to/images -name "*.png" -exec cwebp -alpha_q 100 {} -o {}.webp \;
+# 然后删除多余的.png后缀
+rename 's/\.png\.webp$/.webp/' /path/to/images/*.png.webp

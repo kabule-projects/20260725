@@ -4,10 +4,11 @@ import { IMAGE_BASE_URL } from '../config/imageConfig';
 import { getProductAccessStatus } from '../utils/accessControl';
 import { calculateThreshold } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
+import { getBillboardMessage } from '../data/billboardMessages';
 
 // 商品图组件 - 支持透明底PNG
-// displayStatus: 'silhouette' | 'normal' | 'unlocked-glow'
-const ProductSilhouetteImage = ({ year, displayStatus }) => {
+// accessStatus: 'locked' | 'accessible' | 'unlocked'
+const ProductSilhouetteImage = ({ year, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const basePath = `${IMAGE_BASE_URL}${year}`;
   const formats = ['png', 'jpg', 'jpeg'];
@@ -28,18 +29,11 @@ const ProductSilhouetteImage = ({ year, displayStatus }) => {
     tryLoadImage(basePath, setImageSrc);
   }, [basePath]);
 
-  // 根据状态设置样式
   const getImageStyle = () => {
-    switch (displayStatus) {
-      case 'silhouette':
-        return 'brightness-[0.3]';
-      case 'normal':
-        return 'brightness-100';
-      case 'unlocked-glow':
-        return 'brightness-100 drop-shadow-[0_0_15px_rgba(255,200,100,0.8)]';
-      default:
-        return 'brightness-100';
+    if (accessStatus === 'locked' || accessStatus === 'accessible') {
+      return 'brightness-[0]';
     }
+    return 'brightness-100';
   };
 
   return (
@@ -57,22 +51,6 @@ const ProductSilhouetteImage = ({ year, displayStatus }) => {
   );
 };
 
-// 判断商品显示状态
-const getProductDisplayStatus = (product, accessStatus, light, threshold) => {
-  if (product.year === 2014) {
-    // 2014: locked/accessible 显示剪影, unlocked 显示商品+发光
-    return accessStatus === 'unlocked' ? 'unlocked-glow' : 'silhouette';
-  } else if (product.year === 2026) {
-    // 2026: locked/accessible 显示剪影, unlocked 显示商品+发光
-    return accessStatus === 'unlocked' ? 'unlocked-glow' : 'silhouette';
-  } else {
-    // 其他年份: locked 显示剪影, accessible 显示商品, unlocked 显示商品+发光
-    if (accessStatus === 'locked') return 'silhouette';
-    if (accessStatus === 'accessible') return 'normal';
-    return 'unlocked-glow';
-  }
-};
-
 const Showcase = ({ lights, onProductClick }) => {
   // 组织商品布局：1行2014 + 3行每行4个（共13个商品）
   const product2014 = PRODUCTS.find(p => p.year === 2014);
@@ -85,27 +63,8 @@ const Showcase = ({ lights, onProductClick }) => {
   }
 
   const handleProductClick = (product) => {
-    const light = lights[product.id] || 0;
-    const threshold = calculateThreshold(product.year);
     const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
-    const displayStatus = getProductDisplayStatus(product, accessStatus, light, threshold);
-    
-    let message = '';
-    
-    switch (displayStatus) {
-      case 'silhouette':
-        message = '还没找到这里的商品，晚点再来吧';
-        break;
-      case 'normal':
-        message = '大家的回忆还不够解锁这件商品呢，可以再帮我想想吗？';
-        break;
-      case 'unlocked-glow':
-        message = product.moreInfo?.text || '记忆已照亮';
-        break;
-      default:
-        message = '';
-    }
-    
+    const message = getBillboardMessage(product.year, accessStatus);
     onProductClick(product, message);
   };
 
@@ -151,29 +110,17 @@ const Showcase = ({ lights, onProductClick }) => {
 
 // 展示单个商品
 const ShowcaseItem = ({ product, lights, onClick }) => {
-  const light = lights[product.id] || 0;
-  const threshold = calculateThreshold(product.year);
   const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
-  
-  const displayStatus = getProductDisplayStatus(product, accessStatus, light, threshold);
-  
-  const isClickable = displayStatus === 'silhouette' || displayStatus === 'normal' || displayStatus === 'unlocked-glow';
   
   return (
     <motion.div
       className="w-[18%] aspect-square relative cursor-pointer"
-      onClick={isClickable ? onClick : undefined}
-      whileHover={isClickable ? { scale: 1.05 } : {}}
-      whileTap={isClickable ? { scale: 0.95 } : {}}
+      onClick={onClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
-      {/* 背景遮罩 - 仅剪影状态 */}
-      {displayStatus === 'silhouette' && (
-        <div className="absolute inset-0 bg-memory-dark/50 rounded-lg" />
-      )}
-      
-      {/* 商品图片 */}
       <div className="absolute inset-0 rounded-lg flex items-center justify-center overflow-hidden">
-        <ProductSilhouetteImage year={product.year} displayStatus={displayStatus} />
+        <ProductSilhouetteImage year={product.year} accessStatus={accessStatus} />
       </div>
     </motion.div>
   );

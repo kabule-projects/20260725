@@ -24,6 +24,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-overflow-scrolling: touch;
   background-color: #0a0a12;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 ::selection {
@@ -117,4 +121,12 @@ body {
 .floating-particle {
   animation: particle-float 8s ease-in-out infinite;
   animation-delay: var(--delay, 0s);
+}
+
+img {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }
