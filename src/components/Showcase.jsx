@@ -119,7 +119,7 @@ const Showcase = ({ lights, onProductClick }) => {
       />
       
       {/* 商品陈列区域 */}
-      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[12%] px-[2%]">
+      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[15%] px-[2%]">
         {/* 第一排：2014（居中） */}
         <div className="w-full flex justify-center mb-[2%]">
           {product2014 && (
