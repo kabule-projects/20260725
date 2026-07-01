@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { IMAGE_BASE_URL } from '../config/imageConfig';
 
 const ProductImage = ({ year, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
 
-  // 图片路径（本地存储）
-  const basePath = `${IMAGE_BASE_URL}${year}`;
+  const basePath = `/images/${year}`;
   
   // 支持的格式优先级：png > jpg > jpeg
   const formats = ['png', 'jpg', 'jpeg'];

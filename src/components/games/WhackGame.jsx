@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 // 游戏配置
 const GRID_SIZE = 5; // 5x5 格盘
@@ -169,7 +168,7 @@ const WhackGame = ({ onComplete }) => {
             >
               {isActive && activeImage && (
                 <img
-                  src={`${IMAGE_BASE_URL}whack/${activeImage}`}
+                  src={`/images/whack/${activeImage}`}
                   alt=""
                   className="absolute inset-0 w-full h-full object-contain p-1"
                 />

@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 const SYMBOLS = [
-  { id: 1, image: `${IMAGE_BASE_URL}memory/1.png` },
-  { id: 2, image: `${IMAGE_BASE_URL}memory/2.png` },
-  { id: 3, image: `${IMAGE_BASE_URL}memory/3.png` },
-  { id: 4, image: `${IMAGE_BASE_URL}memory/4.png` },
-  { id: 5, image: `${IMAGE_BASE_URL}memory/5.png` },
-  { id: 6, image: `${IMAGE_BASE_URL}memory/6.png` },
-  { id: 7, image: `${IMAGE_BASE_URL}memory/7.png` },
-  { id: 8, image: `${IMAGE_BASE_URL}memory/8.png` },
+  { id: 1, image: '/images/memory/1.png' },
+  { id: 2, image: '/images/memory/2.png' },
+  { id: 3, image: '/images/memory/3.png' },
+  { id: 4, image: '/images/memory/4.png' },
+  { id: 5, image: '/images/memory/5.png' },
+  { id: 6, image: '/images/memory/6.png' },
+  { id: 7, image: '/images/memory/7.png' },
+  { id: 8, image: '/images/memory/8.png' },
 ];
 
 const FLIP_DURATION = 600; // 翻牌动画时长（毫秒）

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { IMAGE_BASE_URL } from '../config/imageConfig';
 
 const ProductDetailImage = ({ year }) => {
   const [images, setImages] = useState([]);
 
-  // 尝试加载详情图
   const loadDetailImages = () => {
     const detailImages = [];
     let index = 1;
@@ -13,14 +11,13 @@ const ProductDetailImage = ({ year }) => {
       const formats = ['png', 'jpg', 'jpeg'];
       const tryFormat = (fmtIdx) => {
         if (fmtIdx >= formats.length) {
-          // 所有格式都尝试完了，检查是否还有下一张
           if (detailImages.length > 0 || index > 1) {
             setImages(detailImages);
           }
           return;
         }
 
-        const url = `${IMAGE_BASE_URL}${year}-detail-${index}.${formats[fmtIdx]}`;
+        const url = `/images/${year}-detail-${index}.${formats[fmtIdx]}`;
         const img = new Image();
         img.onload = () => {
           detailImages.push(url);

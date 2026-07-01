@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IMAGE_BASE_URL } from '../config/imageConfig';
 
 const BillboardCharacter = ({ message }) => {
   const [showDialog, setShowDialog] = useState(false);
@@ -36,7 +35,7 @@ const BillboardCharacter = ({ message }) => {
     <div className="relative w-full h-full">
       {/* 看板郎背景 */}
       <img
-        src={`${IMAGE_BASE_URL}main/看板郎.png`}
+        src="/images/main/看板郎.png"
         alt="看板郎"
         className="absolute inset-0 w-full h-full object-contain"
       />

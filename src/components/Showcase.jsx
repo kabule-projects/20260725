@@ -1,17 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { IMAGE_BASE_URL } from '../config/imageConfig';
 import { getProductAccessStatus } from '../utils/accessControl';
-import { calculateThreshold } from '../utils/brightness';
 import { PRODUCTS } from '../data/products';
 import { getBillboardMessage } from '../data/billboardMessages';
 
-// 商品图组件 - 支持透明底PNG
-// accessStatus: 'locked' | 'accessible' | 'unlocked'
 const ProductSilhouetteImage = ({ year, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
-  const basePath = `${IMAGE_BASE_URL}${year}`;
-  const formats = ['png', 'jpg', 'jpeg'];
+  const basePath = `/images/${year}`;
+  const formats = ['webp', 'png', 'jpg', 'jpeg'];
 
   const tryLoadImage = (base, setSrc) => {
     const tryFormat = (index) => {
@@ -52,7 +48,11 @@ const ProductSilhouetteImage = ({ year, accessStatus }) => {
 };
 
 const Showcase = ({ lights, onProductClick }) => {
-  // 组织商品布局：1行2014 + 3行每行4个（共13个商品）
+  const isAllUnlocked = PRODUCTS.every(product => {
+    const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+    return accessStatus === 'unlocked';
+  });
+
   const product2014 = PRODUCTS.find(p => p.year === 2014);
   const otherProducts = PRODUCTS.filter(p => p.year !== 2014);
   
@@ -70,16 +70,16 @@ const Showcase = ({ lights, onProductClick }) => {
 
   return (
     <div className="relative w-full h-full">
-      {/* 橱窗背景 */}
+      {/* 底层：橱窗背景 */}
       <img
-        src={`${IMAGE_BASE_URL}main/橱窗.png`}
+        src="/images/main/橱窗.webp"
         alt="橱窗"
         className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+        style={{ zIndex: 1 }}
       />
       
-      {/* 商品陈列区域 */}
-      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[15%] px-[2%]">
-        {/* 第一排：2014（居中） */}
+      {/* 中间层：商品陈列 */}
+      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[15%] px-[2%]" style={{ zIndex: 2 }}>
         <div className="w-full flex justify-center mb-[2%]">
           {product2014 && (
             <ShowcaseItem
@@ -90,7 +90,6 @@ const Showcase = ({ lights, onProductClick }) => {
           )}
         </div>
         
-        {/* 接下来3排，每排4个 */}
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="w-full flex justify-center gap-[1%] mb-[2%]">
             {row.map((product) => (
@@ -104,6 +103,16 @@ const Showcase = ({ lights, onProductClick }) => {
           </div>
         ))}
       </div>
+
+      {/* 顶层：玻璃贴图 */}
+      {!isAllUnlocked && (
+        <img
+          src="/images/main/玻璃.webp"
+          alt="玻璃"
+          className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+          style={{ zIndex: 3 }}
+        />
+      )}
     </div>
   );
 };

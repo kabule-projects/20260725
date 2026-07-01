@@ -1,5 +1,3 @@
-import { IMAGE_BASE_URL } from '../config/imageConfig';
-
 export const PRODUCTS = [
   {
     id: "2014",
@@ -7,10 +5,10 @@ export const PRODUCTS = [
     title: "勇气",
     branch: "[？]",
     description: "[description]",
-    image: `${IMAGE_BASE_URL}2014.jpg`,
+    image: '/images/2014.jpg',
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2014-reveal.jpg`,
+      image: '/images/2014-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -20,11 +18,11 @@ export const PRODUCTS = [
     title: "小小花园",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2015.jpg`,
+    image: '/images/2015.jpg',
     gameType: "colour",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2015-reveal.jpg`,
+      image: '/images/2015-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -34,11 +32,11 @@ export const PRODUCTS = [
     title: "塞壬的镜子",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2016.jpg`,
+    image: '/images/2016.jpg',
     gameType: "spotlight",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2016-reveal.jpg`,
+      image: '/images/2016-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -48,11 +46,11 @@ export const PRODUCTS = [
     title: "安静的翅膀",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2017.jpg`,
+    image: '/images/2017.jpg',
     gameType: "lyric",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2017-reveal.jpg`,
+      image: '/images/2017-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -62,11 +60,11 @@ export const PRODUCTS = [
     title: "有形状的梦想",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2018.jpg`,
+    image: '/images/2018.jpg',
     gameType: "peek",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2018-reveal.jpg`,
+      image: '/images/2018-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -76,11 +74,11 @@ export const PRODUCTS = [
     title: "[占位文本]",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2019.jpg`,
+    image: '/images/2019.jpg',
     gameType: "memory",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2019-reveal.jpg`,
+      image: '/images/2019-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -90,11 +88,11 @@ export const PRODUCTS = [
     title: "想去的地方",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2020.jpg`,
+    image: '/images/2020.jpg',
     gameType: "catch",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2020-reveal.jpg`,
+      image: '/images/2020-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -104,11 +102,11 @@ export const PRODUCTS = [
     title: "定制护深服",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2021.jpg`,
+    image: '/images/2021.jpg',
     gameType: "quiz",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2021-reveal.jpg`,
+      image: '/images/2021-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -118,11 +116,11 @@ export const PRODUCTS = [
     title: "旅人的馈赠",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2022.jpg`,
+    image: '/images/2022.jpg',
     gameType: "echo",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2022-reveal.jpg`,
+      image: '/images/2022-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -132,11 +130,11 @@ export const PRODUCTS = [
     title: "真实的色彩",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2023.jpg`,
+    image: '/images/2023.jpg',
     gameType: "whack",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2023-reveal.jpg`,
+      image: '/images/2023-reveal.jpg',
       text: "画手：@饭老师id是什么！"
     }
   },
@@ -146,11 +144,11 @@ export const PRODUCTS = [
     title: "世界之窗",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2024.jpg`,
+    image: '/images/2024.jpg',
     gameType: "tap",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2024-reveal.jpg`,
+      image: '/images/2024-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -160,11 +158,11 @@ export const PRODUCTS = [
     title: "永远同行之人",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2025.jpg`,
+    image: '/images/2025.jpg',
     gameType: "hold",
     locked: false,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2025-reveal.jpg`,
+      image: '/images/2025-reveal.jpg',
       text: "[占位文本]"
     }
   },
@@ -174,12 +172,12 @@ export const PRODUCTS = [
     title: "百年老店的非卖品",
     branch: "[占位文本]",
     description: "[占位文本]",
-    image: `${IMAGE_BASE_URL}2026.jpg`,
+    image: '/images/2026.jpg',
     gameType: "whack",
     videoUrl: "https://player.bilibili.com/player.html?bvid=BV1RdVG68Ey8&page=1",
     locked: true,
     moreInfo: {
-      image: `${IMAGE_BASE_URL}2026-reveal.jpg`,
+      image: '/images/2026-reveal.jpg',
       text: "[占位文本]"
     }
   }

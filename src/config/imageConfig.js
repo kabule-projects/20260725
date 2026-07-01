@@ -1,1 +1,0 @@
-export const IMAGE_BASE_URL = 'https://kbl725-1361243042.cos.ap-nanjing.myqcloud.com/images/';

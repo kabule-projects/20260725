@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { IMAGE_BASE_URL } from '../../config/imageConfig';
 
 const CatchGame = ({ onComplete }) => {
   const [started, setStarted] = useState(false);
@@ -36,7 +35,7 @@ const CatchGame = ({ onComplete }) => {
       while (found) {
         found = false;
         for (const ext of SCENE_EXTENSIONS) {
-          const src = `${IMAGE_BASE_URL}catch/scene/${index}.${ext}`;
+          const src = `/images/catch/scene/${index}.${ext}`;
           try {
             await new Promise((resolve, reject) => {
               const img = new Image();
@@ -86,22 +85,22 @@ const CatchGame = ({ onComplete }) => {
 
 
   const NORMAL_BLOCK_TEXTURES = [
-    `${IMAGE_BASE_URL}catch/item-1.png`,
-    `${IMAGE_BASE_URL}catch/item-2.png`,
-    `${IMAGE_BASE_URL}catch/item-3.png`,
-    `${IMAGE_BASE_URL}catch/item-4.png`,
-    `${IMAGE_BASE_URL}catch/item-5.png`,
-    `${IMAGE_BASE_URL}catch/item-6.png`,
-    `${IMAGE_BASE_URL}catch/item-7.png`,
-    `${IMAGE_BASE_URL}catch/item-8.png`
+    '/images/catch/item-1.png',
+    '/images/catch/item-2.png',
+    '/images/catch/item-3.png',
+    '/images/catch/item-4.png',
+    '/images/catch/item-5.png',
+    '/images/catch/item-6.png',
+    '/images/catch/item-7.png',
+    '/images/catch/item-8.png'
   ];
   
   const FIRE_BLOCK_TEXTURES = [
-    `${IMAGE_BASE_URL}catch/fire-1.png`,
-    `${IMAGE_BASE_URL}catch/fire-2.png`
+    '/images/catch/fire-1.png',
+    '/images/catch/fire-2.png'
   ];
   
-  const PLAYER_TEXTURE = `${IMAGE_BASE_URL}catch/player.png`;
+  const PLAYER_TEXTURE = '/images/catch/player.png';
   
   const BLOCK_TYPES = [
     { type: 'normal', color: '#e8d5b7', probability: 0.7 },
@@ -372,7 +371,7 @@ const CatchGame = ({ onComplete }) => {
           msUserSelect: 'none',
           userSelect: 'none',
           WebkitTouchCallout: 'none',
-          backgroundImage: `url(${IMAGE_BASE_URL}catch/background.png)`,
+          backgroundImage: `url(/images/catch/background.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
