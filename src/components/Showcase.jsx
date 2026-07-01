@@ -26,8 +26,11 @@ const ProductSilhouetteImage = ({ year, accessStatus }) => {
   }, [basePath]);
 
   const getImageStyle = () => {
-    if (accessStatus === 'locked' || accessStatus === 'accessible') {
-      return 'brightness-[0]';
+    if (accessStatus === 'locked') {
+      return 'brightness-[0.2] grayscale';
+    }
+    if (accessStatus === 'accessible') {
+      return 'brightness-[0.6]';
     }
     return 'brightness-100';
   };
