@@ -5,8 +5,8 @@ const ProductImage = ({ year, accessStatus }) => {
 
   const basePath = `/images/${year}`;
   
-  // 支持的格式优先级：png > jpg > jpeg
-  const formats = ['png', 'jpg', 'jpeg'];
+  // 支持的格式优先级：webp > png > jpg > jpeg
+  const formats = ['webp', 'png', 'jpg', 'jpeg'];
 
   // 尝试加载图片，支持多种格式
   const tryLoadImage = (base, setSrc) => {

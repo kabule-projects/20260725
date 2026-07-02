@@ -21,7 +21,7 @@ export const getBillboardMessage = (year, accessStatus) => {
     case 'locked':
       return DEFAULT_SILHOUETTE_MESSAGE;
     case 'accessible':
-      return `请去${year}加入回忆，解锁这件商品吧`;
+      return `请去${year}加入回忆，解锁这件商品`;
     case 'unlocked':
       return billboardMessages[year] || '记忆已照亮';
     default:

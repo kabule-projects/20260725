@@ -8,7 +8,7 @@ const ProductDetailImage = ({ year }) => {
     let index = 1;
     
     const tryLoad = () => {
-      const formats = ['png', 'jpg', 'jpeg'];
+      const formats = ['webp', 'png', 'jpg', 'jpeg'];
       const tryFormat = (fmtIdx) => {
         if (fmtIdx >= formats.length) {
           if (detailImages.length > 0 || index > 1) {
