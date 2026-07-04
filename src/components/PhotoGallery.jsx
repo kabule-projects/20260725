@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // 基础开放日期（北京时间2026年7月17日中午12点）
 const BASE_UNLOCK_DATE = '2026-07-17T12:00:00+08:00';
 const UNLOCK_INTERVAL = 12 * 60 * 60 * 1000; // 12小时
-const TOTAL_IMAGES = 12;
+const TOTAL_IMAGES = 13;
 
 // 测试模式：是否解锁所有图片
 const TEST_MODE = true;

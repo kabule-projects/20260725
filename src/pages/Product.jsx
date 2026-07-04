@@ -12,18 +12,19 @@ import ProductImage from '../components/ProductImage';
 import ProductDetailImage from '../components/ProductDetailImage';
 // 2014年图集图片
 const GALLERY_IMAGES_2014 = [
-  '/images/2014-gallery-1.jpg',
-  '/images/2014-gallery-2.jpg',
-  '/images/2014-gallery-3.jpg',
-  '/images/2014-gallery-4.jpg',
-  '/images/2014-gallery-5.jpg',
-  '/images/2014-gallery-6.jpg',
-  '/images/2014-gallery-7.jpg',
-  '/images/2014-gallery-8.jpg',
-  '/images/2014-gallery-9.jpg',
-  '/images/2014-gallery-10.jpg',
-  '/images/2014-gallery-11.jpg',
-  '/images/2014-gallery-12.jpg',
+  '/images/gallery/1.webp',
+  '/images/gallery/2.webp',
+  '/images/gallery/3.webp',
+  '/images/gallery/4.webp',
+  '/images/gallery/5.webp',
+  '/images/gallery/6.webp',
+  '/images/gallery/7.webp',
+  '/images/gallery/8.webp',
+  '/images/gallery/9.webp',
+  '/images/gallery/10.webp',
+  '/images/gallery/11.webp',
+  '/images/gallery/12.webp',
+  '/images/gallery/13.gif',
 ];
 
 // const ILLUMINATE_THRESHOLD = 500;

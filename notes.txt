@@ -76,3 +76,34 @@ done
 find /path/to/images -name "*.png" -exec cwebp -alpha_q 100 {} -o {}.webp \;
 # 然后删除多余的.png后缀
 rename 's/\.png\.webp$/.webp/' /path/to/images/*.png.webp
+
+
+
+
+
+# 转换 JPG
+for file in *.JPG; do cwebp -q 80 "$file" -o "${file%.JPG}.webp"; done
+
+# 转换 PNG（保留透明通道）
+for file in *.png; do cwebp -q 80 "$file" -o "${file%.png}.webp"; done
+
+# 同时转换 JPG 和 PNG
+for file in *.jpg *.png *.JPG; do cwebp -q 80 "$file" -o "${file%.*}.webp"; done
+
+
+
+
+
+# 第一步：ffmpeg转换
+ffmpeg -framerate 1 -pattern_type glob -i "*.webp" \
+  -vf "scale=900:-1" \
+  -loop 0 \
+  -gifflags +transdiff \
+  -pix_fmt rgb8 \
+  -y temp.gif
+
+# 第二步：gifsicle二次优化
+gifsicle -O3 --colors 64 --lossy=80 temp.gif -o output.gif
+
+# 清理临时文件
+rm temp.gif
