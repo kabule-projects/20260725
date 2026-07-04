@@ -186,46 +186,62 @@ const PhotoGallery = ({ images }) => {
     }
   }, [isImageDragging, handleImageMouseMove, handleImageMouseUp]);
 
+  const isSpecialImage = currentIndex === TOTAL_IMAGES - 1;
   const currentImage = unlockedCount > 0 ? images[currentIndex] : null;
+  const specialImages = isSpecialImage ? [
+    `/images/gallery/13.1.webp`,
+    `/images/gallery/13.2.webp`,
+    `/images/gallery/13.3.webp`,
+    `/images/gallery/13.4.webp`
+  ] : null;
 
   return (
     <div className="w-full max-w-lg mx-auto select-none">
       {/* 大图展示区域 - 支持左右swipe */}
       <div 
-        className="relative aspect-square rounded-lg overflow-hidden bg-memory-dark/80 border border-memory-muted/20"
+        className="relative w-full rounded-lg overflow-hidden bg-memory-dark/80 border border-memory-muted/20"
+        style={{ height: isSpecialImage ? 'auto' : undefined }}
         onTouchStart={handleImageTouchStart}
         onTouchMove={handleImageTouchMove}
         onTouchEnd={handleImageTouchEnd}
         onMouseDown={handleImageMouseDown}
       >
-        <AnimatePresence mode="wait">
-          {unlockedCount > 0 && currentImage ? (
+        <AnimatePresence>
+          {unlockedCount > 0 && (isSpecialImage ? (
+            <motion.div
+              key={currentIndex}
+              className="flex flex-col w-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {specialImages.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`图片 13.${idx + 1}`}
+                  className="w-full h-auto"
+                />
+              ))}
+            </motion.div>
+          ) : (
             <motion.img
               key={currentIndex}
               src={currentImage}
-              alt={`图片 ${currentIndex + 1}`}
-              className="w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
+              alt={`图片 ${2014 + currentIndex}`}
+              className="w-full aspect-square object-cover"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-memory-dark">
-              <motion.div
-                className="text-6xl text-memory-accent/30"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              >
-                ✧
-              </motion.div>
-            </div>
-          )}
+          ))}
         </AnimatePresence>
 
         {/* 图片计数器 */}
         <div className="absolute bottom-2 right-2 px-2 py-1 rounded bg-black/50 text-white/80 text-xs">
-          {unlockedCount > 0 ? `${currentIndex + 1} / ${unlockedCount}` : `0 / ${TOTAL_IMAGES}`}
+          {unlockedCount > 0 ? `${2014 + currentIndex} / 2026` : `2014 / 2026`}
         </div>
       </div>
 
