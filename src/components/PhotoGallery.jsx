@@ -14,10 +14,16 @@ const PhotoGallery = ({ images }) => {
   const [unlockedCount, setUnlockedCount] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isImageDragging, setIsImageDragging] = useState(false);
+  const [containerHeight, setContainerHeight] = useState(null);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
   const imageStartX = useRef(0);
   const containerRef = useRef(null);
+  const imageHeights = useRef({});
+  const scrollContainerRef = useRef(null);
+  const isSpecialDragging = useRef(false);
+  
+  const isSpecialImage = currentIndex === TOTAL_IMAGES - 1;
 
   // 计算已解锁的图片数量
   useEffect(() => {
@@ -39,9 +45,51 @@ const PhotoGallery = ({ images }) => {
     }
   }, []);
 
+  // 预加载图片并计算高度
+  useEffect(() => {
+    if (unlockedCount === 0) return;
+    
+    const containerWidth = containerRef.current?.offsetWidth || 300;
+    
+    for (let i = 0; i < unlockedCount; i++) {
+      if (i === TOTAL_IMAGES - 1) {
+        const img = new Image();
+        img.onload = () => {
+          const ratio = img.height / img.width;
+          const scrollbarHeight = 20;
+          imageHeights.current[i] = containerWidth * ratio + scrollbarHeight;
+          if (i === currentIndex) {
+            setContainerHeight(imageHeights.current[i]);
+          }
+        };
+        img.src = `/images/gallery/13.1.webp`;
+      } else {
+        const img = new Image();
+        img.onload = () => {
+          const ratio = img.height / img.width;
+          imageHeights.current[i] = containerWidth * ratio;
+          if (i === currentIndex) {
+            setContainerHeight(imageHeights.current[i]);
+          }
+        };
+        img.src = images[i];
+      }
+    }
+  }, [unlockedCount, images]);
+
+  // 更新容器高度
+  useEffect(() => {
+    if (imageHeights.current[currentIndex]) {
+      setContainerHeight(imageHeights.current[currentIndex]);
+    }
+  }, [currentIndex]);
+
   // 导航到指定图片
   const goToImage = useCallback((index) => {
     if (index < unlockedCount) {
+      if (imageHeights.current[index]) {
+        setContainerHeight(imageHeights.current[index]);
+      }
       setCurrentIndex(index);
     }
   }, [unlockedCount]);
@@ -49,14 +97,22 @@ const PhotoGallery = ({ images }) => {
   // 上一张
   const goToPrev = useCallback(() => {
     if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+      const nextIndex = currentIndex - 1;
+      if (imageHeights.current[nextIndex]) {
+        setContainerHeight(imageHeights.current[nextIndex]);
+      }
+      setCurrentIndex(nextIndex);
     }
   }, [currentIndex]);
 
   // 下一张
   const goToNext = useCallback(() => {
     if (currentIndex < unlockedCount - 1) {
-      setCurrentIndex(prev => prev + 1);
+      const nextIndex = currentIndex + 1;
+      if (imageHeights.current[nextIndex]) {
+        setContainerHeight(imageHeights.current[nextIndex]);
+      }
+      setCurrentIndex(nextIndex);
     }
   }, [currentIndex, unlockedCount]);
 
@@ -101,6 +157,59 @@ const PhotoGallery = ({ images }) => {
   // 鼠标拖动结束
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
+  }, []);
+
+  // 第13张图片触摸开始
+  const handleSpecialTouchStart = useCallback((e) => {
+    e.stopPropagation();
+    if (!scrollContainerRef.current) return;
+    startX.current = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+    isSpecialDragging.current = true;
+  }, []);
+
+  // 第13张图片触摸移动
+  const handleSpecialTouchMove = useCallback((e) => {
+    e.stopPropagation();
+    if (!isSpecialDragging.current || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  // 第13张图片触摸结束
+  const handleSpecialTouchEnd = useCallback((e) => {
+    e.stopPropagation();
+    isSpecialDragging.current = false;
+  }, []);
+
+  // 第13张图片鼠标拖动开始
+  const handleSpecialMouseDown = useCallback((e) => {
+    e.stopPropagation();
+    if (!scrollContainerRef.current) return;
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+    isSpecialDragging.current = true;
+    document.addEventListener('mousemove', handleSpecialMouseMove);
+    document.addEventListener('mouseup', handleSpecialMouseUp);
+  }, []);
+
+  // 第13张图片鼠标拖动移动
+  const handleSpecialMouseMove = useCallback((e) => {
+    if (!isSpecialDragging.current || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  // 第13张图片鼠标拖动释放
+  const handleSpecialMouseUp = useCallback((e) => {
+    if (!isSpecialDragging.current) return;
+    isSpecialDragging.current = false;
+    document.removeEventListener('mousemove', handleSpecialMouseMove);
+    document.removeEventListener('mouseup', handleSpecialMouseUp);
   }, []);
 
   // 大图触摸开始
@@ -185,8 +294,7 @@ const PhotoGallery = ({ images }) => {
       };
     }
   }, [isImageDragging, handleImageMouseMove, handleImageMouseUp]);
-
-  const isSpecialImage = currentIndex === TOTAL_IMAGES - 1;
+  
   const currentImage = unlockedCount > 0 ? images[currentIndex] : null;
   const specialImages = isSpecialImage ? [
     `/images/gallery/13.1.webp`,
@@ -199,8 +307,9 @@ const PhotoGallery = ({ images }) => {
     <div className="w-full max-w-lg mx-auto select-none">
       {/* 大图展示区域 - 支持左右swipe */}
       <div 
-        className="relative w-full rounded-lg overflow-hidden bg-memory-dark/80 border border-memory-muted/20"
-        style={{ height: isSpecialImage ? 'auto' : undefined }}
+        ref={containerRef}
+        className="relative w-full rounded-lg overflow-hidden bg-memory-dark/80 border border-memory-muted/20 transition-all duration-300"
+        style={{ height: containerHeight ? `${containerHeight}px` : undefined }}
         onTouchStart={handleImageTouchStart}
         onTouchMove={handleImageTouchMove}
         onTouchEnd={handleImageTouchEnd}
@@ -210,18 +319,23 @@ const PhotoGallery = ({ images }) => {
           {unlockedCount > 0 && (isSpecialImage ? (
             <motion.div
               key={currentIndex}
-              className="flex flex-col w-full"
+              ref={scrollContainerRef}
+              className="flex w-full h-full overflow-x-auto overflow-y-hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
+              onTouchStart={handleSpecialTouchStart}
+              onTouchMove={handleSpecialTouchMove}
+              onTouchEnd={handleSpecialTouchEnd}
+              onMouseDown={handleSpecialMouseDown}
             >
               {specialImages.map((img, idx) => (
                 <img
                   key={idx}
                   src={img}
                   alt={`图片 13.${idx + 1}`}
-                  className="w-full h-auto"
+                  className="flex-shrink-0 w-full h-auto"
                 />
               ))}
             </motion.div>
@@ -230,7 +344,7 @@ const PhotoGallery = ({ images }) => {
               key={currentIndex}
               src={currentImage}
               alt={`图片 ${2014 + currentIndex}`}
-              className="w-full aspect-square object-cover"
+              className="w-full h-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
