@@ -2,14 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 const SYMBOLS = [
-  { id: 1, image: '/images/memory/1.png' },
-  { id: 2, image: '/images/memory/2.png' },
-  { id: 3, image: '/images/memory/3.png' },
-  { id: 4, image: '/images/memory/4.png' },
-  { id: 5, image: '/images/memory/5.png' },
-  { id: 6, image: '/images/memory/6.png' },
-  { id: 7, image: '/images/memory/7.png' },
-  { id: 8, image: '/images/memory/8.png' },
+  { id: 1, image: '/images/memory/1.webp' },
+  { id: 2, image: '/images/memory/2.webp' },
+  { id: 3, image: '/images/memory/3.webp' },
+  { id: 4, image: '/images/memory/4.webp' },
+  { id: 5, image: '/images/memory/5.webp' },
+  { id: 6, image: '/images/memory/6.webp' },
+  { id: 7, image: '/images/memory/7.webp' },
+  { id: 8, image: '/images/memory/8.webp' },
 ];
 
 const FLIP_DURATION = 600; // 翻牌动画时长（毫秒）

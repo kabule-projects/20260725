@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "2014",
-      "light": 21
+      "light": 700
     },
     {
       "id": "2015",
@@ -42,15 +42,15 @@
     },
     {
       "id": "2024",
-      "light": 8
+      "light": 49
     },
     {
       "id": "2025",
-      "light": 4
+      "light": 49
     },
     {
       "id": "2026",
-      "light": 0
+      "light": 49
     }
   ],
   "cooldowns": {
