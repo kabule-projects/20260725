@@ -83,6 +83,7 @@ rename 's/\.png\.webp$/.webp/' /path/to/images/*.png.webp
 
 # 转换 JPG
 for file in *.JPG; do cwebp -q 80 "$file" -o "${file%.JPG}.webp"; done
+for file in *.jpg; do cwebp -q 80 "$file" -o "${file%.jpg}.webp"; done
 
 # 转换 PNG（保留透明通道）
 for file in *.png; do cwebp -q 80 "$file" -o "${file%.png}.webp"; done

@@ -1,12 +1,14 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Product from './pages/Product';
+import WelcomePage from './pages/WelcomePage';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
 
-const VERSION = 8;
+const VERSION = 11;
 const VERSION_KEY = 'memoryStore:version';
+const WELCOME_KEY = 'memoryStore:welcomeDate';
 
 function clearOldData() {
   Object.keys(localStorage)
@@ -22,6 +24,11 @@ function checkVersion() {
   }
 }
 
+function getTodayDate() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
+
 function ScrollToTop() {
   const location = useLocation();
   useEffect(() => {
@@ -32,8 +39,16 @@ function ScrollToTop() {
   return null;
 }
 
+const shouldShowWelcome = () => {
+  const today = getTodayDate();
+  const lastWelcome = localStorage.getItem(WELCOME_KEY);
+  return lastWelcome !== today;
+};
+
 function App() {
   const [lights, setLights] = useState({});
+  const [showWelcome, setShowWelcome] = useState(shouldShowWelcome());
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkVersion();
@@ -94,6 +109,11 @@ function App() {
     updateLights();
   }, []);
 
+  const handleStart = () => {
+    localStorage.setItem(WELCOME_KEY, getTodayDate());
+    setShowWelcome(false);
+  };
+
   return (
     <div className="min-h-screen relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -119,6 +139,10 @@ function App() {
           <Route path="/product/:id" element={<Product lights={lights} setLights={setLights} />} />
         </Routes>
       </div>
+
+      {showWelcome && (
+        <WelcomePage onStart={handleStart} />
+      )}
     </div>
   );
 }
