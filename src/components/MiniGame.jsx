@@ -12,6 +12,7 @@ import MemoryGame from './games/MemoryGame';
 import WhackGame from './games/WhackGame';
 import LyricGame from './games/LyricGame';
 import QuizGame from './games/QuizGame';
+import SortGame from './games/SortGame';
 
 const MiniGame = ({ gameType, onComplete, config }) => {
   const [initialized, setInitialized] = useState(true);
@@ -44,6 +45,8 @@ const MiniGame = ({ gameType, onComplete, config }) => {
         return <LyricGame onComplete={onComplete} />;
       case 'quiz':
         return <QuizGame onComplete={onComplete} />;
+      case 'sort':
+        return <SortGame onComplete={onComplete} />;
       default:
         return <HoldGame onComplete={onComplete} />;
     }

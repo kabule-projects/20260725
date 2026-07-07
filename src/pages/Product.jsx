@@ -219,8 +219,8 @@ const Product = ({ lights, setLights }) => {
 
           {isUnlocked && (
             <div className="memory-card rounded-xl p-6 space-y-4">
-              <p className="text-memory-glow/90 leading-relaxed italic">
-                "{product.description}"
+              <p className="text-memory-glow/90 leading-relaxed italic whitespace-pre-wrap">
+                {product.description}
               </p>
             </div>
           )}

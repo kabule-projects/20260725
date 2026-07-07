@@ -4,9 +4,8 @@ import { getProductAccessStatus } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { getBillboardMessage } from '../data/billboardMessages';
 
-const ProductSilhouetteImage = ({ year, accessStatus }) => {
+const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
-  const basePath = `/images/${year}`;
   const formats = ['webp', 'png', 'jpg', 'jpeg'];
 
   const tryLoadImage = (base, setSrc) => {
@@ -22,8 +21,12 @@ const ProductSilhouetteImage = ({ year, accessStatus }) => {
   };
 
   useEffect(() => {
-    tryLoadImage(basePath, setImageSrc);
-  }, [basePath]);
+    if (imagePath.includes('.')) {
+      setImageSrc(imagePath);
+    } else {
+      tryLoadImage(imagePath, setImageSrc);
+    }
+  }, [imagePath]);
 
   const getImageStyle = () => {
     if (accessStatus === 'locked') {
@@ -123,6 +126,7 @@ const Showcase = ({ lights, onProductClick }) => {
 // 展示单个商品
 const ShowcaseItem = ({ product, lights, onClick }) => {
   const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
+  const imagePath = product.showcaseImage || `/images/${product.year}`;
   
   return (
     <motion.div
@@ -132,7 +136,7 @@ const ShowcaseItem = ({ product, lights, onClick }) => {
       whileTap={{ scale: 0.95 }}
     >
       <div className="absolute inset-0 rounded-lg flex items-center justify-center overflow-hidden">
-        <ProductSilhouetteImage year={product.year} accessStatus={accessStatus} />
+        <ProductSilhouetteImage imagePath={imagePath} accessStatus={accessStatus} />
       </div>
     </motion.div>
   );
