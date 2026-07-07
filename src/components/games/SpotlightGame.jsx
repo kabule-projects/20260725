@@ -8,7 +8,7 @@ const SpotlightGame = ({ onComplete }) => {
   const [completed, setCompleted] = useState(false);
   const [view3Clickable, setView3Clickable] = useState(false);
   const [hintChanged, setHintChanged] = useState(false);
-  const [skipTransition, setSkipTransition] = useState(false);
+  const [graduated, setGraduated] = useState(false);
   
   const lastClickTime = useRef(0);
   const fadeTimeoutRef = useRef(null);
@@ -21,21 +21,9 @@ const SpotlightGame = ({ onComplete }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (view === 3) {
-      setView3Clickable(false);
-      const timer = setTimeout(() => {
-        setView3Clickable(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [view]);
 
-  useEffect(() => {
-    if (view === 3) {
-      setSkipTransition(false);
-    }
-  }, [view]);
+
+
 
   const handleHeadClick = (e) => {
     e.stopPropagation();
@@ -68,8 +56,10 @@ const SpotlightGame = ({ onComplete }) => {
         }
         
         if (maskRemoved && newProgress >= 1) {
-          setSkipTransition(true);
-          setView(3);
+          setGraduated(true);
+          fadeTimeoutRef.current = setTimeout(() => {
+            setView3Clickable(true);
+          }, 1500);
           return 1;
         }
         
@@ -96,7 +86,7 @@ const SpotlightGame = ({ onComplete }) => {
   };
 
   const handleCompleteClick = () => {
-    if (view === 3 && view3Clickable && !completed) {
+    if (view3Clickable && !completed) {
       setCompleted(true);
       onComplete();
     }
@@ -108,40 +98,37 @@ const SpotlightGame = ({ onComplete }) => {
     setSpotlightProgress(0);
     setCompleted(false);
     setHintChanged(false);
+    setGraduated(false);
   };
 
   return (
     <div className="w-full h-full px-[6%] py-[6%] flex items-center justify-center">
       <div className="relative w-full bg-memory-dark/50 rounded-lg p-4">
         <AnimatePresence mode="popLayout">
-          {view === 1 && (
+          {(view === 1 || graduated) && (
             <motion.div
               key="view1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ exit: { duration: skipTransition ? 0 : undefined } }}
               className="relative"
             >
-              {/* 提示词 */}
               {!completed && (
                 <p className="text-memory-accent text-sm text-center mb-2 select-none">
-                  {maskRemoved ? '我可不是什么幺蛾子' : hintChanged ? '光真的照亮他了吗？' : '快速点击聚光'}
+                  {graduated ? '点击完成' : (maskRemoved ? '我可不是什么幺蛾子' : hintChanged ? '光真的照亮他了吗？' : '快速点击聚光')}
                 </p>
               )}
               
               <div 
                 className="relative w-full max-w-lg aspect-[3/4] rounded-lg overflow-hidden mx-auto"
-                onClick={handleSpotlightClick}
+                onClick={graduated && view3Clickable ? handleCompleteClick : handleSpotlightClick}
               >
-              {/* 远景底图：根据maskRemoved状态选择 */}
               <img
                 src={maskRemoved ? '/images/spotlight/无打光无面具.webp' : '/images/spotlight/无打光面具.webp'}
                 alt="远景"
                 className="absolute inset-0 w-full h-full object-cover"
               />
 
-              {/* 打光面具图层 */}
               <motion.img
                 key={`mask-${view}`}
                 src="/images/spotlight/打光面具.webp"
@@ -152,19 +139,27 @@ const SpotlightGame = ({ onComplete }) => {
                 transition={{ duration: 0.3 }}
               />
               
-              {/* 打光无面具图层 */}
               <motion.img
                 key={`no-mask-${view}`}
                 src="/images/spotlight/打光无面具.webp"
                 alt="打光效果"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: maskRemoved ? spotlightProgress : 0 }}
-                transition={{ duration: 0.4 }}
+                animate={{ opacity: graduated ? 0 : (maskRemoved ? spotlightProgress : 0) }}
+                transition={{ duration: graduated ? 1.5 : 0.4 }}
               />
 
-              {/* 头部透明按钮：点击进入近景 */}
-              {!completed && (
+              <motion.img
+                key={`graduation-${view}`}
+                src="/images/spotlight/毕业.webp"
+                alt="毕业"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: graduated ? 1 : 0 }}
+                transition={{ duration: 1.5 }}
+              />
+
+              {!completed && !graduated && (
                 <button
                   className="absolute top-[22%] left-[30%] w-[40%] h-[20%] bg-transparent cursor-pointer z-10"
                   onClick={handleHeadClick}
@@ -206,25 +201,7 @@ const SpotlightGame = ({ onComplete }) => {
           </motion.div>
         )}
 
-        {view === 3 && (
-          <motion.div
-            key="view3"
-            initial={skipTransition ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="relative"
-            onClick={handleCompleteClick}
-          >
-            <div className="relative w-full max-w-lg aspect-[3/4] rounded-lg overflow-hidden mx-auto">
-              {/* 毕业 */}
-              <img
-                src="/images/spotlight/毕业.webp"
-                alt="毕业"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
-        )}
+
       </AnimatePresence>
 
       {completed && (
