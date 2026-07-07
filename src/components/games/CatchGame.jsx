@@ -85,22 +85,22 @@ const CatchGame = ({ onComplete }) => {
 
 
   const NORMAL_BLOCK_TEXTURES = [
-    '/images/catch/item-1.png',
-    '/images/catch/item-2.png',
-    '/images/catch/item-3.png',
-    '/images/catch/item-4.png',
-    '/images/catch/item-5.png',
-    '/images/catch/item-6.png',
-    '/images/catch/item-7.png',
-    '/images/catch/item-8.png'
+    '/images/catch/item-1.webp',
+    '/images/catch/item-2.webp',
+    '/images/catch/item-3.webp',
+    '/images/catch/item-4.webp',
+    '/images/catch/item-5.webp',
+    '/images/catch/item-6.webp',
+    '/images/catch/item-7.webp',
+    '/images/catch/item-8.webp'
   ];
   
   const FIRE_BLOCK_TEXTURES = [
-    '/images/catch/fire-1.png',
-    '/images/catch/fire-2.png'
+    '/images/catch/fire-1.webp',
+    '/images/catch/fire-2.webp'
   ];
   
-  const PLAYER_TEXTURE = '/images/catch/player.png';
+  const PLAYER_TEXTURE = '/images/catch/player.webp';
   
   const BLOCK_TYPES = [
     { type: 'normal', color: '#e8d5b7', probability: 0.7 },
