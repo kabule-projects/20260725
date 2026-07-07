@@ -318,7 +318,7 @@ const CatchGame = ({ onComplete }) => {
   return (
     <div className="w-full h-full px-[12%] py-[12%] flex items-center justify-center">
       <div className="relative w-full bg-memory-dark/50 rounded-lg surreal-border p-4">
-        {showScenes && sceneImages.length > 0 && (
+        {showScenes && (
           <motion.div
             className="absolute inset-0 flex items-center justify-center bg-black z-50 rounded-lg select-none"
             initial={false}
@@ -332,17 +332,21 @@ const CatchGame = ({ onComplete }) => {
               WebkitTouchCallout: 'none',
             }}
           >
-            <img
-              src={sceneImages[currentScene]}
-              alt={`剧情 ${currentScene + 1}`}
-              className="w-full max-w-lg aspect-[3/4] object-contain rounded-lg"
-              style={{ 
-                maxHeight: 'calc(80vh - 80px)',
-                WebkitUserDrag: 'none',
-                userDrag: 'none',
-                pointerEvents: 'none',
-              }}
-            />
+            {sceneImages.length > 0 ? (
+              <img
+                src={sceneImages[currentScene]}
+                alt={`剧情 ${currentScene + 1}`}
+                className="w-full max-w-lg aspect-[3/4] object-contain rounded-lg"
+                style={{ 
+                  maxHeight: 'calc(80vh - 80px)',
+                  WebkitUserDrag: 'none',
+                  userDrag: 'none',
+                  pointerEvents: 'none',
+                }}
+              />
+            ) : (
+              <div className="text-memory-glow/60 text-sm">加载中...</div>
+            )}
           </motion.div>
         )}
 
