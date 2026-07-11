@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import Showcase from '../components/Showcase';
 import BillboardCharacter from '../components/BillboardCharacter';
@@ -18,8 +19,20 @@ const Home = ({ lights }) => {
 
   return (
     <div className="min-h-screen pb-12">
-      <header className="relative py-12 px-6 text-center">
+      <header className="relative py-12 px-6">
+        <motion.button
+          className="absolute top-6 right-6 px-4 py-2 text-memory-glow text-sm"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Link to="/staffing">ℹ️</Link>
+        </motion.button>
+        
         <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}

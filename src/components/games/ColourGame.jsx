@@ -47,7 +47,7 @@ const ColourGame = ({ config, onComplete }) => {
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center gap-4"
           >
-            <div className="relative w-full max-w-lg aspect-[3/4] rounded-lg overflow-hidden">
+            <div className="relative w-full max-w-lg rounded-lg overflow-hidden">
               <img
                 src={step.image}
                 alt={`步骤 ${currentStep + 1}`}

@@ -2,6 +2,7 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Product from './pages/Product';
+import Staffing from './pages/Staffing';
 import WelcomePage from './pages/WelcomePage';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
@@ -137,6 +138,7 @@ function App() {
       <Routes>
           <Route path="/" element={<Home lights={lights} />} />
           <Route path="/product/:id" element={<Product lights={lights} setLights={setLights} />} />
+          <Route path="/staffing" element={<Staffing />} />
         </Routes>
       </div>
 
