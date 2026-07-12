@@ -27,10 +27,7 @@ const GALLERY_IMAGES_2014 = [
   '/images/gallery/13.gif',
 ];
 
-// const ILLUMINATE_THRESHOLD = 500;
-const ILLUMINATE_THRESHOLD = 5;
 const COOLDOWN_KEY = (id) => `memoryStore:cooldown:${id}`;
-// const COOLDOWN_DURATION = 10 * 60 * 1000; // 10 minutes
 const COOLDOWN_DURATION = 30 * 1000;
 
 const Product = ({ lights, setLights }) => {
@@ -170,7 +167,7 @@ const Product = ({ lights, setLights }) => {
           >
             ← 返回
           </Link>
-          <span className="text-memory-accent text-sm">{product.year}</span>
+          <span className="text-sm text-memory-accent">{product.year}</span>
         </div>
       </header>
 
@@ -236,11 +233,9 @@ const Product = ({ lights, setLights }) => {
               >
                 <div className="memory-card rounded-xl p-6 space-y-4 border-memory-accent/30">
                   <div className="flex items-center gap-2">
-                    <span className="text-memory-accent">★</span>
-                    <h3 className="text-memory-accent font-medium">
+                    <h3 className="font-medium text-memory-accent">
                       记忆已照亮
                     </h3>
-                    <span className="text-memory-accent">★</span>
                   </div>
 
                   {/* 详情图 */}
@@ -314,7 +309,7 @@ const Product = ({ lights, setLights }) => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                   >
-                    <p className="text-memory-accent text-lg">
+                    <p className="text-lg text-memory-accent">
                       ✧ 记忆已刻印 ✧
                     </p>
                     <p className="text-memory-muted text-sm">
@@ -322,7 +317,7 @@ const Product = ({ lights, setLights }) => {
                     </p>
                   </motion.div>
                   <motion.button
-                    className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                    className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent"
                     onClick={handleGameComplete}
                     whileTap={{ scale: 0.98 }}
                   >

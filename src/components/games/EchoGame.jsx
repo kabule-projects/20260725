@@ -94,76 +94,78 @@ const EchoGame = ({ onComplete }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-      <p className="text-memory-glow/60 text-sm text-center mb-2 select-none">
-        回声
-      </p>
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="relative w-full max-w-[340px] bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+        <p className="text-memory-glow/60 text-sm text-center mb-2 select-none">
+          回声
+        </p>
 
-      <div
-        className="relative w-full bg-gradient-to-b from-memory-dark to-black rounded overflow-hidden select-none"
-        style={{ height: 320 }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            className="w-24 h-24 rounded-full bg-memory-glow/10 blur-xl"
-          >
-            <div className="w-full h-full rounded-full bg-gradient-to-b from-memory-glow/30 to-transparent" />
-          </motion.div>
-        </div>
+        <div
+          className="relative w-full bg-gradient-to-b from-memory-dark to-black rounded overflow-hidden select-none"
+          style={{ height: 320 }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="w-24 h-24 rounded-full bg-memory-glow/10 blur-xl"
+            >
+              <div className="w-full h-full rounded-full bg-gradient-to-b from-memory-glow/30 to-transparent" />
+            </motion.div>
+          </div>
 
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-memory-dark/90 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-memory-dark/90 to-transparent" />
 
-        <div className="absolute inset-x-4 bottom-4 select-none">
-          <AnimatePresence mode="wait">
-            {showDialogue && (
-              <motion.div
-                key={animationKey}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-              >
-                {currentDialogue.answers.length > 0 ? (
-                  <div className="space-y-2">
-                    <p className="text-memory-glow text-sm text-center mb-3">
-                      {currentDialogue.question}
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      {currentDialogue.answers.map((answer, i) => (
-                        <motion.button
-                          key={i}
-                          className="w-full py-2 px-4 bg-memory-glow/10 text-memory-glow/80 rounded border border-memory-glow/20 text-sm hover:bg-memory-glow/20 transition-colors select-none"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => handleAnswer(answer)}
-                        >
-                          {answer}
-                        </motion.button>
-                      ))}
+          <div className="absolute inset-x-4 bottom-4 select-none">
+            <AnimatePresence mode="wait">
+              {showDialogue && (
+                <motion.div
+                  key={animationKey}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {currentDialogue.answers.length > 0 ? (
+                    <div className="space-y-2">
+                      <p className="text-memory-glow text-sm text-center mb-3">
+                        {currentDialogue.question}
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        {currentDialogue.answers.map((answer, i) => (
+                          <motion.button
+                            key={i}
+                            className="w-full py-2 px-4 bg-memory-glow/10 text-memory-glow/80 rounded border border-memory-glow/20 text-sm hover:bg-memory-glow/20 transition-colors select-none"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => handleAnswer(answer)}
+                          >
+                            {answer}
+                          </motion.button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-center"
-                  >
-                    <p className="text-memory-glow/60 text-sm mb-3">
-                      {currentDialogue.question}
-                    </p>
-                    <motion.button
-                      className="text-memory-glow/40 text-xs hover:text-memory-glow/60 transition-colors select-none"
-                      whileHover={{ scale: 1.05 }}
-                      onClick={advanceDialogue}
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-center"
                     >
-                      继续...
-                    </motion.button>
-                  </motion.div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                      <p className="text-memory-glow/60 text-sm mb-3">
+                        {currentDialogue.question}
+                      </p>
+                      <motion.button
+                        className="text-memory-glow/40 text-xs hover:text-memory-glow/60 transition-colors select-none"
+                        whileHover={{ scale: 1.05 }}
+                        onClick={advanceDialogue}
+                      >
+                        继续...
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

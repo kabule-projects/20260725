@@ -49,7 +49,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-memory-accent text-sm font-medium">
+                <span className="text-sm font-medium text-memory-accent">
                   {product.year}
                 </span>
                 <span className="text-memory-muted text-xs">
@@ -57,7 +57,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
                 </span>
               </div>
 
-              <h3 className="text-memory-glow font-serif text-lg leading-tight">
+              <h3 className="font-serif text-lg leading-tight text-memory-accent">
                 {product.title}
               </h3>
 
@@ -65,7 +65,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
                 {!isFullyIlluminated && (
                   <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                      className="h-full bg-memory-accent"
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
                       transition={{ duration: 0.8 }}
@@ -99,7 +99,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-memory-accent text-sm font-medium">
+                <span className="text-sm font-medium text-memory-accent">
                   {product.year}
                 </span>
                 <span className="text-memory-muted text-xs">
@@ -107,7 +107,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
                 </span>
               </div>
 
-              <h3 className="text-memory-glow font-serif text-lg leading-tight">
+              <h3 className="font-serif text-lg leading-tight text-memory-accent">
                 {product.title}
               </h3>
 
@@ -115,7 +115,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
                 {!isFullyIlluminated && (
                   <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                      className="h-full bg-memory-accent"
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
                       transition={{ duration: 0.8 }}

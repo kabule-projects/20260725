@@ -8,11 +8,12 @@ export default {
     extend: {
       colors: {
         memory: {
-          dark: '#0a0a12',
-          card: '#12121f',
-          glow: '#e8d5b7',
-          accent: '#d4af37',
-          muted: '#6b6b7b',
+          dark: 'rgb(17, 17, 28)',
+          card: 'rgb(18, 18, 31)',
+          glow: 'rgb(232, 213, 183)',
+          accent: 'rgb(254, 254, 198)',
+          muted: 'rgb(159, 161, 133)',
+          info: 'rgb(137, 128, 246)',
         }
       },
       animation: {

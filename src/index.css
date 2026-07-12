@@ -19,20 +19,20 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #0a0a12;
+  background-color: rgb(17, 17, 28);
   min-height: 100%;
 }
 
 body {
   font-family: 'Georgia', serif;
-  background: linear-gradient(180deg, #0a0a12 0%, #12121f 50%, #0a0a12 100%);
-  color: #e8d5b7;
+  background: rgb(17, 17, 28);
+  color: rgb(232, 213, 183);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-overflow-scrolling: touch;
-  background-color: #0a0a12;
+  background-color: rgb(17, 17, 28);
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -40,8 +40,8 @@ body {
 }
 
 ::selection {
-  background: rgba(212, 175, 55, 0.3);
-  color: #e8d5b7;
+  background: rgba(232, 213, 183, 0.3);
+  color: rgb(232, 213, 183);
 }
 
 ::-webkit-scrollbar {
@@ -49,16 +49,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a12;
+  background: rgb(17, 17, 28);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4af37;
+  background: rgb(232, 213, 183);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #e8d5b7;
+  background: rgb(254, 254, 198);
 }
 
 /* 细滚动条样式 */
@@ -71,32 +71,32 @@ body {
 }
 
 .thin-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.5);
+  background: rgba(232, 213, 183, 0.5);
   border-radius: 2px;
 }
 
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.8);
+  background: rgba(254, 254, 198, 0.8);
 }
 
 .thin-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(212, 175, 55, 0.5) transparent;
+  scrollbar-color: rgba(232, 213, 183, 0.5) transparent;
 }
 
 .surreal-glow {
   box-shadow:
-    0 0 20px rgba(212, 175, 55, 0.1),
-    0 0 40px rgba(212, 175, 55, 0.05),
-    inset 0 0 20px rgba(212, 175, 55, 0.05);
+    0 0 20px rgba(232, 213, 183, 0.1),
+    0 0 40px rgba(232, 213, 183, 0.05),
+    inset 0 0 20px rgba(232, 213, 183, 0.05);
 }
 
 .surreal-border {
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(232, 213, 183, 0.2);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #e8d5b7 0%, #d4af37 50%, #e8d5b7 100%);
+  background: rgb(232, 213, 183);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -105,15 +105,15 @@ body {
 .memory-card {
   background: rgba(18, 18, 31, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(232, 213, 183, 0.15);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .memory-card:hover {
-  border-color: rgba(212, 175, 55, 0.4);
+  border-color: rgba(254, 254, 198, 0.4);
   box-shadow:
-    0 0 30px rgba(212, 175, 55, 0.15),
-    0 0 60px rgba(212, 175, 55, 0.05);
+    0 0 30px rgba(254, 254, 198, 0.15),
+    0 0 60px rgba(254, 254, 198, 0.05);
 }
 
 @keyframes particle-float {

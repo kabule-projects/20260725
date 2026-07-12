@@ -80,12 +80,9 @@ const Home = ({ lights }) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-memory-card/50 surreal-border">
-            <span className="text-memory-accent text-lg">✧</span>
-            <span className="text-memory-glow text-sm">
-              已收集的记忆碎片：{' '}
-              <span className="text-memory-accent font-medium">{totalLight}</span>
-            </span>
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-memory-card/50 surreal-border">
+            <span className="text-sm text-memory-info">已收集的记忆碎片：</span>
+            <span className="font-medium text-sm text-memory-accent">{totalLight}</span>
           </div>
         </motion.div>
 
