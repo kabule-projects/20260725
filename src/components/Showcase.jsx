@@ -30,10 +30,10 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
 
   const getImageStyle = () => {
     if (accessStatus === 'locked') {
-      return 'brightness-[0.2] grayscale';
+      return 'brightness-[0] grayscale';
     }
     if (accessStatus === 'accessible') {
-      return 'brightness-[0.6]';
+      return 'brightness-[0.1]';
     }
     return 'brightness-100';
   };

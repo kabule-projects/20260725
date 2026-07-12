@@ -113,7 +113,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
 
               <div className="flex items-center gap-2 pt-2 h-3">
                 {!isFullyIlluminated && (
-                  <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-memory-dark rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-memory-accent"
                       initial={{ width: 0 }}
