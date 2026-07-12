@@ -97,7 +97,7 @@ export const is2014Unlocked = (lights, products) => {
 };
 
 // 2026 解锁阈值：所有年份 light 值总和
-const YEAR_2026_TOTAL_THRESHOLD = 725;
+const YEAR_2026_TOTAL_THRESHOLD = 72500;
 
 // 判断商品访问状态：'locked' | 'accessible' | 'unlocked'
 export const getProductAccessStatus = (product, lights, products) => {

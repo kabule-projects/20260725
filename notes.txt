@@ -108,3 +108,13 @@ gifsicle -O3 --colors 64 --lossy=80 temp.gif -o output.gif
 
 # 清理临时文件
 rm temp.gif
+
+
+
+# 创建输出目录  
+mkdir -p resized
+
+# 批量缩小所有 webp 文件
+for file in *.webp; do
+  cwebp "$file" -resize 750 1000 -o "resized/${file}" -q 80
+done

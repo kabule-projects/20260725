@@ -2,7 +2,7 @@ export const calculateBrightness = (light, locked = false) => {
   if (locked) return 0.3;
 
   const minLight = 0;
-  const maxLight = 500;
+  const maxLight = 7250;
   const minBrightness = 0.4;
   const maxBrightness = 1.0;
 
@@ -48,5 +48,5 @@ export const is2026Unlocked = (lights, products) => {
     return total + (lights[product.id] || 0);
   }, 0);
   
-  return totalLight >= 725;
+  return totalLight >= 72500;
 };
