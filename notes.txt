@@ -89,7 +89,7 @@ for file in *.jpg; do cwebp -q 80 "$file" -o "${file%.jpg}.webp"; done
 for file in *.png; do cwebp -q 80 "$file" -o "${file%.png}.webp"; done
 
 # 同时转换 JPG 和 PNG
-for file in *.jpg *.png *.JPG; do cwebp -q 80 "$file" -o "${file%.*}.webp"; done
+for file in *.jpg *.png; do cwebp -q 80 "$file" -o "${file%.*}.webp"; done
 
 
 
