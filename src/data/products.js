@@ -132,7 +132,7 @@ export const PRODUCTS = [
       image: '/images/2022-reveal.jpg',
       text: "画手：@纳米大瓢"
     },
-    gameArtist: "美术资源：@大山深处的唢呐"
+    gameArtist: "美术资源、文案：@大山深处的唢呐"
   },
   {
     id: "2023",

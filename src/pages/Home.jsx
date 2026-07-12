@@ -12,7 +12,7 @@ const Home = ({ lights }) => {
 
   const totalLight = Object.values(lights).reduce((sum, val) => sum + val, 0);
 
-  const handleProductClick = (message) => {
+  const handleProductClick = (product, message) => {
     setMessageKey(prev => prev + 1);
     setDialogMessage(message);
   };
