@@ -18,7 +18,7 @@ const WhackGame = ({ onComplete }) => {
   const timeoutRef = useRef(null);
   const currentImageRef = useRef(null);
   
-  const imageFiles = ['1.png', '2.png', '3.png', 'bomb.png'];
+  const imageFiles = ['1.webp', '2.webp', '3.webp', 'bomb.webp'];
 
   // 计算当前亮灯时长
   const getCurrentDuration = useCallback(() => {

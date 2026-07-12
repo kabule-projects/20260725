@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 const PeekGame = ({ onComplete }) => {
   const [won, setWon] = useState(false);
   const [foundCount, setFoundCount] = useState(0);
-  const [stars, setStars] = useState([]);
+  const [items, setItems] = useState([]);
+  const [sceneSize, setSceneSize] = useState({ width: 500, height: 500 });
+  const [viewSize, setViewSize] = useState({ width: 300, height: 300 });
 
   const viewXRef = useRef(0);
   const viewYRef = useRef(0);
@@ -12,40 +14,97 @@ const PeekGame = ({ onComplete }) => {
   const [viewY, setViewY] = useState(0);
   const isDraggingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
-  const TOTAL_STARS = 9;
-  const VIEW_WIDTH = 300;
-  const VIEW_HEIGHT = 300;
-  const SCENE_WIDTH = 500;
-  const SCENE_HEIGHT = 500;
-  const STAR_SIZE = 30;
-  const HOLE_RADIUS = 100;
+  const TOTAL_ITEMS = 4;
+  const ITEM_SIZE = 70;
+  const CLICK_RADIUS = 50;
+  const MARGIN_PERCENT = 0.15;
+  const SCENE_SCALE = 1.5;
+
+  const itemImages = [
+    '/images/peek/1.webp',
+    '/images/peek/2.webp',
+    '/images/peek/3.webp',
+    '/images/peek/4.webp'
+  ];
 
   useEffect(() => {
-    const newStars = [];
-    for (let i = 0; i < TOTAL_STARS; i++) {
+    const baseImg = new Image();
+    baseImg.onload = () => {
+      const container = containerRef.current;
+      if (container) {
+        const containerWidth = container.offsetWidth;
+        setViewSize({ width: containerWidth, height: containerWidth });
+
+        const sceneWidth = containerWidth * SCENE_SCALE;
+        const sceneHeight = containerWidth * SCENE_SCALE;
+        setSceneSize({ width: sceneWidth, height: sceneHeight });
+
+        initializeItems(sceneWidth, sceneHeight);
+      }
+    };
+    baseImg.src = '/images/peek/base.webp';
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const container = containerRef.current;
+      if (container) {
+        const containerWidth = container.offsetWidth;
+        setViewSize({ width: containerWidth, height: containerWidth });
+
+        const sceneWidth = containerWidth * SCENE_SCALE;
+        const sceneHeight = containerWidth * SCENE_SCALE;
+        setSceneSize({ width: sceneWidth, height: sceneHeight });
+
+        initializeItems(sceneWidth, sceneHeight);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const initializeItems = useCallback((sceneWidth, sceneHeight) => {
+    const marginX = sceneWidth * MARGIN_PERCENT;
+    const marginY = sceneHeight * MARGIN_PERCENT;
+    const safeWidth = sceneWidth - marginX * 2 - ITEM_SIZE;
+    const safeHeight = sceneHeight - marginY * 2 - ITEM_SIZE;
+
+    const newItems = [];
+    for (let i = 0; i < TOTAL_ITEMS; i++) {
       let x, y;
       let attempts = 0;
-      do {
-        x = STAR_SIZE + Math.random() * (SCENE_WIDTH - STAR_SIZE * 2);
-        y = STAR_SIZE + Math.random() * (SCENE_HEIGHT - STAR_SIZE * 2);
-        attempts++;
-      } while (
-        attempts < 50 &&
-        x > SCENE_WIDTH / 2 - HOLE_RADIUS &&
-        x < SCENE_WIDTH / 2 + HOLE_RADIUS &&
-        y > SCENE_HEIGHT / 2 - HOLE_RADIUS &&
-        y < SCENE_HEIGHT / 2 + HOLE_RADIUS
-      );
+      let valid = false;
 
-      newStars.push({
+      do {
+        x = marginX + Math.random() * safeWidth;
+        y = marginY + Math.random() * safeHeight;
+        attempts++;
+
+        valid = true;
+        for (const item of newItems) {
+          const distance = Math.sqrt(
+            Math.pow(x - item.x, 2) +
+            Math.pow(y - item.y, 2)
+          );
+          if (distance < ITEM_SIZE * 1.5) {
+            valid = false;
+            break;
+          }
+        }
+      } while (!valid && attempts < 100);
+
+      newItems.push({
         id: i,
         x,
         y,
+        image: itemImages[i],
         found: false
       });
     }
-    setStars(newStars);
+    setItems(newItems);
   }, []);
 
   const handleMouseDown = useCallback((e) => {
@@ -64,14 +123,17 @@ const PeekGame = ({ onComplete }) => {
     const deltaX = e.clientX - lastPosRef.current.x;
     const deltaY = e.clientY - lastPosRef.current.y;
 
-    viewXRef.current = Math.max(-(SCENE_WIDTH - VIEW_WIDTH), Math.min(0, viewXRef.current + deltaX));
-    viewYRef.current = Math.max(-(SCENE_HEIGHT - VIEW_HEIGHT), Math.min(0, viewYRef.current + deltaY));
+    const maxX = sceneSize.width - viewSize.width;
+    const maxY = sceneSize.height - viewSize.height;
+
+    viewXRef.current = Math.max(-maxX, Math.min(0, viewXRef.current + deltaX));
+    viewYRef.current = Math.max(-maxY, Math.min(0, viewYRef.current + deltaY));
 
     setViewX(viewXRef.current);
     setViewY(viewYRef.current);
 
     lastPosRef.current = { x: e.clientX, y: e.clientY };
-  }, [won]);
+  }, [won, sceneSize, viewSize]);
 
   const handleTouchStart = useCallback((e) => {
     if (won) return;
@@ -85,14 +147,17 @@ const PeekGame = ({ onComplete }) => {
     const deltaX = e.touches[0].clientX - lastPosRef.current.x;
     const deltaY = e.touches[0].clientY - lastPosRef.current.y;
 
-    viewXRef.current = Math.max(-(SCENE_WIDTH - VIEW_WIDTH), Math.min(0, viewXRef.current + deltaX));
-    viewYRef.current = Math.max(-(SCENE_HEIGHT - VIEW_HEIGHT), Math.min(0, viewYRef.current + deltaY));
+    const maxX = sceneSize.width - viewSize.width;
+    const maxY = sceneSize.height - viewSize.height;
+
+    viewXRef.current = Math.max(-maxX, Math.min(0, viewXRef.current + deltaX));
+    viewYRef.current = Math.max(-maxY, Math.min(0, viewYRef.current + deltaY));
 
     setViewX(viewXRef.current);
     setViewY(viewYRef.current);
 
     lastPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  }, [won]);
+  }, [won, sceneSize, viewSize]);
 
   const handleTouchEnd = useCallback(() => {
     isDraggingRef.current = false;
@@ -105,33 +170,33 @@ const PeekGame = ({ onComplete }) => {
     const clickX = e.clientX - rect.left - viewXRef.current;
     const clickY = e.clientY - rect.top - viewYRef.current;
 
-    setStars(prevStars => {
+    setItems(prevItems => {
       let found = false;
-      const newStars = prevStars.map(star => {
-        if (star.found) return star;
-        const starCenterX = star.x + STAR_SIZE / 2;
-        const starCenterY = star.y + STAR_SIZE / 2;
+      const newItems = prevItems.map(item => {
+        if (item.found) return item;
+        const itemCenterX = item.x + ITEM_SIZE / 2;
+        const itemCenterY = item.y + ITEM_SIZE / 2;
         const distance = Math.sqrt(
-          Math.pow(clickX - starCenterX, 2) +
-          Math.pow(clickY - starCenterY, 2)
+          Math.pow(clickX - itemCenterX, 2) +
+          Math.pow(clickY - itemCenterY, 2)
         );
-        if (distance < STAR_SIZE) {
+        if (distance < CLICK_RADIUS) {
           found = true;
-          return { ...star, found: true };
+          return { ...item, found: true };
         }
-        return star;
+        return item;
       });
 
       if (found) {
-        const newCount = newStars.filter(s => s.found).length;
+        const newCount = newItems.filter(i => i.found).length;
         setFoundCount(newCount);
-        if (newCount >= TOTAL_STARS) {
+        if (newCount >= TOTAL_ITEMS) {
           setWon(true);
           onComplete();
         }
       }
 
-      return newStars;
+      return newItems;
     });
   }, [won, onComplete]);
 
@@ -144,41 +209,60 @@ const PeekGame = ({ onComplete }) => {
     setWon(false);
     isDraggingRef.current = false;
 
-    const newStars = [];
-    for (let i = 0; i < TOTAL_STARS; i++) {
+    const marginX = sceneSize.width * MARGIN_PERCENT;
+    const marginY = sceneSize.height * MARGIN_PERCENT;
+    const safeWidth = sceneSize.width - marginX * 2 - ITEM_SIZE;
+    const safeHeight = sceneSize.height - marginY * 2 - ITEM_SIZE;
+
+    const newItems = [];
+    for (let i = 0; i < TOTAL_ITEMS; i++) {
       let x, y;
       let attempts = 0;
-      do {
-        x = STAR_SIZE + Math.random() * (SCENE_WIDTH - STAR_SIZE * 2);
-        y = STAR_SIZE + Math.random() * (SCENE_HEIGHT - STAR_SIZE * 2);
-        attempts++;
-      } while (
-        attempts < 50 &&
-        x > SCENE_WIDTH / 2 - HOLE_RADIUS &&
-        x < SCENE_WIDTH / 2 + HOLE_RADIUS &&
-        y > SCENE_HEIGHT / 2 - HOLE_RADIUS &&
-        y < SCENE_HEIGHT / 2 + HOLE_RADIUS
-      );
+      let valid = false;
 
-      newStars.push({
+      do {
+        x = marginX + Math.random() * safeWidth;
+        y = marginY + Math.random() * safeHeight;
+        attempts++;
+
+        valid = true;
+        for (const item of newItems) {
+          const distance = Math.sqrt(
+            Math.pow(x - item.x, 2) +
+            Math.pow(y - item.y, 2)
+          );
+          if (distance < ITEM_SIZE * 1.5) {
+            valid = false;
+            break;
+          }
+        }
+      } while (!valid && attempts < 100);
+
+      newItems.push({
         id: i,
         x,
         y,
+        image: itemImages[i],
         found: false
       });
     }
-    setStars(newStars);
+    setItems(newItems);
   };
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
+    <div className="relative w-full h-full flex flex-col items-center justify-center bg-memory-dark/50 rounded-lg p-4 select-none">
       <p className="text-memory-glow/60 text-sm text-center mb-2 select-none">
-        拖动寻找隐藏的星星
+        拖动寻找隐藏的物品
       </p>
 
       <div
-        className="relative w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-black rounded overflow-hidden cursor-grab active:cursor-grabbing select-none"
-        style={{ height: VIEW_HEIGHT }}
+        ref={containerRef}
+        className="relative w-full rounded overflow-hidden cursor-grab active:cursor-grabbing select-none"
+        style={{ 
+          aspectRatio: '1/1',
+          maxWidth: '100%',
+          maxHeight: 'calc(100vh - 120px)'
+        }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
@@ -191,49 +275,60 @@ const PeekGame = ({ onComplete }) => {
         <div
           className="absolute select-none"
           style={{
-            width: SCENE_WIDTH,
-            height: SCENE_HEIGHT,
+            width: sceneSize.width,
+            height: sceneSize.height,
             left: viewX,
             top: viewY,
           }}
         >
-          {stars.map(star => (
-            star.found ? null : (
+          <img
+            src="/images/peek/base.webp"
+            alt="背景"
+            className="w-full h-full object-cover"
+            style={{ WebkitUserDrag: 'none', userDrag: 'none' }}
+          />
+
+          {items.map(item => (
+            item.found ? null : (
               <motion.div
-                key={star.id}
+                key={item.id}
                 className="absolute select-none"
                 style={{
-                  left: star.x,
-                  top: star.y,
-                  width: STAR_SIZE,
-                  height: STAR_SIZE,
+                  left: item.x,
+                  top: item.y,
+                  width: ITEM_SIZE,
+                  height: ITEM_SIZE,
                 }}
-                initial={{ scale: 0, rotate: 0 }}
-                animate={{ scale: 1, rotate: 360 }}
-                transition={{ duration: 0.5 }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3 }}
               >
-                <svg viewBox="0 0 24 24" fill="#FFD700" className="w-full h-full drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
+                <img
+                  src={item.image}
+                  alt={`物品 ${item.id + 1}`}
+                  className="w-full h-full object-contain"
+                  style={{ 
+                    WebkitUserDrag: 'none', 
+                    userDrag: 'none',
+                    filter: 'drop-shadow(0 0 12px rgba(255, 255, 155, 1))'
+                  }}
+                />
               </motion.div>
             )
           ))}
         </div>
 
-        <div
-          className="absolute inset-0 pointer-events-none select-none"
-          style={{
-            background: `radial-gradient(circle at 50% 50%,
-              transparent ${HOLE_RADIUS - 20}px,
-              rgba(0,0,0,0.7) ${HOLE_RADIUS}px,
-              rgba(0,0,0,0.9) ${HOLE_RADIUS + 40}px)`,
-          }}
+        <img
+          src="/images/peek/mask.webp"
+          alt="遮挡层"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+          style={{ WebkitUserDrag: 'none', userDrag: 'none' }}
         />
       </div>
 
       <div className="mt-2 text-center select-none">
         <p className="text-memory-glow/60 text-xs">
-          已找到: {foundCount} / {TOTAL_STARS}
+          已找到: {foundCount} / {TOTAL_ITEMS}
         </p>
       </div>
 
@@ -244,7 +339,7 @@ const PeekGame = ({ onComplete }) => {
           animate={{ opacity: 1 }}
         >
           <p className="text-memory-glow text-lg mb-2 select-none">成功!</p>
-          <p className="text-memory-muted text-sm mb-4 select-none">已找到所有星星</p>
+          <p className="text-memory-muted text-sm mb-4 select-none">已找到所有物品</p>
           <motion.button
             className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 select-none"
             whileHover={{ scale: 1.05 }}
