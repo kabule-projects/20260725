@@ -106,7 +106,8 @@ const MemoryGame = ({ onComplete }) => {
   }
 
   return (
-    <div className="relative w-full max-w-[400px] mx-auto bg-memory-dark/50 rounded-lg p-4 select-none">
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="relative w-full max-w-[400px] bg-memory-dark/50 rounded-lg p-4 select-none">
       {/* 标题 */}
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">记忆配对</h2>
@@ -159,6 +160,7 @@ const MemoryGame = ({ onComplete }) => {
             </motion.div>
           );
         })}
+      </div>
       </div>
     </div>
   );
