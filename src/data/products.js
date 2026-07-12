@@ -9,8 +9,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2014-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@胡同口卯時二刻"
+    },
+    gameArtist: "美术资源：@甜团子咸粽子"
   },
   {
     id: "2015",
@@ -23,8 +24,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2015-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@久不晚睡"
+    },
+    gameArtist: "美术资源：@hinatayuki"
   },
   {
     id: "2016",
@@ -37,8 +39,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2016-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@迷匣匣匣"
+    },
+    gameArtist: "美术资源：@迷匣匣匣"
   },
   {
     id: "2017",
@@ -51,8 +54,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2017-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@一锅望仔"
+    },
+    gameArtist: "美术资源：@一锅望仔"
   },
   {
     id: "2018",
@@ -65,8 +69,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2018-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@久不晚睡"
+    },
+    gameArtist: "美术资源：@久不晚睡"
   },
   {
     id: "2019",
@@ -79,8 +84,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2019-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@迷匣匣匣"
+    },
+    gameArtist: "美术资源：@迷匣匣匣、@王久哔哔叭叭、@茗酱白粥铺"
   },
   {
     id: "2020",
@@ -93,8 +99,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2020-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@啾星原产果冻现摘现发"
+    },
+    gameArtist: "美术资源：@dontmind_冬麦"
   },
   {
     id: "2021",
@@ -108,8 +115,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2021-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@邪恶小毛米"
+    },
+    gameArtist: "美术资源：@王工头又困了"
   },
   {
     id: "2022",
@@ -122,8 +130,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2022-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@纳米大瓢"
+    },
+    gameArtist: "美术资源：@大山深处的唢呐"
   },
   {
     id: "2023",
@@ -136,8 +145,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2023-reveal.jpg',
-      text: "画手：@饭老师id是什么！"
-    }
+      text: "画手：@氵衮去看书"
+    },
+    gameArtist: "美术资源：@久不晚睡"
   },
   {
     id: "2024",
@@ -150,8 +160,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2024-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@邪恶小毛米"
+    },
+    gameArtist: "美术资源：@邪恶小毛米"
   },
   {
     id: "2025",
@@ -164,8 +175,9 @@ export const PRODUCTS = [
     locked: false,
     moreInfo: {
       image: '/images/2025-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@啾星原产果冻现摘现发"
+    },
+    gameArtist: "美术资源：@一锅望仔"
   },
   {
     id: "2026",
@@ -179,7 +191,8 @@ export const PRODUCTS = [
     locked: true,
     moreInfo: {
       image: '/images/2026-reveal.jpg',
-      text: "[占位文本]"
-    }
+      text: "画手：@积极向上桔叨叨"
+    },
+    gameArtist: "手书：@Gululu苔古"
   }
 ];

@@ -14,7 +14,7 @@ import LyricGame from './games/LyricGame';
 import QuizGame from './games/QuizGame';
 import SortGame from './games/SortGame';
 
-const MiniGame = ({ gameType, onComplete, config }) => {
+const MiniGame = ({ gameType, onComplete, config, artist }) => {
   const [initialized, setInitialized] = useState(true);
 
   const renderGame = () => {
@@ -53,9 +53,14 @@ const MiniGame = ({ gameType, onComplete, config }) => {
   };
 
   return (
-    <>
+    <div className="relative w-full h-full">
       {initialized && renderGame()}
-    </>
+      {artist && (
+        <div className="absolute bottom-2 right-2 text-xs text-white/60 bg-black/30 px-2 py-1 rounded">
+          {artist}
+        </div>
+      )}
+    </div>
   );
 };
 

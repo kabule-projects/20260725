@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 // 游戏配置
 const GRID_SIZE = 5; // 5x5 格盘
 const TOTAL_SUCCESS = 12; // 需要连续成功点击的次数
-const INITIAL_DURATION = 1200; // 初始亮灯时长（毫秒）
-const MIN_DURATION = 800; // 最短亮灯时长
+const INITIAL_DURATION = 1000; // 初始亮灯时长（毫秒）
+const MIN_DURATION = 600; // 最短亮灯时长
 const DURATION_DECREASE = 30; // 每次成功后减少的时长
 
 const WhackGame = ({ onComplete }) => {
@@ -47,7 +47,7 @@ const WhackGame = ({ onComplete }) => {
     const duration = getCurrentDuration();
     timeoutRef.current = setTimeout(() => {
       if (!isClicked) {
-        if (currentImageRef.current !== 'bomb.png') {
+        if (currentImageRef.current !== 'bomb.webp') {
           // 超时未点击普通图片，重置分数
           setScore(0);
         }
@@ -75,7 +75,7 @@ const WhackGame = ({ onComplete }) => {
       clearTimeout(timeoutRef.current);
       setActiveCell(null);
       
-      if (activeImage === 'bomb.png') {
+      if (activeImage === 'bomb.webp') {
         // 点击炸弹，分数清零
         setScore(0);
       } else {
@@ -114,7 +114,8 @@ const WhackGame = ({ onComplete }) => {
   }
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="relative w-full max-w-[340px] bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
       {/* 标题 */}
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">追光</h2>
@@ -143,7 +144,7 @@ const WhackGame = ({ onComplete }) => {
           const row = Math.floor(index / GRID_SIZE);
           const col = index % GRID_SIZE;
           const isActive = activeCell && activeCell.row === row && activeCell.col === col;
-          const isBomb = isActive && activeImage === 'bomb.png';
+          const isBomb = isActive && activeImage === 'bomb.webp';
           
           return (
             <motion.div
@@ -171,6 +172,11 @@ const WhackGame = ({ onComplete }) => {
                   src={`/images/whack/${activeImage}`}
                   alt=""
                   className="absolute inset-0 w-full h-full object-contain p-1"
+                  style={{
+                    filter: isBomb 
+                      ? 'drop-shadow(0 0 15px rgba(255, 100, 100, 1))' 
+                      : 'drop-shadow(0 0 15px rgba(255, 255, 255, 1))'
+                  }}
                 />
               )}
             </motion.div>
@@ -197,6 +203,7 @@ const WhackGame = ({ onComplete }) => {
           <p className="text-memory-muted/60 text-xs">点击亮起的格子</p>
         </div>
       )}
+      </div>
     </div>
   );
 };

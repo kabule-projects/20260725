@@ -441,6 +441,7 @@ const Product = ({ lights, setLights }) => {
                     gameType={product.gameType}
                     config={GAME_CONFIGS[product.id]}
                     onComplete={() => setGameCompleted(true)}
+                    artist={product.gameArtist}
                   />
                 )}
               </div>
