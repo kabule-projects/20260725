@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const OPTIONS_MAP = {
   40: ['喜欢。'],
-  41: ['……', '流行。'],
-  43: ['去哪？'],
-  45: ['会。'],
+  41: ['我觉得它是。'],
+  46: ['……','好。'],
+  47: ['会。'],
 };
 
 const TOTAL_IMAGES = 49;
