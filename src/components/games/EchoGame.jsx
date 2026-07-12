@@ -8,7 +8,7 @@ const OPTIONS_MAP = {
   47: ['会。'],
 };
 
-const TOTAL_IMAGES = 49;
+const TOTAL_IMAGES = 51;
 
 const EchoGame = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -58,17 +58,17 @@ const EchoGame = ({ onComplete }) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <div className="relative w-[76%] h-[76%] select-none">
+      <div className="relative w-[76%] max-w-[90vw] aspect-[3/4.2] select-none">
 
         <div
           className="relative w-full h-full bg-gradient-to-b from-memory-dark to-black rounded overflow-hidden select-none cursor-pointer"
           onClick={handleImageClick}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pb-[8%]">
             <img
               src={imageSrc}
               alt={`echo-${currentIndex}`}
-              className="w-full h-full object-contain"
+              className="w-full h-[92%] object-contain"
               onLoad={handleImageLoad}
             />
           </div>
@@ -76,7 +76,7 @@ const EchoGame = ({ onComplete }) => {
           <AnimatePresence>
             {showOptions && currentOptions && (
               <motion.div
-                className="absolute inset-x-4 bottom-4"
+                className="absolute inset-x-12 bottom-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
