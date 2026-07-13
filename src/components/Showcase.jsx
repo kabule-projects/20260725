@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { getProductAccessStatus } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { getBillboardMessage } from '../data/billboardMessages';
+import LazyImage from './LazyImage';
 
 const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -41,7 +42,7 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
   return (
     <div className="relative w-full h-full flex items-center justify-center">
       {imageSrc ? (
-        <img
+        <LazyImage
           src={imageSrc}
           alt=""
           className={`max-w-full max-h-full object-contain transition-all duration-300 ${getImageStyle()}`}

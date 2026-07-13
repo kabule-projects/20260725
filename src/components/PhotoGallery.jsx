@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LazyImage from './LazyImage';
 
 // 基础开放日期（北京时间2026年7月17日中午12点）
 const BASE_UNLOCK_DATE = '2026-07-17T12:00:00+08:00';
@@ -385,7 +386,7 @@ const PhotoGallery = ({ images }) => {
             style={{ touchAction: 'none' }}
           >
             {index < unlockedCount ? (
-              <img
+              <LazyImage
                 src={image}
                 alt={`预览 ${index + 1}`}
                 className="w-full h-full object-cover"

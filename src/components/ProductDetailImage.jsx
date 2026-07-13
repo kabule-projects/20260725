@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import LazyImage from './LazyImage';
 
 const ProductDetailImage = ({ year }) => {
   const [images, setImages] = useState([]);
@@ -35,12 +36,12 @@ const ProductDetailImage = ({ year }) => {
     tryLoad();
   };
 
-  // 初始加载
-  if (images.length === 0) {
-    loadDetailImages();
-  }
+  useEffect(() => {
+    if (images.length === 0) {
+      loadDetailImages();
+    }
+  }, [images.length]);
 
-  // 如果没有图片，不渲染
   if (images.length === 0) {
     return null;
   }
@@ -52,7 +53,7 @@ const ProductDetailImage = ({ year }) => {
           key={index}
           className="relative w-full max-w-[900px] mx-auto aspect-[3/4] rounded-lg overflow-hidden"
         >
-          <img
+          <LazyImage
             src={url}
             alt={`Detail ${index + 1}`}
             className="w-full h-full object-contain bg-memory-dark/50"

@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
+import LazyImage from './LazyImage';
 
 const ProductImage = ({ year, accessStatus }) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   const basePath = `/images/${year}`;
   
-  // 支持的格式优先级：webp > png > jpg > jpeg
   const formats = ['webp', 'png', 'jpg', 'jpeg'];
 
-  // 尝试加载图片，支持多种格式
   const tryLoadImage = (base, setSrc) => {
     const tryFormat = (index) => {
       if (index >= formats.length) return;
@@ -26,8 +25,11 @@ const ProductImage = ({ year, accessStatus }) => {
     tryFormat(0);
   };
 
-  // 初始化加载图片
-  if (!imageSrc) tryLoadImage(basePath, setImageSrc);
+  useEffect(() => {
+    if (!imageSrc) {
+      tryLoadImage(basePath, setImageSrc);
+    }
+  }, [imageSrc, basePath]);
 
   const getImageStyle = () => {
     if (accessStatus === 'locked' || accessStatus === 'accessible') {
@@ -39,7 +41,7 @@ const ProductImage = ({ year, accessStatus }) => {
   return (
     <div className="absolute inset-0">
       {imageSrc && (
-        <img
+        <LazyImage
           src={imageSrc}
           alt=""
           className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${getImageStyle()}`}
