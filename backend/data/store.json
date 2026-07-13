@@ -6,51 +6,51 @@
     },
     {
       "id": "2015",
-      "light": 1000
+      "light": 9000
     },
     {
       "id": "2016",
-      "light": 19
+      "light": 9000
     },
     {
       "id": "2017",
-      "light": 20
+      "light": 9000
     },
     {
       "id": "2018",
-      "light": 21
+      "light": 9000
     },
     {
       "id": "2019",
-      "light": 24
+      "light": 9000
     },
     {
       "id": "2020",
-      "light": 24
+      "light": 24000
     },
     {
       "id": "2021",
-      "light": 23
+      "light": 23000
     },
     {
       "id": "2022",
-      "light": 3
+      "light": 6000
     },
     {
       "id": "2023",
-      "light": 0
+      "light": 9000
     },
     {
       "id": "2024",
-      "light": 0
+      "light": 9000
     },
     {
       "id": "2025",
-      "light": 0
+      "light": 90000
     },
     {
       "id": "2026",
-      "light": 30
+      "light": 3000
     }
   ],
   "cooldowns": {
