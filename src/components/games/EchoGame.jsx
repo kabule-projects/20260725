@@ -2,13 +2,13 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const OPTIONS_MAP = {
-  40: ['喜欢。'],
-  41: ['我觉得它是。'],
-  46: ['……','好。'],
-  47: ['会。'],
+  42: ['喜欢。'],
+  43: ['我觉得它是。'],
+  48: ['……','好。'],
+  49: ['会。'],
 };
 
-const TOTAL_IMAGES = 51;
+const TOTAL_IMAGES = 54;
 
 const EchoGame = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
