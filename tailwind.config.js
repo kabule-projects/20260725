@@ -12,7 +12,7 @@ export default {
           card: 'rgb(18, 18, 31)',
           glow: 'rgba(254, 254, 198, 0.9)',
           accent: 'rgb(254, 254, 198)',
-          muted: 'rgb(159, 161, 133)',
+          muted: 'rgba(254, 254, 198, 0.7)',
           info: 'rgb(137, 128, 246)',
         }
       },

@@ -11,7 +11,7 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
   const isLocked = accessStatus === 'locked';
   const isFullyIlluminated = accessStatus === 'unlocked';
 
-  const YEAR_2026_TOTAL_THRESHOLD = 725;
+  const YEAR_2026_TOTAL_THRESHOLD = 72500;
   let progress = 0;
   
   if (product.year === 2014) {

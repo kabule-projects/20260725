@@ -29,8 +29,8 @@ export const formatCooldown = (seconds) => {
 export const calculateThreshold = (year) => {
   const currentYear = 2026;
   const earliestYear = 2014;
-  const minThreshold = 10;
-  const maxThreshold = 20;
+  const minThreshold = 2000;
+  const maxThreshold = 9000;
   
   const yearDifference = currentYear - year;
   const maxDifference = currentYear - earliestYear;
