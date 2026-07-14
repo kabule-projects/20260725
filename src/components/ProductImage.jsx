@@ -31,20 +31,13 @@ const ProductImage = ({ year, accessStatus }) => {
     }
   }, [imageSrc, basePath]);
 
-  const getImageStyle = () => {
-    if (accessStatus === 'locked' || accessStatus === 'accessible') {
-      return 'brightness-[0]';
-    }
-    return 'brightness-100';
-  };
-
   return (
     <div className="absolute inset-0">
       {imageSrc && (
         <LazyImage
           src={imageSrc}
           alt=""
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${getImageStyle()}`}
+          className="absolute inset-0 w-full h-full object-cover transition-all duration-300"
         />
       )}
     </div>

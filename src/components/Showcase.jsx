@@ -29,15 +29,17 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
     }
   }, [imagePath]);
 
-  const getImageStyle = () => {
-    if (accessStatus === 'locked') {
-      return 'brightness-[0] grayscale';
-    }
-    if (accessStatus === 'accessible') {
-      return 'brightness-[0.1]';
-    }
-    return 'brightness-100';
-  };
+  if (accessStatus === 'locked') {
+    return (
+      <div className="relative w-full h-full flex items-center justify-center">
+        <img
+          src="/images/ui/home/未解锁.webp"
+          alt="未解锁"
+          className="max-w-full max-h-full object-contain"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
@@ -45,7 +47,7 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
         <LazyImage
           src={imageSrc}
           alt=""
-          className={`max-w-full max-h-full object-contain transition-all duration-300 ${getImageStyle()}`}
+          className="max-w-full max-h-full object-contain transition-all duration-300"
         />
       ) : (
         <div className="w-full h-full bg-memory-dark/30 rounded" />

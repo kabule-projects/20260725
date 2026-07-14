@@ -29,100 +29,60 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
       transition={{ duration: 0.6, delay: index * 0.1 }}
     >
       {isLocked ? (
-        <div>
-          <motion.div
-            className={`memory-card rounded-xl p-4 cursor-not-allowed relative overflow-hidden ${
-              isLocked ? 'opacity-60' : ''
-            }`}
-          >
-            <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-              <ProductImage year={product.year} accessStatus={accessStatus} />
-
-              {isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">
-                  <span className="text-memory-muted text-xs uppercase tracking-widest">
-                    待上架
-                  </span>
-                </div>
-              )}
+        <div className="relative">
+          <img
+            src="/images/ui/home/商品卡.webp"
+            alt="商品卡背景"
+            className="w-full h-auto"
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
+            <div className="relative aspect-square w-full mb-2">
+              <img
+                src="/images/ui/home/未解锁.webp"
+                alt="未解锁"
+                className="w-full h-full object-contain"
+              />
             </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-memory-accent">
-                  {product.year}
-                </span>
-                <span className="text-memory-muted text-xs">
-                  {product.branch}
-                </span>
-              </div>
-
-              <h3 className="font-serif text-lg leading-tight text-memory-accent">
-                {product.title}
-              </h3>
-
-              <div className="flex items-center gap-2 pt-2 h-3">
-                {!isFullyIlluminated && (
-                  <div className="flex-1 h-1 bg-memory-dark rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-memory-accent"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${progress}%` }}
-                      transition={{ duration: 0.8 }}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
+            <span className="text-sm font-medium text-memory-accent">
+              {product.year}
+            </span>
+            <h3 className="font-serif text-sm leading-tight text-memory-accent">
+              {product.title}
+            </h3>
+          </div>
         </div>
       ) : (
         <Link to={`/product/${product.id}`}>
           <motion.div
-            className={`memory-card rounded-xl p-4 cursor-pointer relative overflow-hidden ${
-              isLocked ? 'opacity-60' : ''
-            }`}
-            whileHover={isLocked ? {} : { y: -5, scale: 1.02 }}
-            whileTap={isLocked ? {} : { scale: 0.98 }}
+            className="relative cursor-pointer"
+            whileHover={{ y: -5, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <div className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-memory-dark/50 surreal-border">
-              <ProductImage year={product.year} accessStatus={accessStatus} />
-
-              {isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center bg-memory-dark/60">
-                  <span className="text-memory-muted text-xs uppercase tracking-widest">
-                    待上架
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-memory-accent">
-                  {product.year}
-                </span>
-                <span className="text-memory-muted text-xs">
-                  {product.branch}
-                </span>
+            <img
+              src="/images/ui/home/商品卡.webp"
+              alt="商品卡背景"
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
+              <div className="relative aspect-square w-full mb-2">
+                <ProductImage year={product.year} accessStatus={accessStatus} />
               </div>
-
-              <h3 className="font-serif text-lg leading-tight text-memory-accent">
+              <span className="text-sm font-medium text-memory-accent">
+                {product.year}
+              </span>
+              <h3 className="font-serif text-sm leading-tight text-memory-accent">
                 {product.title}
               </h3>
-
-              <div className="flex items-center gap-2 pt-2 h-3">
-                {!isFullyIlluminated && (
-                  <div className="flex-1 h-2 bg-memory-dark rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-memory-accent"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${progress}%` }}
-                      transition={{ duration: 0.8 }}
-                    />
-                  </div>
-                )}
-              </div>
+              {!isFullyIlluminated && (
+                <div className="flex-1 w-full h-1 bg-memory-dark rounded-full overflow-hidden mt-2">
+                  <motion.div
+                    className="h-full bg-memory-accent"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.8 }}
+                  />
+                </div>
+              )}
             </div>
           </motion.div>
         </Link>

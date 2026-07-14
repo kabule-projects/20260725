@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         memory: {
-          dark: 'rgb(17, 17, 28)',
+          dark: '#11111d',
           card: 'rgb(18, 18, 31)',
           glow: 'rgba(254, 254, 198, 0.9)',
           accent: 'rgb(254, 254, 198)',

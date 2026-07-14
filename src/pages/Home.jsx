@@ -18,37 +18,38 @@ const Home = ({ lights }) => {
   };
 
   return (
-    <div className="min-h-screen pb-12">
-      <header className="relative py-12 px-6">
-        <motion.button
-          className="absolute top-6 right-6 px-4 py-2 text-memory-glow text-sm"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <Link to="/staffing">ℹ️</Link>
-        </motion.button>
+    <div className="min-h-screen bg-memory-dark">
+      <div className="relative w-full">
+        <img
+          src="/images/ui/home/首页头图底.webp"
+          alt="首页头图底"
+          className="w-full h-auto"
+        />
         
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-4xl md:text-5xl font-serif text-gradient mb-4">
-            <a href={import.meta.env.BASE_URL} onClick={() => window.location.href = import.meta.env.BASE_URL}>Shen'Storey</a>
-          </h1>
-          <p className="text-memory-glow/60 text-sm tracking-widest uppercase">
-            2014-2026
-          </p>
-        </motion.div>
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+          <motion.button
+            className="absolute top-6 right-6 px-4 py-2 text-memory-glow text-sm"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Link to="/staffing">ℹ️</Link>
+          </motion.button>
 
-      </header>
+          <motion.img
+            src="/images/ui/home/主页头图.webp"
+            alt="主页头图"
+            className="max-w-full h-auto"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          />
+        </div>
+      </div>
 
       <main className="px-4 md:px-6">
-        {/* 橱窗和看板郎区域 */}
         <motion.div
           className="max-w-6xl mx-auto mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -57,15 +58,13 @@ const Home = ({ lights }) => {
         >
           <div 
             className="relative w-full"
-            style={{ paddingBottom: '66.67%' }} // 3:2 比例
+            style={{ paddingBottom: '66.67%' }}
           >
             <div className="absolute inset-0 flex gap-2">
-              {/* 橱窗 - 60% */}
               <div className="w-[60%] h-full">
                 <Showcase lights={lights} onProductClick={handleProductClick} />
               </div>
               
-              {/* 看板郎 - 40% */}
               <div className="w-[40%] h-full">
                 <BillboardCharacter message={dialogMessage} key={messageKey} />
               </div>
@@ -73,20 +72,25 @@ const Home = ({ lights }) => {
           </div>
         </motion.div>
 
-        {/* 已收集的记忆碎片 */}
         <motion.div
           className="max-w-6xl mx-auto mb-12 text-center"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-memory-card/50 surreal-border">
-            <span className="text-sm text-memory-info">已收集的记忆碎片：</span>
-            <span className="font-medium text-sm text-memory-accent">{totalLight}</span>
+          <div className="relative inline-flex items-center justify-center">
+            <img
+              src="/images/ui/home/告示牌.webp"
+              alt="告示牌"
+              className="w-full h-auto"
+            />
+            <div className="absolute inset-0 flex items-center justify-center gap-2">
+              <span className="text-sm text-memory-info">已收集的记忆碎片：</span>
+              <span className="font-medium text-sm text-memory-accent">{totalLight}</span>
+            </div>
           </div>
         </motion.div>
 
-        {/* 商品卡片网格 */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
           {PRODUCTS.map((product, index) => (
             <motion.div
@@ -106,10 +110,17 @@ const Home = ({ lights }) => {
         </div>
       </main>
 
-      <footer className="mt-16 text-center px-6">
-        <p className="text-memory-muted/50 text-xs tracking-wider">
-          不朽的 没有了 没人记得
-        </p>
+      <footer className="relative mt-16">
+        <img
+          src="/images/ui/home/首页尾图底.webp"
+          alt="首页尾图底"
+          className="w-full h-auto"
+        />
+        <div className="absolute inset-0 flex items-end justify-center pb-4">
+          <p className="text-memory-muted/50 text-xs tracking-wider">
+            不朽的 没有了 没人记得
+          </p>
+        </div>
       </footer>
     </div>
   );
