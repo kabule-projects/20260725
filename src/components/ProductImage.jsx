@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import LazyImage from './LazyImage';
 
-const ProductImage = ({ year, accessStatus }) => {
+const ProductImage = ({ year, accessStatus, additionalClass = '' }) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   const basePath = `/images/${year}`;
@@ -37,7 +37,7 @@ const ProductImage = ({ year, accessStatus }) => {
         <LazyImage
           src={imageSrc}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover transition-all duration-300"
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${additionalClass}`}
         />
       )}
     </div>

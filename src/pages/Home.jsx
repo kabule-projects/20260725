@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
@@ -9,8 +9,18 @@ import { PRODUCTS } from '../data/products';
 const Home = ({ lights }) => {
   const [dialogMessage, setDialogMessage] = useState('');
   const [messageKey, setMessageKey] = useState(0);
+  const [totalLight, setTotalLight] = useState(0);
 
-  const totalLight = Object.values(lights).reduce((sum, val) => sum + val, 0);
+  useEffect(() => {
+    const stored = localStorage.getItem('memoryStore:fallbackLights');
+    let currentLights = lights;
+    if (stored) {
+      const localLights = JSON.parse(stored);
+      currentLights = { ...currentLights, ...localLights };
+    }
+    const sum = Object.values(currentLights).reduce((acc, val) => acc + (Number(val) || 0), 0);
+    setTotalLight(sum);
+  }, [lights]);
 
   const handleProductClick = (product, message) => {
     setMessageKey(prev => prev + 1);
@@ -20,28 +30,34 @@ const Home = ({ lights }) => {
   return (
     <div className="min-h-screen bg-memory-dark">
       <div className="relative w-full">
+        <motion.button
+          className="absolute top-6 right-5 z-20 w-12"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Link to="/staffing">
+            <img
+              src="/images/ui/home/info.webp"
+              alt="staffing"
+              className="w-auto h-auto"
+            />
+          </Link>
+        </motion.button>
+
         <img
           src="/images/ui/home/首页头图底.webp"
           alt="首页头图底"
           className="w-full h-auto"
         />
-        
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-          <motion.button
-            className="absolute top-6 right-6 px-4 py-2 text-memory-glow text-sm"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Link to="/staffing">ℹ️</Link>
-          </motion.button>
 
+        <div className="absolute inset-0">
           <motion.img
             src="/images/ui/home/主页头图.webp"
             alt="主页头图"
-            className="max-w-full h-auto"
+            className="w-full h-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -49,13 +65,13 @@ const Home = ({ lights }) => {
         </div>
       </div>
 
-      <main className="px-4 md:px-6">
-        <motion.div
-          className="max-w-6xl mx-auto mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+      <motion.div
+        className="w-full"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <div className="max-w-6xl mx-auto px-4 md:px-6 mb-4">
           <div 
             className="relative w-full"
             style={{ paddingBottom: '66.67%' }}
@@ -70,15 +86,17 @@ const Home = ({ lights }) => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
+      <main className="px-4 md:px-6">
         <motion.div
-          className="max-w-6xl mx-auto mb-12 text-center"
+          className="max-w-6xl mx-auto mb-12 flex justify-center"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="relative inline-flex items-center justify-center">
+          <div className="relative w-[55%]">
             <img
               src="/images/ui/home/告示牌.webp"
               alt="告示牌"
@@ -117,7 +135,7 @@ const Home = ({ lights }) => {
           className="w-full h-auto"
         />
         <div className="absolute inset-0 flex items-end justify-center pb-4">
-          <p className="text-memory-muted/50 text-xs tracking-wider">
+          <p className="text-memory-info/70 text-xs tracking-wider">
             不朽的 没有了 没人记得
           </p>
         </div>

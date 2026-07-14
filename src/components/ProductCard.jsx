@@ -35,21 +35,36 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
             alt="商品卡背景"
             className="w-full h-auto"
           />
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
-            <div className="relative aspect-square w-full mb-2">
-              <img
-                src="/images/ui/home/未解锁.webp"
-                alt="未解锁"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="text-sm font-medium text-memory-accent">
-              {product.year}
-            </span>
-            <h3 className="font-serif text-sm leading-tight text-memory-accent">
-              {product.title}
-            </h3>
+          <span 
+            className="absolute left-[50%] top-[0.5%] -translate-x-[50%] font-medium text-memory-accent"
+            style={{ fontSize: 'clamp(12px, 5px + 1.2vmax, 40px)' }}
+          >
+            {product.year}
+          </span>
+          <div 
+            className="absolute left-[7.5%] top-[5%]"
+            style={{ 
+              width: '85%',
+              aspectRatio: '1'
+            }}
+          >
+            <img
+              src="/images/ui/home/未解锁.webp"
+              alt="未解锁"
+              className="w-full h-full object-contain"
+            />
           </div>
+          <h3 
+            className="absolute font-serif leading-tight text-memory-accent text-left"
+            style={{ 
+              top: '76%',
+              left: '7%',
+              width: '86%',
+              fontSize: 'clamp(12px, 8px + 1.2vmax, 50px)'
+            }}
+          >
+            {product.title}
+          </h3>
         </div>
       ) : (
         <Link to={`/product/${product.id}`}>
@@ -63,27 +78,55 @@ const ProductCard = ({ product, light = 0, index, lights }) => {
               alt="商品卡背景"
               className="w-full h-auto"
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
-              <div className="relative aspect-square w-full mb-2">
-                <ProductImage year={product.year} accessStatus={accessStatus} />
-              </div>
-              <span className="text-sm font-medium text-memory-accent">
-                {product.year}
-              </span>
-              <h3 className="font-serif text-sm leading-tight text-memory-accent">
-                {product.title}
-              </h3>
-              {!isFullyIlluminated && (
-                <div className="flex-1 w-full h-1 bg-memory-dark rounded-full overflow-hidden mt-2">
-                  <motion.div
-                    className="h-full bg-memory-accent"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progress}%` }}
-                    transition={{ duration: 0.8 }}
-                  />
-                </div>
-              )}
+            <span 
+              className="absolute left-[50%] top-[0.5%] -translate-x-[50%] font-medium text-memory-accent"
+              style={{ fontSize: 'clamp(12px, 5px + 1.2vmax, 40px)' }}
+            >
+              {product.year}
+            </span>
+            <div 
+              className="absolute"
+              style={{ 
+                top: '5%',
+                left: '7.5%',
+                width: '85%',
+                aspectRatio: '1'
+              }}
+            >
+              <ProductImage 
+                year={product.year} 
+                accessStatus={accessStatus} 
+                additionalClass={accessStatus === 'accessible' ? 'brightness-[0]' : ''}
+              />
             </div>
+            <h3 
+              className="absolute font-serif leading-tight text-memory-accent text-left"
+              style={{ 
+                top: '76%',
+                left: '7%',
+                width: '86%',
+                fontSize: 'clamp(12px, 8px + 1.2vmax, 50px)'
+              }}
+            >
+              {product.title}
+            </h3>
+            {!isFullyIlluminated && (
+              <div 
+                className="absolute w-full h-1.5 bg-memory-dark rounded-full overflow-hidden"
+                style={{ 
+                  top: '92%',
+                  left: '7.5%',
+                  width: '85%'
+                }}
+              >
+                <motion.div
+                  className="h-full bg-memory-accent"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.8 }}
+                />
+              </div>
+            )}
           </motion.div>
         </Link>
       )}

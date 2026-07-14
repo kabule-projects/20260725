@@ -20,7 +20,7 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/5.webp',
-        cueLines: '一只小鹿！好活泼呀。\n它在吃什么？一朵玫瑰？'
+        cueLines: '一只小鹿！好活泼呀。'
       },
       {
         image: '/images/colour/6.webp',
@@ -30,9 +30,7 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/7.webp',
-        cueLines: '玫瑰是：',
-        options: ['A 金色', 'B 红色', 'C 蓝色', 'D 白色'],
-        correctAnswer: 1
+        cueLines: '它在吃什么？一朵玫瑰？'
       },
       {
         image: '/images/colour/8.webp'

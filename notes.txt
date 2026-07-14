@@ -118,3 +118,40 @@ mkdir -p resized
 for file in *.webp; do
   cwebp "$file" -resize 750 1000 -o "resized/${file}" -q 80
 done
+
+
+
+
+
+# Kill 前端（端口 3000）
+lsof -ti:3000 | xargs kill -9 2>/dev/null
+
+# Kill 后端（端口 3001）
+lsof -ti:3001 | xargs kill -9 2>/dev/null
+
+# Kill 所有相关进程（一次性）
+lsof -ti:3000,3001 | xargs kill -9 2>/dev/null
+
+
+
+
+# 启动前端开发服务器（端口 3000）
+npm run dev
+
+# 启动后端服务器（端口 3001）
+cd backend && node server.js
+
+# 同时启动前后端（新开终端）
+# Terminal 1: npm run dev
+# Terminal 2: cd backend && node server.js
+
+
+# 前端构建（生成 dist/ 目录）
+npm run build
+
+# 后端无需 build（直接运行即可）
+cd backend && node server.js
+
+
+
+
