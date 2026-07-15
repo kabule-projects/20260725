@@ -70,7 +70,7 @@ const LyricGame = ({ onComplete }) => {
     // 延迟后显示下一句歌词
     setTimeout(() => {
       showNextLyric();
-    }, 1000);
+    }, 1500);
   }, [isCorrect, gameState, currentLyric, score, showNextLyric, onComplete]);
 
   // 游戏完成界面
@@ -121,8 +121,8 @@ const LyricGame = ({ onComplete }) => {
             <div key={currentLyric.lyric}>
               <div className="flex justify-center mb-4">
                 <img 
-                  key={randomImage}
-                  src={randomImage} 
+                  key={feedback || randomImage}
+                  src={feedback === 'correct' ? '/images/lyric/对.webp' : feedback === 'wrong' ? '/images/lyric/错.webp' : randomImage} 
                   alt="" 
                   className="w-48 h-48 object-contain"
                 />

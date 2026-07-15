@@ -1,27 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// 7月17日19:25北京时间（UTC+8）= 11:25 UTC
+const UNLOCK_TIME = new Date('2026-07-17T19:25:00+08:00').getTime();
 
 const WelcomePage = ({ onStart }) => {
-  const [phase, setPhase] = useState('idle');
+  const [phase, setPhase] = useState('idle'); // 'idle' | 'fading' | 'done'
+  const [showButton, setShowButton] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
+
+  // 后门：按 D 键强制显示推门按钮
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'q' || e.key === 'Q') {
+        setShowButton(true);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
+  // 延迟1秒淡入推门按钮（需满足时间条件或后门触发）
+  useEffect(() => {
+    const now = Date.now();
+    const isUnlocked = now >= UNLOCK_TIME || showButton;
+    if (isUnlocked) {
+      const timer = setTimeout(() => {
+        setButtonVisible(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showButton]);
 
   const handleStart = () => {
-    setPhase('dimming');
-    
-    setTimeout(() => {
-      setPhase('fading');
-    }, 800);
-    
+    setPhase('fading');
+
     setTimeout(() => {
       setPhase('done');
       onStart();
-    }, 1800);
+    }, 2000);
   };
 
   const getContainerStyle = () => {
     switch (phase) {
-      case 'dimming':
-        return { opacity: 1, transition: 'none' };
       case 'fading':
-        return { opacity: 0, transition: 'opacity 1s ease-out' };
+        return { opacity: 0, transition: 'opacity 2s ease-out' };
       case 'done':
         return { opacity: 0, pointerEvents: 'none' };
       default:
@@ -29,42 +51,115 @@ const WelcomePage = ({ onStart }) => {
     }
   };
 
-  const getBackgroundStyle = () => {
-    switch (phase) {
-      case 'dimming':
-        return { filter: 'brightness(0)', transition: 'filter 0.8s ease-out' };
-      case 'fading':
-      case 'done':
-        return { filter: 'brightness(0)', transition: 'none' };
-      default:
-        return {};
-    }
+  // lighton层：始终保持闪烁动画
+  const getLightOnStyle = () => {
+    return { animation: 'morseFlicker 4.8s linear infinite' };
   };
+
+  const now = Date.now();
+  const isTimeUnlocked = now >= UNLOCK_TIME || showButton;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black"
       style={getContainerStyle()}
     >
-      <div 
-        className="absolute inset-0"
-        style={getBackgroundStyle()}
-      >
+      <style>{`
+        @keyframes morseFlicker {
+          0% { opacity: 0; }
+          2.08% { opacity: 1; }
+          10.42% { opacity: 1; }
+          12.5% { opacity: 0; }
+          16.67% { opacity: 0; }
+          18.75% { opacity: 1; }
+          27.08% { opacity: 1; }
+          29.17% { opacity: 0; }
+          33.33% { opacity: 0; }
+          34.38% { opacity: 1; }
+          36.46% { opacity: 1; }
+          37.5% { opacity: 0; }
+          41.67% { opacity: 0; }
+          42.71% { opacity: 1; }
+          44.79% { opacity: 1; }
+          45.83% { opacity: 0; }
+          58.33% { opacity: 0; }
+          59.38% { opacity: 1; }
+          61.46% { opacity: 1; }
+          62.5% { opacity: 0; }
+          66.67% { opacity: 0; }
+          67.71% { opacity: 1; }
+          69.79% { opacity: 1; }
+          70.83% { opacity: 0; }
+          75% { opacity: 0; }
+          76.04% { opacity: 1; }
+          78.13% { opacity: 1; }
+          79.17% { opacity: 0; }
+          100% { opacity: 0; }
+        }
+      `}</style>
+
+      {/* 默认背景：lightoff */}
+      <div className="absolute inset-0">
         <img
-          src="/images/welcome/welcome-bg.webp"
+          src="/images/welcome/welcom-light-off.webp"
           alt="Welcome"
           className="w-full h-full object-cover"
         />
       </div>
 
-      {phase === 'idle' && (
+      {/* 叠加层：lighton，通过不透明度闪烁 */}
+      <div
+        className="absolute inset-0"
+        style={getLightOnStyle()}
+      >
+        <img
+          src="/images/welcome/welcome-light-on.webp"
+          alt=""
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* 漂浮光点效果 */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-memory-glow/40 floating-particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              '--tx': `${(Math.random() - 0.5) * 60}px`,
+              '--ty': `${(Math.random() - 0.5) * 60}px`,
+              '--delay': `${Math.random() * 24}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* 推门按钮 */}
+      {phase === 'idle' && isTimeUnlocked && buttonVisible && (
         <button
-          className="absolute top-[85%] left-[50%] -translate-x-1/2 px-8 py-3 bg-memory-accent/80 hover:bg-memory-accent hover:scale-105 active:scale-95 text-memory-dark font-bold rounded-lg transition-transform duration-200"
+          className="absolute left-[50%] top-[80%] -translate-x-1/2 -translate-y-1/2 hover:scale-105 active:scale-95 transition-all duration-1000"
+          style={{ opacity: 0, animation: 'fadeIn 1s ease-in forwards' }}
           onClick={handleStart}
         >
-          开始
+          <img
+            src="/images/welcome/推门.webp"
+            alt="推门"
+            className="w-[120px] h-auto object-contain"
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-memory-accent font-bold text-lg">
+            推门
+          </span>
         </button>
       )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 };

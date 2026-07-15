@@ -115,24 +115,19 @@ function App() {
     setShowWelcome(false);
   };
 
+  // 后门：按 W 键回到 welcome page
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'w' || e.key === 'W') {
+        setShowWelcome(true);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
   return (
     <div className="min-h-screen relative">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-memory-glow/30 floating-particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              '--tx': `${(Math.random() - 0.5) * 100}px`,
-              '--ty': `${(Math.random() - 0.5) * 100}px`,
-              '--delay': `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div>
-
       <div className="relative z-10">
         <ScrollToTop />
       <Routes>
