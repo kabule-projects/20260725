@@ -167,7 +167,7 @@ const LyricGame = ({ onComplete }) => {
       {isCorrect === null && (
         <div className="flex gap-3">
           <motion.button
-            className="flex-1 py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors border border-memory-accent/30"
+            className="flex-1 py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
             onClick={() => handleAnswer(true)}
             whileTap={{ scale: 0.98 }}
           >

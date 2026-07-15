@@ -341,7 +341,7 @@ const PeekGame = ({ onComplete }) => {
           <p className="text-memory-glow text-lg mb-2 select-none">成功!</p>
           <p className="text-memory-muted text-sm mb-4 select-none">已找到所有物品</p>
           <motion.button
-            className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 select-none"
+            className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info select-none"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={restartGame}

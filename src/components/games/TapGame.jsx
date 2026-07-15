@@ -231,7 +231,7 @@ const TapGame = ({ onComplete }) => {
             cy="50"
             r="46"
             fill="none"
-            stroke={holdCompleted ? "#d4af37" : "#e8d5b7"}
+            stroke={holdCompleted ? "#8980ff" : "#8980ff"}
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray={289}
@@ -303,7 +303,7 @@ const TapGame = ({ onComplete }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-memory-accent/10 via-memory-accent/20 to-memory-accent/10" />
               
               <motion.div
-                className="absolute top-0 h-full bg-memory-glow/30 rounded-full"
+                className="absolute top-0 h-full bg-memory-info/50 rounded-full"
                 style={{
                   left: `${50 - TARGET_ZONE_WIDTH / 2}%`,
                   width: `${TARGET_ZONE_WIDTH}%`,
@@ -312,7 +312,7 @@ const TapGame = ({ onComplete }) => {
                 transition={{ duration: 1, repeat: Infinity }}
               >
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-memory-glow text-xs font-medium">目标</span>
+                  <span className="text-memory-accent text-xs font-bold">目标</span>
                 </div>
               </motion.div>
             </div>
@@ -335,7 +335,7 @@ const TapGame = ({ onComplete }) => {
           {isPlaying && !isPaused && (
             <div className="mt-12">
               <motion.button
-                className="w-full py-4 rounded-lg bg-memory-accent/30 text-memory-accent hover:bg-memory-accent/40 transition-colors text-lg font-medium border border-memory-accent/40"
+                className="w-full py-4 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors text-lg font-medium border border-memory-info"
                 onClick={handleTap}
                 whileTap={{ scale: 0.95 }}
               >
@@ -347,7 +347,7 @@ const TapGame = ({ onComplete }) => {
           <div className="text-center mt-12">
             {!isPlaying ? (
               <motion.button
-                className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                className="w-full py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
                 onClick={startGame}
                 whileTap={{ scale: 0.98 }}
               >
@@ -367,7 +367,7 @@ const TapGame = ({ onComplete }) => {
                     <>
                       <p className="text-memory-accent text-lg">✧ 成功！✧</p>
                       <motion.button
-                        className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                        className="w-full py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
                         onClick={handleNextRound}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -379,7 +379,7 @@ const TapGame = ({ onComplete }) => {
                       <p className="text-memory-error text-lg">失败...</p>
                       <p className="text-memory-muted/60 text-sm">再试一次吧！</p>
                       <motion.button
-                        className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+                        className="w-full py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
                         onClick={handleRetry}
                         whileTap={{ scale: 0.98 }}
                       >

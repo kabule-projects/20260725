@@ -86,7 +86,7 @@ const EchoGame = ({ onComplete }) => {
                   {currentOptions.map((option, i) => (
                     <motion.button
                       key={i}
-                      className="flex-1 py-2 px-4 bg-memory-glow/10 text-memory-glow/80 rounded border border-memory-glow/20 text-sm hover:bg-memory-glow/20 transition-colors select-none"
+                      className="flex-1 py-2 px-4 bg-memory-info/10 text-memory-info rounded border border-memory-info text-sm hover:bg-memory-info/20 transition-colors select-none"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={(e) => {

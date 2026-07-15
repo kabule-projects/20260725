@@ -10,6 +10,7 @@ const Home = ({ lights }) => {
   const [dialogMessage, setDialogMessage] = useState('');
   const [messageKey, setMessageKey] = useState(0);
   const [totalLight, setTotalLight] = useState(0);
+  const [allUnlocked, setAllUnlocked] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('memoryStore:fallbackLights');
@@ -20,6 +21,14 @@ const Home = ({ lights }) => {
     }
     const sum = Object.values(currentLights).reduce((acc, val) => acc + (Number(val) || 0), 0);
     setTotalLight(sum);
+    
+    const unlockedCount = PRODUCTS.filter(product => {
+      const light = currentLights[product.id] || 0;
+      const threshold = product.year === 2026 ? 72500 : 
+        Math.round(product.year === 2014 ? 0 : (product.year - 2013) * 500);
+      return light >= threshold;
+    }).length;
+    setAllUnlocked(unlockedCount === PRODUCTS.length);
   }, [lights]);
 
   const handleProductClick = (product, message) => {
@@ -31,19 +40,20 @@ const Home = ({ lights }) => {
     <div className="min-h-screen bg-memory-dark">
       <div className="relative w-full">
         <motion.button
-          className="absolute top-6 right-5 z-20 w-12"
+          className="absolute top-8 right-[1px] z-20 w-[60px]"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <Link to="/staffing">
+          <Link to="/staffing" className="relative w-full h-full flex items-center justify-center">
             <img
               src="/images/ui/home/info.webp"
               alt="staffing"
-              className="w-auto h-auto"
+              className="absolute inset-0 w-full h-full object-contain"
             />
+            <span className="relative z-10 text-memory-accent font-bold text-sm">i</span>
           </Link>
         </motion.button>
 
@@ -128,18 +138,18 @@ const Home = ({ lights }) => {
         </div>
       </main>
 
-      <footer className="relative mt-16">
-        <img
-          src="/images/ui/home/首页尾图底.webp"
-          alt="首页尾图底"
-          className="w-full h-auto"
-        />
-        <div className="absolute inset-0 flex items-end justify-center pb-4">
-          <p className="text-memory-info/70 text-xs tracking-wider">
-            不朽的 没有了 没人记得
-          </p>
-        </div>
+      <div className="relative mt-16 pb-72">
+      <footer className="absolute bottom-16 left-0 right-0 z-10 flex justify-center">
+        <p className="text-memory-info/70 text-sm tracking-wider">
+          {allUnlocked ? '不朽的 永恒了 我们记得' : '不朽的 没有了 没人记得'}
+        </p>
       </footer>
+      <img
+        src="/images/ui/home/首页尾图底.webp"
+        alt="首页尾图底"
+        className="absolute bottom-0 left-0 w-full h-auto"
+      />
+      </div>
     </div>
   );
 };

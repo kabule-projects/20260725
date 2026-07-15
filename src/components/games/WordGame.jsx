@@ -198,7 +198,7 @@ const WordGame = ({ onComplete }) => {
       {selectedAnswers.filter(a => a !== undefined).length > 0 && gameState === 'playing' && (
         <div className="flex justify-center mb-4">
           <motion.button
-            className="px-4 py-2 bg-memory-glow/10 text-memory-glow/70 rounded-lg border border-memory-glow/20 text-sm"
+            className="px-4 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-sm"
             whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
             whileTap={{ scale: 0.95 }}
             onClick={undo}
@@ -223,7 +223,7 @@ const WordGame = ({ onComplete }) => {
               按顺序点击选项，将正确的字填入空格中
             </p>
             <motion.button
-              className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-sm"
+              className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={startGame}
@@ -245,7 +245,7 @@ const WordGame = ({ onComplete }) => {
           >
             <p className="text-memory-glow text-sm mb-4">记忆好像有些差错……</p>
             <motion.button
-              className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-sm"
+              className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={resetGame}

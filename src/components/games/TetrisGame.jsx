@@ -417,7 +417,7 @@ const TetrisGame = ({ onComplete }) => {
                 >
                   <h2 className="text-memory-glow text-xl mb-4">俄罗斯方块</h2>
                   <motion.button
-                    className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-sm"
+                    className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={startGame}
@@ -456,7 +456,7 @@ const TetrisGame = ({ onComplete }) => {
                   <p className="text-memory-glow text-sm mb-2">得分: {score}</p>
                   <p className="text-memory-glow text-sm mb-4">目标: {WIN_SCORE} 分</p>
                   <motion.button
-                    className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-sm"
+                    className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={startGame}
@@ -474,7 +474,7 @@ const TetrisGame = ({ onComplete }) => {
       {gameState === 'playing' && (
         <div className="flex justify-center gap-2 mt-3">
           <motion.button
-            className="w-12 h-12 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-xl flex items-center justify-center"
+            className="w-12 h-12 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-xl flex items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={moveLeft}
@@ -482,7 +482,7 @@ const TetrisGame = ({ onComplete }) => {
             ←
           </motion.button>
           <motion.button
-            className="w-12 h-12 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-xl flex items-center justify-center"
+            className="w-12 h-12 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-xl flex items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={rotate}
@@ -490,7 +490,7 @@ const TetrisGame = ({ onComplete }) => {
             ↻
           </motion.button>
           <motion.button
-            className="w-12 h-12 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-xl flex items-center justify-center"
+            className="w-12 h-12 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-xl flex items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={hardDrop}
@@ -498,7 +498,7 @@ const TetrisGame = ({ onComplete }) => {
             ↓
           </motion.button>
           <motion.button
-            className="w-12 h-12 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-xl flex items-center justify-center"
+            className="w-12 h-12 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info text-xl flex items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={moveRight}

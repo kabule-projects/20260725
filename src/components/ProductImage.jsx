@@ -31,8 +31,10 @@ const ProductImage = ({ year, accessStatus, additionalClass = '' }) => {
     }
   }, [imageSrc, basePath]);
 
+  const isAccessible = accessStatus === 'accessible';
+
   return (
-    <div className="absolute inset-0">
+    <div className={`absolute inset-0 ${isAccessible ? 'brightness-[0]' : ''}`} style={isAccessible ? { filter: 'brightness(0) drop-shadow(0 0 8px rgba(137, 128, 246, 0.6))' } : {}}>
       {imageSrc && (
         <LazyImage
           src={imageSrc}

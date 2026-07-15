@@ -241,7 +241,7 @@ const QuizGame = ({ onComplete }) => {
         {/* 选项 */}
         <div className="grid grid-cols-2 gap-2">
           {currentQuestion.options.map((option, index) => {
-            let buttonClass = 'border-memory-muted/30 hover:border-memory-accent/50 hover:bg-memory-accent/10';
+            let buttonClass = 'border-memory-muted/30 hover:border-memory-info hover:bg-memory-info/10';
             
             if (showResult) {
               if (index === currentQuestion.correctAnswer) {
@@ -250,7 +250,7 @@ const QuizGame = ({ onComplete }) => {
                 buttonClass = 'border-red-500 bg-red-500/20';
               }
             } else if (selectedAnswer === index) {
-              buttonClass = 'border-memory-accent bg-memory-accent/20';
+              buttonClass = 'border-memory-info bg-memory-info/10';
             }
 
             return (

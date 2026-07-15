@@ -188,7 +188,7 @@ const WhackGame = ({ onComplete }) => {
       {!isPlaying && (
         <div className="mt-4">
           <motion.button
-            className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors"
+            className="w-full py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
             onClick={startGame}
             whileTap={{ scale: 0.98 }}
           >

@@ -3,44 +3,58 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ColourGame = ({ config, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [currentInternalStep, setCurrentInternalStep] = useState(0);
   const [wrongAnswer, setWrongAnswer] = useState(false);
 
   const resetGame = useCallback(() => {
     setCurrentStep(0);
+    setCurrentInternalStep(0);
     setWrongAnswer(false);
   }, []);
 
+  const step = config.steps[currentStep];
+  
+  const cueLines = Array.isArray(step.cueLines) 
+    ? step.cueLines 
+    : (step.cueLines || '').split('\n').filter(line => line.trim());
+  
+  const totalInternalSteps = cueLines.length > 0 ? cueLines.length : 1;
+  const isLastInternalStep = currentInternalStep === totalInternalSteps - 1;
+  const hasOptions = step.options && step.options.length > 0 && isLastInternalStep;
+  const isLastStep = currentStep === config.steps.length - 1 && isLastInternalStep;
+
+  const currentCueLine = cueLines[currentInternalStep];
+
   const handleAnswer = useCallback((answerIndex) => {
-    const step = config.steps[currentStep];
     if (answerIndex === step.correctAnswer) {
       if (currentStep < config.steps.length - 1) {
         setCurrentStep(prev => prev + 1);
+        setCurrentInternalStep(0);
       }
     } else {
       setWrongAnswer(true);
     }
-  }, [currentStep, config.steps]);
+  }, [currentStep, config.steps.length, step.correctAnswer]);
 
   const handleContinue = useCallback(() => {
-    if (currentStep < config.steps.length - 1) {
+    if (!isLastInternalStep) {
+      setCurrentInternalStep(prev => prev + 1);
+    } else if (currentStep < config.steps.length - 1) {
       setCurrentStep(prev => prev + 1);
+      setCurrentInternalStep(0);
     }
-  }, [currentStep, config.steps.length]);
+  }, [currentStep, config.steps.length, isLastInternalStep]);
 
   const handleEndJourney = useCallback(() => {
     onComplete();
   }, [onComplete]);
-
-  const step = config.steps[currentStep];
-  const hasOptions = step.options && step.options.length > 0;
-  const isLastStep = currentStep === config.steps.length - 1;
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="relative w-full px-[12%] py-[9%] bg-memory-dark/50 rounded-lg p-4 select-none">
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentStep}
+            key={`${currentStep}-${currentInternalStep}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -55,14 +69,9 @@ const ColourGame = ({ config, onComplete }) => {
               />
             </div>
 
-            {step.cueLines && (
-              <p className="text-memory-glow text-center leading-relaxed text-sm">
-                {step.cueLines.split('\n').map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
+            {currentCueLine && (
+              <p className="text-memory-glow text-center leading-relaxed text-base">
+                {currentCueLine}
               </p>
             )}
 
@@ -71,7 +80,7 @@ const ColourGame = ({ config, onComplete }) => {
                 {step.options.map((option, index) => (
                   <motion.button
                     key={index}
-                    className="px-4 py-3 bg-memory-glow/10 text-memory-glow rounded-lg border border-memory-glow/20 hover:bg-memory-glow/20 transition-colors text-sm"
+                    className="px-4 py-3 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info hover:bg-memory-info/20 transition-colors text-sm"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleAnswer(index)}
@@ -82,19 +91,21 @@ const ColourGame = ({ config, onComplete }) => {
               </div>
             ) : isLastStep ? (
               <motion.button
-                className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
+                className="text-memory-info"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleEndJourney}
+                style={{ backgroundImage: 'url(/images/ui/product/按钮.webp)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', padding: '0', border: 'none', width: '150px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 结束旅程
               </motion.button>
             ) : (
               <motion.button
-                className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
+                className="text-memory-info"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleContinue}
+                style={{ backgroundImage: 'url(/images/ui/product/按钮.webp)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', padding: '0', border: 'none', width: '150px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 继续前行
               </motion.button>
@@ -114,7 +125,7 @@ const ColourGame = ({ config, onComplete }) => {
                 眼前的景象变得模糊，你渐渐从梦中苏醒，不知怎么才能回到那里。
               </p>
               <motion.button
-                className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
+                className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={resetGame}

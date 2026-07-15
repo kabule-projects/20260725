@@ -158,69 +158,127 @@ const Product = ({ lights, setLights }) => {
   }
 
   return (
-    <div className="min-h-screen pb-12">
-      <header className="sticky top-0 z-50 bg-memory-dark/80 backdrop-blur-md border-b border-memory-accent/10">
-        <div className="px-4 py-4 flex items-center justify-between max-w-4xl mx-auto">
-          <Link
-            to="/"
-            className="text-memory-glow/60 hover:text-memory-glow transition-colors"
-          >
-            ← 返回
-          </Link>
-          <span className="text-sm text-memory-accent">{product.year}</span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-memory-dark pb-12">
+      <div className="relative w-full pb-48">
+        <img
+          src="/images/ui/product/顶部底图.webp"
+          alt="顶部底图"
+          className="w-full h-auto"
+        />
 
-      <main className="px-4 py-8 max-w-4xl mx-auto">
+        <div className="absolute top-4 left-2 right-2 z-10">
+          <div className="w-full max-w-6xl mx-auto px-4 flex items-start justify-between">
+            <Link to="/" className="w-16 h-auto" style={{ marginTop: '9px' }}>
+              <img
+                src="/images/ui/product/返回键.webp"
+                alt="返回"
+                className="w-full h-auto"
+              />
+            </Link>
+
+            <img
+              src="/images/ui/product/logo.webp"
+              alt="logo"
+              className="h-auto"
+              style={{ width: '32%' }}
+            />
+
+            <span className="text-memory-info text-base" style={{ marginTop: '12px', marginRight: '12px' }}>{product.year}</span>
+          </div>
+        </div>
+
+        <div className="absolute top-[25%] left-0 right-0 z-0">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="relative" style={{ maxWidth: '75%', margin: '0 auto' }}>
+              <img
+                src="/images/ui/product/椭圆阴影.webp"
+                alt="椭圆阴影"
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%] h-auto pointer-events-none z-0"
+              />
+
+              <div
+                className="relative aspect-square z-10"
+              >
+                <ProductImage year={product.year} accessStatus={accessStatus} />
+
+                {isLocked && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-6xl text-memory-glow/30">
+                      🔒
+                    </span>
+                  </div>
+                )}
+
+                <AnimatePresence>
+                  {localFeedback && (
+                    <motion.div
+                      className="absolute inset-0 bg-memory-accent/20 pointer-events-none"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 0.5, 0] }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1 }}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {isUnlocked && (
+              <div 
+                className="rounded-xl p-6 space-y-4 bg-memory-dark"
+                style={{ 
+                  border: '1px solid #8980ff',
+                  maxWidth: '88%',
+                  margin: '15px auto 0',
+                  marginTop: '15px'
+                }}
+              >
+                <p className="text-memory-muted leading-relaxed whitespace-pre-wrap">
+                  {product.description}
+                </p>
+              </div>
+            )}
+
+            {!isLocked && !isUnlocked && product.moreInfo && (
+              <div 
+                className="rounded-xl p-6 bg-memory-dark"
+                style={{ 
+                  border: '1px solid #8980ff',
+                  boxShadow: '0 0 15px rgba(137, 128, 246, 0.3)',
+                  margin: '20px auto 0'
+                }}
+              >
+                <div className="flex items-center gap-2 mb-4 justify-center">
+                  <span className="text-memory-muted text-base">✧</span>
+                  <span className="text-memory-muted text-base uppercase tracking-wider">
+                    隐藏的记忆
+                  </span>
+                  <span className="text-memory-muted text-base">✧</span>
+                </div>
+                <p className="text-memory-muted text-sm mt-3 text-center">
+                  模糊的记忆碎片，或许大家还能再想起些什么……<br />点击下方加入回忆，一起找回这件商品吧
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="absolute top-[20%] left-0 right-0 z-20">
+          <div className="text-center">
+            <h1 className="text-6xl font-serif font-bold text-memory-accent tracking-[0.1em]">
+              {product.title}
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative">
+      <main className="px-4 max-w-4xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          <div className="text-center space-y-4">
-            <h1 className="text-3xl md:text-4xl font-serif text-gradient">
-              {product.title}
-            </h1>
-            <p className="text-memory-muted text-sm uppercase tracking-widest">
-              {product.branch}
-            </p>
-          </div>
-
-          <div
-            className="relative aspect-square rounded-xl overflow-hidden bg-memory-dark/50 surreal-border"
-          >
-            {/* 使用商品图片组件 */}
-            <ProductImage year={product.year} accessStatus={accessStatus} />
-
-            {/* 如果没有图片则显示占位符 */}
-            {isLocked && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-6xl text-memory-glow/30">
-                  🔒
-                </span>
-              </div>
-            )}
-
-            <AnimatePresence>
-              {localFeedback && (
-                <motion.div
-                  className="absolute inset-0 bg-memory-accent/20 pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.5, 0] }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1 }}
-                />
-              )}
-            </AnimatePresence>
-          </div>
-
-          {isUnlocked && (
-            <div className="memory-card rounded-xl p-6 space-y-4">
-              <p className="text-memory-glow/90 leading-relaxed italic whitespace-pre-wrap">
-                {product.description}
-              </p>
-            </div>
-          )}
 
           <AnimatePresence>
             {isUnlocked && product.moreInfo && (
@@ -231,17 +289,24 @@ const Product = ({ lights, setLights }) => {
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className="overflow-hidden"
               >
-                <div className="memory-card rounded-xl p-6 space-y-4 border-memory-accent/30">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium text-memory-accent">
+                <div className="rounded-xl">
+                  <div className="text-center relative z-10">
+                    <h3 className="font-medium text-memory-muted text-2xl">
                       记忆已照亮
                     </h3>
                   </div>
 
-                  {/* 详情图 */}
-                  <ProductDetailImage year={product.year} />
+                  <div className="relative" style={{ maxWidth: '95%', margin: '64px auto 40px', padding: '30px' }}>
+                    <ProductDetailImage year={product.year}/>
+                    <img
+                      src="/images/ui/product/画框.webp"
+                      alt="画框"
+                      className="absolute inset-[30px] w-[calc(100%-60px)] h-[calc(100%-60px)] object-contain pointer-events-none"
+                      style={{ transform: 'scale(1.3)' }}
+                    />
+                  </div>
 
-                  <p className="text-memory-glow/80 leading-relaxed">
+                  <p className="text-memory-muted leading-relaxed text-sm text-right pt-4 mr-8">
                     {product.moreInfo.text}
                   </p>
                 </div>
@@ -249,23 +314,8 @@ const Product = ({ lights, setLights }) => {
             )}
           </AnimatePresence>
 
-          {!isLocked && !isUnlocked && product.moreInfo && (
-            <div className="memory-card rounded-xl p-6 border-memory-muted/20">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-memory-muted text-sm">✧</span>
-                <span className="text-memory-muted text-sm uppercase tracking-wider">
-                  隐藏的记忆
-                </span>
-                <span className="text-memory-muted text-sm">✧</span>
-              </div>
-              <p className="text-memory-muted text-xs mt-3 text-center">
-                模糊的记忆碎片，或许大家还能再想起些什么……<br />点击下方加入回忆，一起找回这件商品吧
-              </p>
-            </div>
-          )}
-
           {(product.year !== 2026 || !isLocked) && product.year !== 2014 && (
-            <div className="memory-card rounded-xl p-6">
+            <div className="rounded-xl p-6 pb-32">
               {isLocked ? (
                 <div className="text-center py-8 space-y-4">
                   <p className="text-memory-muted">
@@ -302,59 +352,48 @@ const Product = ({ lights, setLights }) => {
                 <div className="text-center py-8 space-y-4">
                   <p className="text-memory-muted">检查中...</p>
                 </div>
-              ) : gameCompleted ? (
-                <div className="text-center space-y-4">
-                  <motion.div
-                    className="py-8 space-y-4"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                  >
-                    <p className="text-lg text-memory-accent">
-                      ✧ 记忆已刻印 ✧
-                    </p>
-                    <p className="text-memory-muted text-sm">
-                      我们听到了 我们看到了
-                    </p>
-                  </motion.div>
+              ) : (
+                <>
+                  {!isUnlocked && (
+                    <div 
+                      className="rounded-xl p-4 mb-4"
+                      style={{ 
+                        border: '1px solid #8980ff',
+                        boxShadow: '0 0 15px rgba(137, 128, 246, 0.3)'
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-memory-accent">✧</span>
+                        <div className="flex-1">
+                          <div className="h-2 bg-memory-dark rounded-full overflow-hidden">
+                            <motion.div
+                              className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
+                              initial={{ width: 0 }}
+                              animate={{
+                                width: `${progress}%`,
+                              }}
+                              transition={{ duration: 0.8 }}
+                            />
+                          </div>
+                        </div>
+                        <span className="text-memory-muted text-xs">
+                          已刻印{Math.round(progress)}%</span> 
+                      </div>
+                    </div>
+                  )}
                   <motion.button
-                    className="w-full py-3 rounded-lg bg-memory-accent/20 text-memory-accent"
-                    onClick={handleGameComplete}
+                    className="w-3/4 mx-auto block"
+                    onClick={() => setShowFullscreenGame(true)}
                     whileTap={{ scale: 0.98 }}
                   >
-                    不朽的 永恒了 我们记得
-                  </motion.button>
-                </div>
-              ) : (
-                <motion.button
-                  className="w-full py-6 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
-                  onClick={() => setShowFullscreenGame(true)}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  加入回忆
-                </motion.button>
-              )}
-            </div>
-          )}
-
-          {!isLocked && !isUnlocked && (
-            <div className="memory-card rounded-xl p-4">
-              <div className="flex items-center gap-3">
-                <span className="text-memory-accent">✧</span>
-                <div className="flex-1">
-                  <div className="h-2 bg-memory-dark rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-memory-accent to-memory-glow"
-                      initial={{ width: 0 }}
-                      animate={{
-                        width: `${progress}%`,
-                      }}
-                      transition={{ duration: 0.8 }}
+                    <img
+                      src="/images/ui/product/加入回忆.webp"
+                      alt="加入回忆"
+                      className="w-full h-auto"
                     />
-                  </div>
-                </div>
-                <span className="text-memory-muted text-xs">
-                  已刻印{Math.round(progress)}%</span> 
-              </div>
+                  </motion.button>
+                </>
+              )}
             </div>
           )}
 
@@ -367,11 +406,20 @@ const Product = ({ lights, setLights }) => {
               transition={{ duration: 0.5 }}
             >
               <h3 className="text-memory-accent text-lg mb-6 text-center">记忆刻印</h3>
-              <PhotoGallery images={GALLERY_IMAGES_2014} />
+              <div className="pb-32">
+                <PhotoGallery images={GALLERY_IMAGES_2014} />
+              </div>
             </motion.div>
           )}
         </motion.div>
       </main>
+
+      <img
+        src="/images/ui/product/尾部底图.webp"
+        alt="尾部底图"
+        className="absolute bottom-0 left-0 w-full h-auto"
+      />
+      </div>
 
       {/* 全屏游戏模态框 */}
       <AnimatePresence>
@@ -409,12 +457,13 @@ const Product = ({ lights, setLights }) => {
                       我们听到了 我们看到了
                     </p>
                     <motion.button
-                      className="px-8 py-4 rounded-xl bg-memory-accent/20 text-memory-accent hover:bg-memory-accent/30 transition-colors text-lg font-medium"
+                      className="text-memory-info text-xl"
                       onClick={() => {
                         handleGameComplete();
                         setShowFullscreenGame(false);
                       }}
                       whileTap={{ scale: 0.98 }}
+                      style={{ backgroundImage: 'url(/images/ui/home/告示牌.webp)', backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', padding: '0', border: 'none', borderRadius: '0', width: '300px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                       不朽的 永恒了 我们记得
                     </motion.button>

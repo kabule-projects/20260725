@@ -165,7 +165,7 @@ const Staffing = () => {
               {section.subgroups.map((subgroup, subgroupIndex) => (
                 <div key={subgroup.name || subgroupIndex} className="mb-6">
                   {subgroup.name && (
-                    <h3 className="text-memory-glow/70 text-sm mb-2 ml-2">
+                    <h3 className="text-memory-glow/70 text-base mb-2 ml-2">
                       {subgroup.name}
                     </h3>
                   )}
@@ -173,11 +173,11 @@ const Staffing = () => {
                     {subgroup.members.map((member, memberIndex) => (
                       <span
                         key={memberIndex}
-                        className={`px-3 py-1 rounded-full text-xs ${subgroup.name ? 'bg-memory-glow/10' : 'bg-memory-glow/10'}`}
+                        className={`px-3 py-1 rounded-full text-sm bg-memory-info/10`}
                       >
-                        <span className={subgroup.name ? 'text-memory-glow' : 'text-memory-glow'}>{member.id}</span>
+                        <span className="text-memory-info">{member.id}</span>
                         {member.years && (
-                          <span className="text-memory-glow/50 ml-1">（{member.years}）</span>
+                          <span className="text-memory-info/50 ml-1">（{member.years}）</span>
                         )}
                       </span>
                     ))}
@@ -191,9 +191,10 @@ const Staffing = () => {
 
       <footer className="mt-12 text-center px-6">
         <motion.button
-          className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30 text-sm"
+          className="text-memory-info text-base mx-auto block"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          style={{ backgroundImage: 'url(/images/ui/product/按钮.webp)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', padding: '0', border: 'none', width: '150px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <Link to="/">返回首页</Link>
         </motion.button>

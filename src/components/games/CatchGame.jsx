@@ -463,7 +463,7 @@ const CatchGame = ({ onComplete }) => {
         >
           <p className="text-memory-glow text-lg mb-4">这里或许能写点什么</p>
           <motion.button
-            className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
+            className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleStartGame}
@@ -482,7 +482,7 @@ const CatchGame = ({ onComplete }) => {
           <p className="text-memory-glow text-lg mb-2">成功!</p>
           <p className="text-memory-muted text-sm mb-4">所有方块已收集</p>
           <motion.button
-            className="px-6 py-2 bg-memory-glow/20 text-memory-glow rounded-lg border border-memory-glow/30"
+            className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={restartGame}

@@ -10,10 +10,10 @@ export default {
         memory: {
           dark: '#11111d',
           card: 'rgb(18, 18, 31)',
-          glow: 'rgba(254, 254, 198, 0.9)',
-          accent: 'rgb(254, 254, 198)',
-          muted: 'rgba(254, 254, 198, 0.7)',
-          info: 'rgb(137, 128, 246)',
+          glow: 'rgb(254, 254, 198)',
+          accent: '#fffdb8',
+          muted: '#949381',
+          info: '#8980ff',
         }
       },
       animation: {

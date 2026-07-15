@@ -7,7 +7,7 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/2.webp',
-        cueLines: '一朵朵厚重的云遮住了太阳，云彩是：',
+        cueLines: ['一朵朵厚重的云遮住了太阳', '云彩是：'],
         options: ['A 白色', 'B 黑色', 'C 粉色', 'D 灰色'],
         correctAnswer: 3
       },
@@ -24,13 +24,15 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/6.webp',
-        cueLines: '小鹿是：',
+        cueLines: ['它在吃什么？一朵玫瑰？', '小鹿是：'],
         options: ['A 棕色', 'B 彩色', 'C 金色', 'D 银色'],
         correctAnswer: 1
       },
       {
         image: '/images/colour/7.webp',
-        cueLines: '它在吃什么？一朵玫瑰？'
+        cueLines: '玫瑰是什么颜色？',
+        options: ['A 银色', 'B 蓝色', 'C 金色', 'D 红色'],
+        correctAnswer: 3
       },
       {
         image: '/images/colour/8.webp'
@@ -41,7 +43,7 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/10.webp',
-        cueLines: '就快看到了……原来是一颗星星！\n星星是：',
+        cueLines: ['就快看到了……原来是一颗星星！', '星星是：'],
         options: ['A 蓝色', 'B 银色', 'C 黄色', 'D 金色'],
         correctAnswer: 0
       },
@@ -50,7 +52,7 @@ export const GAME_CONFIGS = {
       },
       {
         image: '/images/colour/12.webp',
-        cueLines: '雨衣是：',
+        cueLines: ['太好了！星星们都好好地穿着雨衣', '雨衣是：'],
         options: ['A 蓝色', 'B 银色', 'C 黄色', 'D 金色'],
         correctAnswer: 2
       },
