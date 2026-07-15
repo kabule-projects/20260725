@@ -11,6 +11,7 @@ const LyricGame = ({ onComplete }) => {
   const [score, setScore] = useState(0); // 连续正确次数
   const [gameState, setGameState] = useState('playing'); // 'playing' | 'win' | 'feedback'
   const [feedback, setFeedback] = useState(null); // 'correct' | 'wrong'
+  const [randomImage, setRandomImage] = useState('/images/lyric/1.webp');
 
   // 获取随机歌词（50%概率正确，50%概率错误）
   const getRandomLyric = useCallback(() => {
@@ -31,6 +32,8 @@ const LyricGame = ({ onComplete }) => {
     setCurrentLyric(lyric);
     setIsCorrect(null);
     setFeedback(null);
+    const randomIndex = Math.floor(Math.random() * 3) + 1;
+    setRandomImage(`/images/lyric/${randomIndex}.webp`);
   }, [getRandomLyric]);
 
   // 初始化游戏
@@ -114,20 +117,15 @@ const LyricGame = ({ onComplete }) => {
 
       {/* 歌词显示区域 */}
       <div className="relative">
-        <AnimatePresence mode="wait">
-          {currentLyric && (
-            <motion.div
-              key={currentLyric.lyric}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* 周深头像/图标区域 */}
+        {currentLyric && (
+            <div key={currentLyric.lyric}>
               <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 rounded-full bg-memory-accent/20 flex items-center justify-center border border-memory-accent/30">
-                  <span className="text-2xl">🎤</span>
-                </div>
+                <img 
+                  key={randomImage}
+                  src={randomImage} 
+                  alt="" 
+                  className="w-48 h-48 object-contain"
+                />
               </div>
               
               {/* 歌词内容 */}
@@ -158,9 +156,8 @@ const LyricGame = ({ onComplete }) => {
                   </p>
                 </motion.div>
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </div>
 
       {/* 按钮区域 */}

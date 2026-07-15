@@ -200,7 +200,7 @@ const WhackGame = ({ onComplete }) => {
       {/* 提示 */}
       {isPlaying && (
         <div className="mt-4 text-center">
-          <p className="text-memory-muted/60 text-xs">点击亮起的格子</p>
+          <p className="text-memory-muted/60 text-xs">点击亮起的格子，当心混进来的小恶魔！</p>
         </div>
       )}
       </div>
