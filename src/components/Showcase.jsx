@@ -47,7 +47,7 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
         <LazyImage
           src={imageSrc}
           alt=""
-          className={`max-w-full max-h-full object-contain transition-all duration-300 ${accessStatus === 'accessible' ? 'brightness-[0]' : ''}`}
+          className={`max-w-full max-h-full object-contain transition-all duration-300 ${accessStatus === 'accessible' ? 'brightness-[0.1]' : ''}`}
         />
       ) : (
         <div className="w-full h-full bg-memory-dark/30 rounded" />
@@ -88,8 +88,8 @@ const Showcase = ({ lights, onProductClick }) => {
       />
       
       {/* 中间层：商品陈列 */}
-      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[15%] px-[2%]" style={{ zIndex: 2 }}>
-        <div className="w-full flex justify-center mb-[2%]">
+      <div className="absolute inset-0 flex flex-col items-center justify-start pt-[5%] px-[1%]" style={{ zIndex: 2 }}>
+        <div className="w-full flex justify-center mb-[1%]">
           {product2014 && (
             <ShowcaseItem
               product={product2014}
@@ -100,7 +100,7 @@ const Showcase = ({ lights, onProductClick }) => {
         </div>
         
         {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="w-full flex justify-center gap-[1%] mb-[2%]">
+          <div key={rowIndex} className="w-full flex justify-center gap-[3%] mb-[2%]">
             {row.map((product) => (
               <ShowcaseItem
                 key={product.id}
@@ -112,16 +112,6 @@ const Showcase = ({ lights, onProductClick }) => {
           </div>
         ))}
       </div>
-
-      {/* 顶层：玻璃贴图 */}
-      {!isAllUnlocked && (
-        <img
-          src="/images/main/玻璃.webp"
-          alt="玻璃"
-          className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-          style={{ zIndex: 3 }}
-        />
-      )}
     </div>
   );
 };
@@ -133,7 +123,7 @@ const ShowcaseItem = ({ product, lights, onClick }) => {
   
   return (
     <motion.div
-      className="w-[18%] aspect-square relative cursor-pointer"
+      className="w-[19%] aspect-square relative cursor-pointer"
       onClick={onClick}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

@@ -2,7 +2,7 @@ export const calculateBrightness = (light, locked = false) => {
   if (locked) return 0.3;
 
   const minLight = 0;
-  const maxLight = 7250;
+  const maxLight = 9290;
   const minBrightness = 0.4;
   const maxBrightness = 1.0;
 
@@ -30,7 +30,7 @@ export const calculateThreshold = (year) => {
   const currentYear = 2026;
   const earliestYear = 2014;
   const minThreshold = 2000;
-  const maxThreshold = 9000;
+  const maxThreshold = 9290;
   
   const yearDifference = currentYear - year;
   const maxDifference = currentYear - earliestYear;

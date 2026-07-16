@@ -84,14 +84,14 @@ const Home = ({ lights }) => {
         <div className="max-w-6xl mx-auto px-4 md:px-6 mb-4">
           <div 
             className="relative w-full"
-            style={{ paddingBottom: '66.67%' }}
+            style={{ paddingBottom: '70%' }}
           >
-            <div className="absolute inset-0 flex gap-2">
-              <div className="w-[60%] h-full">
+            <div className="absolute inset-0 flex gap-0">
+              <div className="w-[75%] h-full pl-[7%] pb-[7%]" style={{ zIndex: 1 }}>
                 <Showcase lights={lights} onProductClick={handleProductClick} />
               </div>
-              
-              <div className="w-[40%] h-full">
+
+              <div className="w-[45%] h-full -ml-[10%] relative" style={{ zIndex: 2 }}>
                 <BillboardCharacter message={dialogMessage} key={messageKey} />
               </div>
             </div>
@@ -101,7 +101,7 @@ const Home = ({ lights }) => {
 
       <main className="px-4 md:px-6">
         <motion.div
-          className="max-w-6xl mx-auto mb-12 flex justify-center"
+          className="max-w-6xl mx-auto mb-12 flex justify-center pt-[10%]"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}

@@ -1,20 +1,55 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
+const PLAYER_WIDTH = 60;
+const PLAYER_HEIGHT = 70;
+const GAME_WIDTH = 300;
+const GAME_HEIGHT = 400;
+const BLOCK_SPAWN_INTERVAL = 600;
+const FALL_SPEED = 3;
+const WIN_HEIGHT = 520;
+const WIN_FIRE_COUNT = 6;
+
+const NORMAL_BLOCK_TEXTURES = [
+  '/images/catch/item-1.webp',
+  '/images/catch/item-2.webp',
+  '/images/catch/item-3.webp',
+  '/images/catch/item-4.webp',
+  '/images/catch/item-5.webp',
+  '/images/catch/item-6.webp',
+  '/images/catch/item-7.webp',
+  '/images/catch/item-8.webp'
+];
+
+const FIRE_BLOCK_TEXTURES = [
+  '/images/catch/fire-1.webp',
+  '/images/catch/fire-2.webp'
+];
+
+const PLAYER_TEXTURE = '/images/catch/player.webp';
+
+const BLOCK_TYPES = [
+  { type: 'normal', probability: 0.6 },
+  { type: 'fire', probability: 0.4 },
+];
+
 const CatchGame = ({ onComplete }) => {
-  const [started, setStarted] = useState(false);
-  const [won, setWon] = useState(false);
-  const [caughtHeight, setCaughtHeight] = useState(0);
-  const [fireCount, setFireCount] = useState(0);
-  const [showScenes, setShowScenes] = useState(true);
-  const [currentScene, setCurrentScene] = useState(0);
-  const [sceneImages, setSceneImages] = useState([]);
+  const [gamePhase, setGamePhase] = useState('scene');
+  const [sceneStep, setSceneStep] = useState(0);
+  const [radiationBackground, setRadiationBackground] = useState(1);
 
   const playerXRef = useRef(150);
   const [playerX, setPlayerX] = useState(150);
   const [blocks, setBlocks] = useState([]);
+  const [failureBlocks, setFailureBlocks] = useState([]);
+  const [failurePlayerX, setFailurePlayerX] = useState(GAME_WIDTH / 2 - PLAYER_WIDTH / 2);
+  const [animationTick, setAnimationTick] = useState(0);
+  const [caughtHeight, setCaughtHeight] = useState(0);
+  const [fireCount, setFireCount] = useState(0);
+  const [won, setWon] = useState(false);
 
   const containerRef = useRef(null);
+  const failureContainerRef = useRef(null);
   const animationRef = useRef(null);
   const lastTimeRef = useRef(0);
   const spawnTimeRef = useRef(0);
@@ -22,102 +57,20 @@ const CatchGame = ({ onComplete }) => {
   const wonRef = useRef(false);
   const caughtHeightRef = useRef(0);
   const fireCountRef = useRef(0);
-  const fireAddedThisFrameRef = useRef(false);
-
-  const SCENE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
-
-  useEffect(() => {
-    const loadSceneImages = async () => {
-      const images = [];
-      let index = 1;
-      let found = true;
-
-      while (found) {
-        found = false;
-        for (const ext of SCENE_EXTENSIONS) {
-          const src = `/images/catch/scene/${index}.${ext}`;
-          try {
-            await new Promise((resolve, reject) => {
-              const img = new Image();
-              img.onload = () => {
-                images.push(src);
-                found = true;
-                resolve();
-              };
-              img.onerror = () => resolve();
-              img.src = src;
-            });
-            if (found) break;
-          } catch {
-            // 忽略错误
-          }
-        }
-        index++;
-        if (index > 50) break;
-      }
-
-      setSceneImages(images);
-    };
-
-    loadSceneImages();
-  }, []);
-
-  const handleSceneClick = () => {
-    if (currentScene < sceneImages.length - 1) {
-      setCurrentScene(prev => prev + 1);
-    } else {
-      setShowScenes(false);
-    }
-  };
-
-  const handleStartGame = () => {
-    setStarted(true);
-  };
-
-  const PLAYER_WIDTH = 60;
-  const PLAYER_HEIGHT = 70;
-  const GAME_WIDTH = 300;
-  const GAME_HEIGHT = 400; // 3:4 比例
-  const BLOCK_SPAWN_INTERVAL = 1000;
-  const FALL_SPEED = 2;
-  const WIN_HEIGHT = 520;
-  const WIN_FIRE_COUNT = 6;
-
-
-  const NORMAL_BLOCK_TEXTURES = [
-    '/images/catch/item-1.webp',
-    '/images/catch/item-2.webp',
-    '/images/catch/item-3.webp',
-    '/images/catch/item-4.webp',
-    '/images/catch/item-5.webp',
-    '/images/catch/item-6.webp',
-    '/images/catch/item-7.webp',
-    '/images/catch/item-8.webp'
-  ];
-  
-  const FIRE_BLOCK_TEXTURES = [
-    '/images/catch/fire-1.webp',
-    '/images/catch/fire-2.webp'
-  ];
-  
-  const PLAYER_TEXTURE = '/images/catch/player.webp';
-  
-  const BLOCK_TYPES = [
-    { type: 'normal', color: '#e8d5b7', probability: 0.7 },
-    { type: 'fire', color: '#ff6b35', probability: 0.3 },
-  ];
+  const blocksRef = useRef([]);
+  const failureBlocksRef = useRef([]);
+  const gamePhaseRef = useRef('scene');
 
   const spawnBlock = useCallback((gameWidth = GAME_WIDTH) => {
     const MIN_BLOCK_SIZE = 30;
     const MAX_BLOCK_SIZE = 50;
     const size = MIN_BLOCK_SIZE + Math.random() * (MAX_BLOCK_SIZE - MIN_BLOCK_SIZE);
     const x = Math.random() * (gameWidth - size);
-    
-    // 根据概率选择掉落物类型
+
     const rand = Math.random();
     let cumulative = 0;
     let selectedType = BLOCK_TYPES[0];
-    
+
     for (const blockType of BLOCK_TYPES) {
       cumulative += blockType.probability;
       if (rand <= cumulative) {
@@ -125,8 +78,7 @@ const CatchGame = ({ onComplete }) => {
         break;
       }
     }
-    
-    // 为掉落物随机选择贴图
+
     let texture = null;
     if (selectedType.type === 'normal') {
       const randomIndex = Math.floor(Math.random() * NORMAL_BLOCK_TEXTURES.length);
@@ -135,7 +87,7 @@ const CatchGame = ({ onComplete }) => {
       const randomIndex = Math.floor(Math.random() * FIRE_BLOCK_TEXTURES.length);
       texture = FIRE_BLOCK_TEXTURES[randomIndex];
     }
-    
+
     return {
       id: Date.now() + Math.random(),
       x,
@@ -143,7 +95,6 @@ const CatchGame = ({ onComplete }) => {
       size,
       caught: false,
       type: selectedType.type,
-      color: selectedType.color,
       texture: texture
     };
   }, []);
@@ -164,61 +115,117 @@ const CatchGame = ({ onComplete }) => {
     return false;
   }, []);
 
-  const gameLoop = useCallback((timestamp) => {
-    if (!lastTimeRef.current) lastTimeRef.current = timestamp;
-    if (!spawnTimeRef.current) spawnTimeRef.current = timestamp;
+  const runFailureAnimation = useCallback((onCompleteAnim) => {
+    const startPlayerX = GAME_WIDTH / 2 - PLAYER_WIDTH / 2;
+    setFailurePlayerX(startPlayerX);
+    failureBlocksRef.current = [];
+    setFailureBlocks([]);
 
-    // 获取容器实际尺寸
-    const gameHeight = containerRef.current ? containerRef.current.offsetHeight : GAME_HEIGHT;
-    const gameWidth = containerRef.current ? containerRef.current.offsetWidth : GAME_WIDTH;
+    const startTime = performance.now();
+    const duration = 6000;
+    let lastSpawnTime = startTime;
+    let targetX = Math.random() * (GAME_WIDTH - PLAYER_WIDTH);
+    let currentFailureBlocks = [];
+    let currentPlayerX = startPlayerX;
 
-    // 重置每帧的火苗计数标志
-    fireAddedThisFrameRef.current = false;
+    const animate = () => {
+      const elapsed = performance.now() - startTime;
+      
+      if (elapsed >= duration) {
+        failureBlocksRef.current = [];
+        setFailureBlocks([]);
+        onCompleteAnim && onCompleteAnim();
+        return;
+      }
 
-    const spawnDelta = timestamp - spawnTimeRef.current;
+      if (elapsed - lastSpawnTime >= 500) {
+        currentFailureBlocks = [...currentFailureBlocks, spawnBlock(GAME_WIDTH)];
+        lastSpawnTime = elapsed;
+      }
+      
+      currentFailureBlocks = currentFailureBlocks
+        .map(block => {
+          if (block.caught) return block;
+          return { ...block, y: block.y + FALL_SPEED * 0.6 };
+        })
+        .filter(block => block.y < GAME_HEIGHT);
+        
+      failureBlocksRef.current = currentFailureBlocks;
+      setFailureBlocks(currentFailureBlocks.slice());
 
-    if (spawnDelta > BLOCK_SPAWN_INTERVAL) {
-      setBlocks(prev => [...prev, spawnBlock(gameWidth)]);
-      spawnTimeRef.current = timestamp;
-    }
+      const distanceToTarget = Math.abs(targetX - currentPlayerX);
+      if (distanceToTarget < 5) {
+        targetX = Math.random() * (GAME_WIDTH - PLAYER_WIDTH);
+      }
+      const lerpFactor = 0.03;
+      currentPlayerX = currentPlayerX + (targetX - currentPlayerX) * lerpFactor;
+      setFailurePlayerX(currentPlayerX);
 
-    setBlocks(prev => {
-      const updatedBlocks = prev.map(block => {
-        if (block.caught) return block;
-        const newY = block.y + FALL_SPEED;
-        return { ...block, y: newY };
-      }).filter(block => {
-        if (block.y > gameHeight) return false;
-        return true;
-      });
+      setAnimationTick(t => t + 1);
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+  }, [spawnBlock]);
+
+  useEffect(() => {
+    gamePhaseRef.current = gamePhase;
+  }, [gamePhase]);
+
+  useEffect(() => {
+    if (gamePhase !== 'playing') return;
+    
+    lastTimeRef.current = 0;
+    spawnTimeRef.current = 0;
+    wonRef.current = false;
+    caughtHeightRef.current = 0;
+    fireCountRef.current = 0;
+    blocksRef.current = [];
+    setBlocks([]);
+    
+    const gameLoopInternal = (timestamp) => {
+      if (!lastTimeRef.current) lastTimeRef.current = timestamp;
+      if (!spawnTimeRef.current) spawnTimeRef.current = timestamp;
+
+      const gameHeight = containerRef.current ? containerRef.current.offsetHeight : GAME_HEIGHT;
+      const gameWidth = containerRef.current ? containerRef.current.offsetWidth : GAME_WIDTH;
+
+      const spawnDelta = timestamp - spawnTimeRef.current;
+
+      if (spawnDelta > BLOCK_SPAWN_INTERVAL) {
+        blocksRef.current = [...blocksRef.current, spawnBlock(gameWidth)];
+        spawnTimeRef.current = timestamp;
+      }
 
       let newHeight = 0;
       let newFires = 0;
-      
-      for (const block of updatedBlocks) {
-        if (block.caught) continue;
-        
-        // 只有当块到达玩家区域时才进行碰撞检测
+
+      const updatedBlocks = blocksRef.current
+        .map(block => {
+          if (block.caught) return block;
+          const newY = block.y + FALL_SPEED;
+          return { ...block, y: newY };
+        })
+        .filter(block => block.y <= gameHeight);
+
+      const finalBlocks = updatedBlocks.map(block => {
+        if (block.caught) return block;
+
         const blockBottom = block.y + block.size;
         const playerTop = gameHeight - PLAYER_HEIGHT - 10;
-        
+
         if (blockBottom >= playerTop && blockBottom <= playerTop + PLAYER_HEIGHT + 20) {
           if (checkCollision(block, playerXRef.current, gameHeight)) {
-            block.caught = true;
             newHeight += block.size * 0.5;
-            
-            // 只有真正接到的火苗才计数（每帧最多增加1个）
-            if (block.type === 'fire' && newFires === 0) {
-              newFires = 1;
+            if (block.type === 'fire') {
+              newFires++;
             }
+            return { ...block, caught: true };
           }
         }
-        
-        // 每帧最多处理一个火苗
-        if (newFires >= 1) {
-          break;
-        }
-      }
+        return block;
+      });
 
       if (newHeight > 0) {
         caughtHeightRef.current += newHeight;
@@ -226,51 +233,78 @@ const CatchGame = ({ onComplete }) => {
       }
 
       if (newFires > 0) {
-        const newFireCount = fireCountRef.current + 1;
-        fireCountRef.current = newFireCount;
-        setFireCount(newFireCount);
+        fireCountRef.current += newFires;
+        setFireCount(fireCountRef.current);
       }
 
-      // 通关条件：同时满足高度和火苗数量
-      if (caughtHeightRef.current >= WIN_HEIGHT && 
-          fireCountRef.current >= WIN_FIRE_COUNT && 
-          !wonRef.current) {
-        wonRef.current = true;
-        setWon(true);
-        onComplete();
+      blocksRef.current = finalBlocks;
+      setBlocks(finalBlocks);
+
+      if (gamePhaseRef.current === 'playing') {
+        animationRef.current = requestAnimationFrame(gameLoopInternal);
       }
-
-      lastTimeRef.current = timestamp;
-      return updatedBlocks;
-    });
-
-    if (!wonRef.current) {
-      animationRef.current = requestAnimationFrame(gameLoop);
-    }
-  }, [spawnBlock, checkCollision, onComplete]);
+    };
+    
+    animationRef.current = requestAnimationFrame(gameLoopInternal);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [gamePhase, spawnBlock, checkCollision]);
 
   useEffect(() => {
-    if (started && !won) {
-      lastTimeRef.current = 0;
-      spawnTimeRef.current = 0;
-      animationRef.current = requestAnimationFrame(gameLoop);
+    if (gamePhase !== 'playing') return;
+    
+    if (caughtHeightRef.current >= WIN_HEIGHT &&
+      fireCountRef.current >= WIN_FIRE_COUNT &&
+      !wonRef.current) {
+      wonRef.current = true;
+      setWon(true);
+      setGamePhase('success');
+    }
+  }, [caughtHeight, fireCount, gamePhase]);
+
+  useEffect(() => {
+    if (gamePhase === 'success') {
+      const interval = setInterval(() => {
+        setRadiationBackground(prev => prev === 1 ? 2 : 1);
+      }, 500);
+
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 3000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timer);
+      };
+    }
+  }, [gamePhase, onComplete]);
+
+  useEffect(() => {
+    if (sceneStep === 2) {
+      runFailureAnimation(() => setSceneStep(3));
+    } else if (sceneStep === 4) {
+      runFailureAnimation(() => setSceneStep(5));
     }
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [started, won, gameLoop]);
+  }, [sceneStep, runFailureAnimation]);
 
   const handleMouseDown = useCallback((e) => {
-    if (!started || won) return;
+    if (gamePhase !== 'playing' || won) return;
     isDraggingRef.current = true;
     const rect = containerRef.current.getBoundingClientRect();
     const gameWidth = rect.width;
     const x = e.clientX - rect.left - PLAYER_WIDTH / 2;
     playerXRef.current = Math.max(0, Math.min(gameWidth - PLAYER_WIDTH, x));
     setPlayerX(playerXRef.current);
-  }, [started, won]);
+  }, [gamePhase, won]);
 
   const handleMouseUp = useCallback(() => {
     isDraggingRef.current = false;
@@ -294,15 +328,36 @@ const CatchGame = ({ onComplete }) => {
     setPlayerX(playerXRef.current);
   }, [won]);
 
+  const handleSceneClick = () => {
+    switch (sceneStep) {
+      case 0:
+        setSceneStep(1);
+        break;
+      case 1:
+        setSceneStep(2);
+        break;
+      case 3:
+        setSceneStep(4);
+        break;
+      case 5:
+        setGamePhase('playing');
+        break;
+      default:
+        break;
+    }
+  };
+
   const restartGame = () => {
     setBlocks([]);
+    setFailureBlocks([]);
     setCaughtHeight(0);
     setFireCount(0);
     setWon(false);
-    setStarted(false);
     setPlayerX(150);
-    setShowScenes(true);
-    setCurrentScene(0);
+    setFailurePlayerX(GAME_WIDTH / 2 - PLAYER_WIDTH / 2);
+    setAnimationTick(0);
+    setGamePhase('scene');
+    setSceneStep(0);
     playerXRef.current = 150;
     wonRef.current = false;
     caughtHeightRef.current = 0;
@@ -310,187 +365,247 @@ const CatchGame = ({ onComplete }) => {
     lastTimeRef.current = 0;
     spawnTimeRef.current = 0;
     isDraggingRef.current = false;
+    blocksRef.current = [];
+    failureBlocksRef.current = [];
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
   };
 
+  const renderScene = () => {
+    const renderFailureScene = () => (
+      <div className="relative w-full h-full flex items-center justify-center" style={{ minHeight: '400px' }}>
+        <div 
+          className="relative w-full max-w-lg aspect-[3/4] mx-auto" 
+          ref={failureContainerRef}
+        >
+          <img
+            src="/images/catch/background.webp"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+          {failureBlocks.map(block => (
+            !block.caught && (
+              <div
+                key={block.id}
+                className="absolute z-10"
+                style={{ 
+                  left: `${(block.x / GAME_WIDTH) * 100}%`, 
+                  top: `${(block.y / GAME_HEIGHT) * 100}%`, 
+                  width: `${(block.size / GAME_WIDTH) * 100}%` 
+                }}
+              >
+                <img src={block.texture} alt="" className="w-full h-auto" />
+              </div>
+            )
+          ))}
+          <div 
+            className="absolute z-20" 
+            style={{ 
+              left: `${(failurePlayerX / GAME_WIDTH) * 100}%`, 
+              bottom: '2%', 
+              width: `${((PLAYER_WIDTH * 1.2) / GAME_WIDTH) * 100}%` 
+            }}
+          >
+            <img src={PLAYER_TEXTURE} alt="" className="w-full h-auto" />
+          </div>
+        </div>
+      </div>
+    );
+
+    if (sceneStep === 0) {
+      return (
+        <div className="relative w-full h-full flex items-center justify-center" onClick={handleSceneClick} style={{ minHeight: '400px' }}>
+          <img
+            src="/images/catch/scene/正面低头.webp"
+            alt=""
+            className="w-full max-w-lg aspect-[3/4] object-contain"
+          />
+        </div>
+      );
+    }
+
+    if (sceneStep === 1) {
+      return (
+        <div className="relative w-full h-full flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
+          <img
+            src="/images/catch/scene/需要准备.webp"
+            alt=""
+            className="w-full max-w-lg aspect-[3/4] object-contain"
+          />
+          <motion.button
+            className="mt-4 px-8 py-3 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleSceneClick}
+          >
+            开始吧
+          </motion.button>
+        </div>
+      );
+    }
+
+    if (sceneStep === 2) {
+      return renderFailureScene();
+    }
+
+    if (sceneStep === 3) {
+      return (
+        <div className="relative w-full h-full flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
+          <img
+            src="/images/catch/scene/不够呢.webp"
+            alt=""
+            className="w-full max-w-lg aspect-[3/4] object-contain"
+          />
+          <motion.button
+            className="mt-4 px-8 py-3 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleSceneClick}
+          >
+            再试一次吧...
+          </motion.button>
+        </div>
+      );
+    }
+
+    if (sceneStep === 4) {
+      return renderFailureScene();
+    }
+
+    if (sceneStep === 5) {
+      return (
+        <div className="relative w-full h-full flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
+          <img
+            src="/images/catch/scene/不够呢.webp"
+            alt=""
+            className="w-full max-w-lg aspect-[3/4] object-contain"
+          />
+          <motion.button
+            className="mt-4 px-8 py-3 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleSceneClick}
+          >
+            不着急，再试一次
+          </motion.button>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="w-full h-full px-[12%] py-[12%] flex items-center justify-center">
-      <div className="relative w-full bg-memory-dark/50 rounded-lg surreal-border p-4">
-        {showScenes && (
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-black z-50 rounded-lg select-none"
-            initial={false}
-            animate={{ opacity: 1 }}
-            onClick={handleSceneClick}
+      <div className={`relative w-full ${gamePhase === 'scene' || gamePhase === 'success' ? '' : 'bg-memory-dark/50 rounded-lg surreal-border p-4'}`} style={gamePhase === 'scene' || gamePhase === 'success' ? { height: '100%', backgroundColor: 'transparent' } : {}}>
+        {gamePhase === 'scene' && renderScene()}
+
+        {gamePhase === 'success' && (
+          <div className="relative w-full h-full flex flex-col items-center justify-center" style={{ minHeight: '400px' }}>
+            <div className="relative w-full max-w-lg aspect-[3/4]">
+              <img
+                src="/images/catch/scene/放射背景1.webp"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: radiationBackground === 1 ? 1 : 0 }}
+              />
+              <img
+                src="/images/catch/scene/放射背景2.webp"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: radiationBackground === 2 ? 1 : 0 }}
+              />
+              <img
+                src="/images/catch/scene/背面看盆.webp"
+                alt=""
+                className="absolute inset-0 w-full h-full object-contain"
+              />
+              <img
+                src="/images/catch/scene/成功了.webp"
+                alt=""
+                className="absolute inset-0 w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        )}
+
+        {gamePhase !== 'scene' && gamePhase !== 'success' && (
+          <>
+            <div className="flex justify-between items-center mb-2 px-2">
+              <div className="text-memory-glow/60 text-sm">
+                {fireCount === 0 ? '公司起什么名字好呢？' :
+                  fireCount <= 2 ? '劲火？' :
+                    fireCount <= 4 ? '劲炎？' : '劲焱！'}
+              </div>
+              <div className="text-memory-glow/60 text-sm">
+                分数: {Math.floor(caughtHeight)}/{WIN_HEIGHT}
+              </div>
+            </div>
+            <p className="text-memory-glow/60 text-sm text-center mb-2">
+              接不接？接什么？先接！
+            </p>
+          </>
+        )}
+
+        {gamePhase !== 'scene' && gamePhase !== 'success' && (
+          <div
+            ref={containerRef}
+            className="relative w-full max-w-lg aspect-[3/4] rounded overflow-hidden select-none mx-auto"
             style={{
+              maxHeight: 'calc(80vh - 80px)',
               WebkitUserSelect: 'none',
               MozUserSelect: 'none',
               msUserSelect: 'none',
               userSelect: 'none',
               WebkitTouchCallout: 'none',
+              backgroundImage: `url(/images/catch/background.webp)`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
             }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            onTouchMove={handleTouchMove}
+            onDragStart={(e) => e.preventDefault()}
           >
-            {sceneImages.length > 0 ? (
+            {blocks.map(block => (
+              !block.caught && (
+                <motion.div
+                  key={block.id}
+                  className="absolute"
+                  style={{ left: block.x, top: block.y, width: block.size }}
+                  initial={{ opacity: 0.8, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <img
+                    src={block.texture}
+                    alt=""
+                    className="w-full h-auto object-contain"
+                    draggable="false"
+                    style={{ pointerEvents: 'none' }}
+                  />
+                </motion.div>
+              )
+            ))}
+
+            <div
+              className="absolute overflow-hidden"
+              style={{ left: playerX, bottom: 10, width: PLAYER_WIDTH }}
+            >
               <img
-                src={sceneImages[currentScene]}
-                alt={`剧情 ${currentScene + 1}`}
-                className="w-full max-w-lg aspect-[3/4] object-contain rounded-lg"
-                style={{ 
-                  maxHeight: 'calc(80vh - 80px)',
-                  WebkitUserDrag: 'none',
-                  userDrag: 'none',
-                  pointerEvents: 'none',
-                }}
+                src={PLAYER_TEXTURE}
+                alt="举盆小人"
+                className="w-full h-auto"
+                draggable="false"
+                style={{ pointerEvents: 'none' }}
               />
-            ) : (
-              <div className="text-memory-glow/60 text-sm">加载中...</div>
-            )}
-          </motion.div>
+            </div>
+          </div>
         )}
 
-      {/* 进度显示 */}
-      <div className="flex justify-between items-center mb-2 px-2">
-        <div className="text-memory-glow/60 text-sm">
-          {fireCount === 0 ? '公司起什么名字好呢？' :
-           fireCount <= 2 ? '劲火？' : 
-           fireCount <= 4 ? '劲炎？' : '劲焱！'}
-        </div>
-        <div className="text-memory-glow/60 text-sm">
-          高度: {Math.floor(caughtHeight)}/{WIN_HEIGHT}
-        </div>
-      </div>
-      <p className="text-memory-glow/60 text-sm text-center mb-2">
-        接不接？接什么？先接！
-      </p>
-
-      <div
-        ref={containerRef}
-        className="relative w-full max-w-lg aspect-[3/4] rounded overflow-hidden select-none mx-auto"
-        style={{
-          maxHeight: 'calc(80vh - 80px)',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          userSelect: 'none',
-          WebkitTouchCallout: 'none',
-          backgroundImage: `url(/images/catch/background.png)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onTouchMove={handleTouchMove}
-        onDragStart={(e) => e.preventDefault()}
-      >
-        {blocks.map(block => (
-          block.caught ? null : (
-            <motion.div
-              key={block.id}
-              className="absolute"
-              style={{
-                left: block.x,
-                top: block.y,
-                width: block.size,
-                // 高度设为auto，让贴图自然显示其原始比例
-              }}
-              initial={{ opacity: 0.8, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              {/* 使用贴图显示掉落物 - 宽度与block对齐，高度自适应 */}
-              <img
-                src={block.texture}
-                alt={block.type === 'fire' ? '火苗' : '物品'}
-                className="w-full"
-                draggable="false"
-                style={{
-                  // 宽度填满容器，高度自动按比例缩放
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  pointerEvents: 'none'
-                }}
-                onDragStart={(e) => e.preventDefault()}
-              />
-            </motion.div>
-          )
-        ))}
-
-        {/* 举盆小人 - 接触判定区在上边缘 */}
-        <div
-          className="absolute overflow-hidden"
-          style={{
-            left: playerX,
-            bottom: 10,
-            width: PLAYER_WIDTH,
-            // 移除固定高度，让容器自适应贴图高度
-          }}
-        >
-          {/* 盆（接收块）- 上边缘作为接触判定区 */}
-          <div 
-            className="absolute top-0 left-0 right-0 h-4"
-            style={{
-              // 这个区域的上边缘就是接触判定区
-              // 需要与掉落物的碰撞检测对齐
-            }}
-          />
-          {/* 举盆小人主体 - 使用贴图，宽度与接收块对齐，高度自适应 */}
-          <img 
-            src={PLAYER_TEXTURE}
-            alt="举盆小人"
-            className="w-full h-auto"
-            draggable="false"
-            style={{ width: '100%', pointerEvents: 'none' }}
-            onDragStart={(e) => e.preventDefault()}
-          />
-        </div>
-
-        <div
-          className="absolute bottom-0 left-0 right-0 bg-memory-glow/20 transition-all duration-300"
-          style={{ height: Math.min(caughtHeight, WIN_HEIGHT) }}
-        />
-      </div>
-
-      {!showScenes && !started && !won && (
-        <motion.div
-          className="absolute inset-0 bg-memory-dark/90 flex flex-col items-center justify-center rounded-lg"
-          initial={false}
-          animate={{ opacity: 1 }}
-        >
-          <p className="text-memory-glow text-lg mb-4">这里或许能写点什么</p>
-          <motion.button
-            className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleStartGame}
-          >
-            开始
-          </motion.button>
-        </motion.div>
-      )}
-
-      {won && (
-        <motion.div
-          className="absolute inset-0 bg-memory-dark/90 flex flex-col items-center justify-center rounded-lg"
-          initial={false}
-          animate={{ opacity: 1 }}
-        >
-          <p className="text-memory-glow text-lg mb-2">成功!</p>
-          <p className="text-memory-muted text-sm mb-4">所有方块已收集</p>
-          <motion.button
-            className="px-6 py-2 bg-memory-info/10 text-memory-info rounded-lg border border-memory-info"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={restartGame}
-          >
-            再试一次
-          </motion.button>
-        </motion.div>
-      )}
       </div>
     </div>
   );

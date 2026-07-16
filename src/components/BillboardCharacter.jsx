@@ -35,7 +35,7 @@ const BillboardCharacter = ({ message }) => {
     <div className="relative w-full h-full">
       {/* 看板郎背景 */}
       <img
-        src="/images/main/看板郎.png"
+        src="/images/main/看板郎.webp"
         alt="看板郎"
         className="absolute inset-0 w-full h-full object-contain"
       />
@@ -45,7 +45,7 @@ const BillboardCharacter = ({ message }) => {
         {showDialog && currentMessage && (
           <motion.div
             key={currentMessage}
-            className="absolute top-[60%] left-[5%] right-[5%]"
+            className="absolute top-[70%] left-[5%] right-[5%]"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
