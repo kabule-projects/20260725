@@ -161,3 +161,7 @@ for file in *.webp; do
     cwebp "$file" -resize 900 0 -q 80 -o "resized/$file"
 done
 
+
+
+
+cd ~/20260725 && bash deploy/deploy-server.sh
