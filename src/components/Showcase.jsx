@@ -73,7 +73,7 @@ const Showcase = ({ lights, onProductClick }) => {
 
   const handleProductClick = (product) => {
     const accessStatus = getProductAccessStatus(product, lights, PRODUCTS);
-    const message = getBillboardMessage(product.year, accessStatus);
+    const message = getBillboardMessage(product, accessStatus);
     onProductClick(product, message);
   };
 

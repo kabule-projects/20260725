@@ -16,14 +16,16 @@ export const billboardMessages = {
   '2026': '定制文案2026'
 };
 
-export const getBillboardMessage = (year, accessStatus) => {
+export const getBillboardMessage = (product, accessStatus) => {
+  const { year, description } = product;
+  
   switch (accessStatus) {
     case 'locked':
       return DEFAULT_SILHOUETTE_MESSAGE;
     case 'accessible':
       return `请去${year}加入回忆，解锁这件商品`;
     case 'unlocked':
-      return billboardMessages[year] || '记忆已照亮';
+      return description || '记忆已照亮';
     default:
       return '';
   }

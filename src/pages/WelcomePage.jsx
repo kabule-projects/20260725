@@ -23,12 +23,12 @@ const getBusinessMessage = () => {
   
   // 未到首次营业时间
   if (now < UNLOCK_TIME) {
-    return '商店将于今晚19:25开始营业';
+    return '本店将于今晚19:25开始营业';
   }
   
   // 已开业，关门时间显示打烊提示
   if (!isBusinessHours()) {
-    return '商店打烊啦，大家都好好休息吧';
+    return '出门右转去时空美味侦查组报个到就睡吧，别熬夜了';
   }
   
   return '';
@@ -63,13 +63,12 @@ const WelcomePage = ({ onStart }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // 延迟1秒淡入推门按钮（需满足时间条件或后门触发）
+  // 延迟1秒淡入按钮（营业时显示Enter，关门时显示Closed）
   useEffect(() => {
     const now = Date.now();
     const isUnlocked = now >= UNLOCK_TIME || showButton;
-    const isOpen = isBusinessHours() || showButton;
     
-    if (isUnlocked && isOpen) {
+    if (isUnlocked) {
       const timer = setTimeout(() => {
         setButtonVisible(true);
       }, 1000);
@@ -156,17 +155,19 @@ const WelcomePage = ({ onStart }) => {
         />
       </div>
 
-      {/* 叠加层：lighton，通过不透明度闪烁 */}
-      <div
-        className="absolute inset-0"
-        style={getLightOnStyle()}
-      >
-        <img
-          src="/images/welcome/welcome-light-on.webp"
-          alt=""
-          className="w-full h-full object-cover"
-        />
-      </div>
+      {/* 叠加层：lighton，通过不透明度闪烁（仅营业期间显示） */}
+      {(isOpen || now < UNLOCK_TIME) && (
+        <div
+          className="absolute inset-0"
+          style={getLightOnStyle()}
+        >
+          <img
+            src="/images/welcome/welcome-light-on.webp"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
 
       {/* 漂浮光点效果 */}
       <div className="absolute inset-0 pointer-events-none">
@@ -197,8 +198,25 @@ const WelcomePage = ({ onStart }) => {
         </div>
       )}
 
-      {/* 推门按钮 */}
-      {phase === 'idle' && isTimeUnlocked && isOpen && buttonVisible && (
+      {/* 关门状态：显示Closed按钮，不可点击 */}
+      {phase === 'idle' && isTimeUnlocked && !isOpen && !showButton && (
+        <div
+          className="absolute left-[50%] top-[80%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          style={{ opacity: 0, animation: 'fadeIn 1s ease-in forwards' }}
+        >
+          <img
+            src="/images/welcome/推门.webp"
+            alt="Closed"
+            className="w-[120px] h-auto object-contain opacity-70 grayscale"
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-white/60 font-bold text-lg">
+            Closed
+          </span>
+        </div>
+      )}
+
+      {/* 营业状态 / 后门激活：显示Enter按钮，可点击 */}
+      {phase === 'idle' && isTimeUnlocked && (isOpen || showButton) && buttonVisible && (
         <button
           className="absolute left-[50%] top-[80%] -translate-x-1/2 -translate-y-1/2 hover:scale-105 active:scale-95 transition-all duration-1000"
           style={{ opacity: 0, animation: 'fadeIn 1s ease-in forwards' }}
@@ -206,11 +224,11 @@ const WelcomePage = ({ onStart }) => {
         >
           <img
             src="/images/welcome/推门.webp"
-            alt="推门"
+            alt="Enter"
             className="w-[120px] h-auto object-contain"
           />
           <span className="absolute inset-0 flex items-center justify-center text-memory-accent font-bold text-lg">
-            推门
+            Enter
           </span>
         </button>
       )}

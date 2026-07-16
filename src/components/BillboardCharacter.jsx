@@ -45,20 +45,20 @@ const BillboardCharacter = ({ message }) => {
         {showDialog && currentMessage && (
           <motion.div
             key={currentMessage}
-            className="absolute top-[70%] left-[5%] right-[5%]"
+            className="absolute top-[70%] left-[-85%] right-[15%]"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
             transition={{ duration: 0.2 }}
           >
             {/* 对话框背景 */}
-            <div className="bg-memory-card/95 backdrop-blur-sm rounded-xl p-4 border border-memory-accent/30 shadow-lg">
+            <div className="bg-memory-card/65 backdrop-blur-sm rounded-xl p-4 border border-memory-accent/30 shadow-lg">
               <div className="relative">
                 {/* 对话框尖角 */}
                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-memory-card/95" />
                 
                 {/* 对话内容 */}
-                <p className="text-memory-glow text-sm text-center leading-relaxed">
+                <p className="text-memory-glow/90 text-sm text-center leading-relaxed">
                   {currentMessage}
                 </p>
               </div>

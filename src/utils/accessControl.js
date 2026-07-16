@@ -1,7 +1,7 @@
 import { calculateThreshold } from './brightness';
 
 // backdoor
-const BYPASS_DATE_LOCK = false;
+const BYPASS_DATE_LOCK = true;
 
 // 阶段划分配置
 export const PHASES = [
