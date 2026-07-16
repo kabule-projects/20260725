@@ -265,7 +265,7 @@ const Product = ({ lights, setLights }) => {
 
         <div className="absolute top-[20%] left-0 right-0 z-20">
           <div className="text-center">
-            <h1 className="text-6xl font-serif font-bold text-memory-accent tracking-[0.1em]">
+            <h1 className="text-5xl font-serif font-bold text-memory-accent tracking-[0.1em]">
               {product.title}
             </h1>
           </div>
