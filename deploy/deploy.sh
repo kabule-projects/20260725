@@ -1,6 +1,6 @@
 #!/bin/bash
 # 部署脚本 - 在本地运行
-# 用法: ./deploy/deploy.sh user@server_ip
+# 用法: ./deploy/deploy.sh user@43.129.250.140
 
 set -e
 
