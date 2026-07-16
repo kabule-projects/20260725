@@ -14,6 +14,7 @@ npm run build
 echo "===== 2. 上传文件到服务器 ====="
 ssh $SERVER "mkdir -p $REMOTE_DIR"
 rsync -avz --delete dist/ $SERVER:$REMOTE_DIR/
+ssh $SERVER "chown -R www-data:www-data $REMOTE_DIR && chmod -R 755 $REMOTE_DIR"
 
 echo "===== 3. 部署 Nginx 配置 ====="
 scp $NGINX_CONF $SERVER:/etc/nginx/sites-available/memory-store
