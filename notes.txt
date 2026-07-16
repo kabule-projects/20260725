@@ -96,8 +96,8 @@ for file in *.jpg *.png; do cwebp -q 80 "$file" -o "${file%.*}.webp"; done
 
 
 # 第一步：ffmpeg转换
-ffmpeg -framerate 1 -pattern_type glob -i "*.webp" \
-  -vf "scale=900:-1" \
+ffmpeg -framerate 10 -pattern_type glob -i "*.webp" \
+  -vf "scale=750:-1" \
   -loop 0 \
   -gifflags +transdiff \
   -pix_fmt rgb8 \

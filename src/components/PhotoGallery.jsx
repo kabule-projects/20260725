@@ -1,16 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LazyImage from './LazyImage';
+import { getProductAccessStatus } from '../utils/accessControl';
 
-// 基础开放日期（北京时间2026年7月17日中午12点）
-const BASE_UNLOCK_DATE = '2026-07-17T12:00:00+08:00';
-const UNLOCK_INTERVAL = 12 * 60 * 60 * 1000; // 12小时
 const TOTAL_IMAGES = 13;
 
-// 测试模式：是否解锁所有图片
-const TEST_MODE = true;
-
-const PhotoGallery = ({ images }) => {
+const PhotoGallery = ({ images, lights, products }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [unlockedCount, setUnlockedCount] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -28,23 +23,30 @@ const PhotoGallery = ({ images }) => {
 
   // 计算已解锁的图片数量
   useEffect(() => {
-    if (TEST_MODE) {
-      setUnlockedCount(TOTAL_IMAGES);
-      setCurrentIndex(0);
-    } else {
-      const baseDate = new Date(BASE_UNLOCK_DATE).getTime();
-      const now = new Date().getTime();
+    if (!products || !lights) {
+      setUnlockedCount(1);
+      return;
+    }
+
+    let count = 1;
+
+    for (let i = 1; i < TOTAL_IMAGES; i++) {
+      const year = 2014 + i;
+      const product = products.find(p => p.year === year);
       
-      if (now < baseDate) {
-        setUnlockedCount(0);
-      } else {
-        const elapsed = now - baseDate;
-        const unlocked = Math.min(Math.floor(elapsed / UNLOCK_INTERVAL) + 1, TOTAL_IMAGES);
-        setUnlockedCount(unlocked);
-        setCurrentIndex(unlocked - 1);
+      if (product) {
+        const status = getProductAccessStatus(product, lights, products);
+        if (status === 'unlocked') {
+          count = i + 1;
+        } else {
+          break;
+        }
       }
     }
-  }, []);
+
+    setUnlockedCount(count);
+    setCurrentIndex(count - 1);
+  }, [products, lights]);
 
   // 预加载图片并计算高度
   useEffect(() => {
@@ -407,7 +409,7 @@ const PhotoGallery = ({ images }) => {
             ? '已解锁所有记忆'
             : unlockedCount === 0
             ? '等待解锁记忆...'
-            : `${unlockedCount} / ${TOTAL_IMAGES} 张图片已解锁`}
+            : `${unlockedCount} / ${TOTAL_IMAGES} 记忆已解锁`}
         </p>
       </div>
     </div>

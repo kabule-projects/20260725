@@ -407,7 +407,7 @@ const Product = ({ lights, setLights }) => {
             >
               <h3 className="text-memory-accent text-lg mb-6 text-center">记忆刻印</h3>
               <div className="pb-32">
-                <PhotoGallery images={GALLERY_IMAGES_2014} />
+                <PhotoGallery images={GALLERY_IMAGES_2014} lights={lights} products={PRODUCTS} />
               </div>
             </motion.div>
           )}

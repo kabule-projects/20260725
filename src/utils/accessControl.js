@@ -1,19 +1,25 @@
 import { calculateThreshold } from './brightness';
 
+// ============ 测试后门 ============
+// 设置为 true 即可无视所有日期限制
+// 修改后刷新页面生效
+const BYPASS_DATE_LOCK = true;
+// ============ 测试后门 ============
+
 // 阶段划分配置
 export const PHASES = [
-  { id: 'phase1', years: [2014], unlockDate: null },
-  { id: 'phase2', years: [2015, 2016], unlockDate: null },
-  { id: 'phase3', years: [2017, 2018], unlockDate: null },
-  { id: 'phase4', years: [2019, 2020], unlockDate: null },
-  { id: 'phase5', years: [2021, 2022], unlockDate: null },
-  { id: 'phase6', years: [2023, 2024], unlockDate: null },
-  { id: 'phase7', years: [2025, 2026], unlockDate: null },
+  { id: 'phase1', years: [2014], unlockDate: '2026-07-17T19:25:00+08:00' },
+  { id: 'phase2', years: [2015, 2016], unlockDate: '2026-07-18T07:25:00+08:00' },
+  { id: 'phase3', years: [2017, 2018], unlockDate: '2026-07-19T07:25:00+08:00' },
+  { id: 'phase4', years: [2019, 2020], unlockDate: '2026-07-20T07:25:00+08:00' },
+  { id: 'phase5', years: [2021, 2022], unlockDate: '2026-07-21T07:25:00+08:00' },
+  { id: 'phase6', years: [2023, 2024], unlockDate: '2026-07-22T07:25:00+08:00' },
+  { id: 'phase7', years: [2025, 2026], unlockDate: '2026-07-23T07:25:00+08:00' },
 ];
 
 // 基础开放日期（北京时间2026年7月17日零点）
 // 留空则不启用日期解锁机制（用于测试）
-export const BASE_UNLOCK_DATE = null; // '2026-07-17T00:00:00+08:00';
+export const BASE_UNLOCK_DATE = '2026-07-17T19:25:00+08:00';
 
 // 获取商品所在阶段
 export const getProductPhase = (year) => {
@@ -27,6 +33,9 @@ export const getPhaseIndex = (phaseId) => {
 
 // 检查阶段是否通过日期开放（仅当开放日期已定义时生效）
 export const isPhaseUnlockedByDate = (phaseId) => {
+  // 测试后门：无视日期限制
+  if (BYPASS_DATE_LOCK) return true;
+  
   if (!BASE_UNLOCK_DATE) return false;
   
   const phaseIndex = getPhaseIndex(phaseId);
@@ -125,6 +134,7 @@ export const getProductAccessStatus = (product, lights, products) => {
     return totalLight >= YEAR_2026_TOTAL_THRESHOLD ? 'unlocked' : 'accessible';
   }
   
+  // 2015-2025：必须先日期解锁才能进入 accessible/unlocked 状态
   // 检查日期解锁（仅当开放日期已定义时）
   if (BASE_UNLOCK_DATE && isPhaseUnlockedByDate(phase.id)) {
     // 检查是否已完全解锁
@@ -133,13 +143,7 @@ export const getProductAccessStatus = (product, lights, products) => {
     return light >= threshold ? 'unlocked' : 'accessible';
   }
   
-  // 检查进度解锁
-  if (isPhaseUnlockedByProgress(phase.id, lights, products)) {
-    const light = lights[product.id] || 0;
-    const threshold = calculateThreshold(product.year);
-    return light >= threshold ? 'unlocked' : 'accessible';
-  }
-  
+  // 日期未解锁，保持锁定状态
   return 'locked';
 };
 

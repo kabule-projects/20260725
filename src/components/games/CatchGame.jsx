@@ -41,9 +41,7 @@ const CatchGame = ({ onComplete }) => {
   const playerXRef = useRef(150);
   const [playerX, setPlayerX] = useState(150);
   const [blocks, setBlocks] = useState([]);
-  const [failureBlocks, setFailureBlocks] = useState([]);
   const [failurePlayerX, setFailurePlayerX] = useState(GAME_WIDTH / 2 - PLAYER_WIDTH / 2);
-  const [animationTick, setAnimationTick] = useState(0);
   const [caughtHeight, setCaughtHeight] = useState(0);
   const [fireCount, setFireCount] = useState(0);
   const [won, setWon] = useState(false);
@@ -58,7 +56,6 @@ const CatchGame = ({ onComplete }) => {
   const caughtHeightRef = useRef(0);
   const fireCountRef = useRef(0);
   const blocksRef = useRef([]);
-  const failureBlocksRef = useRef([]);
   const gamePhaseRef = useRef('scene');
 
   const spawnBlock = useCallback((gameWidth = GAME_WIDTH) => {
@@ -118,40 +115,19 @@ const CatchGame = ({ onComplete }) => {
   const runFailureAnimation = useCallback((onCompleteAnim) => {
     const startPlayerX = GAME_WIDTH / 2 - PLAYER_WIDTH / 2;
     setFailurePlayerX(startPlayerX);
-    failureBlocksRef.current = [];
-    setFailureBlocks([]);
 
     const startTime = performance.now();
     const duration = 6000;
-    let lastSpawnTime = startTime;
     let targetX = Math.random() * (GAME_WIDTH - PLAYER_WIDTH);
-    let currentFailureBlocks = [];
     let currentPlayerX = startPlayerX;
 
     const animate = () => {
       const elapsed = performance.now() - startTime;
       
       if (elapsed >= duration) {
-        failureBlocksRef.current = [];
-        setFailureBlocks([]);
         onCompleteAnim && onCompleteAnim();
         return;
       }
-
-      if (elapsed - lastSpawnTime >= 500) {
-        currentFailureBlocks = [...currentFailureBlocks, spawnBlock(GAME_WIDTH)];
-        lastSpawnTime = elapsed;
-      }
-      
-      currentFailureBlocks = currentFailureBlocks
-        .map(block => {
-          if (block.caught) return block;
-          return { ...block, y: block.y + FALL_SPEED * 0.6 };
-        })
-        .filter(block => block.y < GAME_HEIGHT);
-        
-      failureBlocksRef.current = currentFailureBlocks;
-      setFailureBlocks(currentFailureBlocks.slice());
 
       const distanceToTarget = Math.abs(targetX - currentPlayerX);
       if (distanceToTarget < 5) {
@@ -161,13 +137,11 @@ const CatchGame = ({ onComplete }) => {
       currentPlayerX = currentPlayerX + (targetX - currentPlayerX) * lerpFactor;
       setFailurePlayerX(currentPlayerX);
 
-      setAnimationTick(t => t + 1);
-
       animationRef.current = requestAnimationFrame(animate);
     };
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [spawnBlock]);
+  }, []);
 
   useEffect(() => {
     gamePhaseRef.current = gamePhase;
@@ -349,13 +323,11 @@ const CatchGame = ({ onComplete }) => {
 
   const restartGame = () => {
     setBlocks([]);
-    setFailureBlocks([]);
     setCaughtHeight(0);
     setFireCount(0);
     setWon(false);
     setPlayerX(150);
     setFailurePlayerX(GAME_WIDTH / 2 - PLAYER_WIDTH / 2);
-    setAnimationTick(0);
     setGamePhase('scene');
     setSceneStep(0);
     playerXRef.current = 150;
@@ -366,7 +338,6 @@ const CatchGame = ({ onComplete }) => {
     spawnTimeRef.current = 0;
     isDraggingRef.current = false;
     blocksRef.current = [];
-    failureBlocksRef.current = [];
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
@@ -380,25 +351,10 @@ const CatchGame = ({ onComplete }) => {
           ref={failureContainerRef}
         >
           <img
-            src="/images/catch/background.webp"
+            src="/images/catch/scene/掉落物.gif"
             alt=""
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
-          {failureBlocks.map(block => (
-            !block.caught && (
-              <div
-                key={block.id}
-                className="absolute z-10"
-                style={{ 
-                  left: `${(block.x / GAME_WIDTH) * 100}%`, 
-                  top: `${(block.y / GAME_HEIGHT) * 100}%`, 
-                  width: `${(block.size / GAME_WIDTH) * 100}%` 
-                }}
-              >
-                <img src={block.texture} alt="" className="w-full h-auto" />
-              </div>
-            )
-          ))}
           <div 
             className="absolute z-20" 
             style={{ 
