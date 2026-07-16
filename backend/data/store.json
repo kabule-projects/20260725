@@ -2,51 +2,51 @@
   "products": [
     {
       "id": "2014",
-      "light": 700
+      "light": 0
     },
     {
       "id": "2015",
-      "light": 9002
+      "light": 0
     },
     {
       "id": "2016",
-      "light": 9000
+      "light": 0
     },
     {
       "id": "2017",
-      "light": 9000
+      "light": 0
     },
     {
       "id": "2018",
-      "light": 9002
+      "light": 0
     },
     {
       "id": "2019",
-      "light": 9000
+      "light": 0
     },
     {
       "id": "2020",
-      "light": 24000
+      "light": 0
     },
     {
       "id": "2021",
-      "light": 23000
+      "light": 0
     },
     {
       "id": "2022",
-      "light": 6000
+      "light": 0
     },
     {
       "id": "2023",
-      "light": 9000
+      "light": 0
     },
     {
       "id": "2024",
-      "light": 93
+      "light": 0
     },
     {
       "id": "2025",
-      "light": 90
+      "light": 0
     },
     {
       "id": "2026",
@@ -54,8 +54,5 @@
     }
   ],
   "cooldowns": {
-    "2024:::ffff:127.0.0.1": {
-      "timestamp": 1784099162152
-    }
   }
 }
