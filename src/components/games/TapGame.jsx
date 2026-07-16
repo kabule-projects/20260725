@@ -14,6 +14,8 @@ const TARGET_ZONE_WIDTH = 20; // 目标区域占bar宽度的百分比
 const INITIAL_SPEED = 1; // 初始速度
 const SPEED_INCREMENT = 0.2; // 每轮速度增加量
 const HOLD_DURATION = 2000; // 蓄力时长
+const ARROW_MIN = 4; // 箭头最小位置（防止边缘裁切）
+const ARROW_MAX = 96; // 箭头最大位置（防止边缘裁切）
 
 const TapGame = ({ onComplete }) => {
   const [currentRoundIndex, setCurrentRoundIndex] = useState(0);
@@ -52,12 +54,12 @@ const TapGame = ({ onComplete }) => {
       setArrowPosition(prev => {
         const newPosition = prev + direction * currentSpeed;
         
-        if (newPosition >= 100) {
+        if (newPosition >= ARROW_MAX) {
           setDirection(-1);
-          return 100;
-        } else if (newPosition <= 0) {
+          return ARROW_MAX;
+        } else if (newPosition <= ARROW_MIN) {
           setDirection(1);
-          return 0;
+          return ARROW_MIN;
         }
         
         return newPosition;
@@ -119,9 +121,6 @@ const TapGame = ({ onComplete }) => {
 
       if (progress >= 100 && !holdCompleted) {
         setHoldCompleted(true);
-        setTimeout(() => {
-          handleNextRound();
-        }, 500);
       } else if (progress < 100) {
         holdAnimationRef.current = requestAnimationFrame(animate);
       }
@@ -181,13 +180,41 @@ const TapGame = ({ onComplete }) => {
     setIsHolding(false);
   }, []);
 
+  // 获取进度点下方的图片
+  const getRoundImage = () => {
+    const isRoundSuccess = isTapRound
+      ? roundResult === 'success'
+      : holdCompleted;
+
+    if (currentRoundIndex === 0) {
+      return isRoundSuccess ? '/images/tap/a2.webp' : '/images/tap/a1.webp';
+    } else if (currentRoundIndex === 1) {
+      return isRoundSuccess ? '/images/tap/b2.webp' : '/images/tap/b1.webp';
+    } else if (currentRoundIndex === 2) {
+      return '/images/tap/c1.webp';
+    }
+    return null;
+  };
+
+  // 获取叠加图片（仅 round 3 成功后）
+  const getOverlayImage = () => {
+    const isRoundSuccess = isTapRound
+      ? roundResult === 'success'
+      : holdCompleted;
+
+    if (currentRoundIndex === 2 && isRoundSuccess) {
+      return '/images/tap/c2.webp';
+    }
+    return null;
+  };
+
   // ========== 蓄力游戏组件 ==========
   const HoldChallenge = () => {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
           <div className="text-center mb-4">
-            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
+            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 关</p>
             <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
             <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
           </div>
@@ -206,6 +233,26 @@ const TapGame = ({ onComplete }) => {
           />
         ))}
       </div>
+
+      {/* 进度点下方图片 - 修改 w-[120px] 调整大小 */}
+      {getRoundImage() && (
+        <div className="flex justify-center mb-4">
+          <div className="relative">
+            <img
+              src={getRoundImage()}
+              alt=""
+              className="w-[300px] h-auto object-contain"
+            />
+            {getOverlayImage() && (
+              <img
+                src={getOverlayImage()}
+                alt=""
+                className="absolute inset-0 w-[300px] h-auto object-contain"
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       <motion.div
         className="relative w-32 h-32 mx-auto rounded-full border-4 border-memory-muted/30 flex items-center justify-center cursor-pointer"
@@ -264,9 +311,28 @@ const TapGame = ({ onComplete }) => {
         )}
       </motion.div>
 
-      <p className="mt-6 text-center text-memory-muted text-xs">
-        {holdCompleted ? "蓄力完成！" : isHolding ? "蓄力中..." : "按住蓄力"}
-      </p>
+      <div className="mt-6 text-center">
+        {holdCompleted ? (
+          <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <p className="text-memory-accent text-lg">✧ 蓄力完成！✧</p>
+            <motion.button
+              className="w-full py-3 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors border border-memory-info"
+              onClick={handleNextRound}
+              whileTap={{ scale: 0.98 }}
+            >
+              {currentRoundIndex < ROUNDS.length - 1 ? '下一关' : '完成'}
+            </motion.button>
+          </motion.div>
+        ) : (
+          <p className="text-memory-muted text-xs">
+            {isHolding ? "蓄力中..." : "按住蓄力"}
+          </p>
+        )}
+      </div>
         </div>
       </div>
     );
@@ -278,7 +344,7 @@ const TapGame = ({ onComplete }) => {
       <div className="w-full h-full flex items-center justify-center">
         <div className="relative w-full px-[12%] py-[12%] bg-memory-dark/50 rounded-lg p-4 select-none">
           <div className="text-center mb-4">
-            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 轮</p>
+            <p className="text-memory-accent text-sm">第 {currentRound?.id} / {ROUNDS.length} 关</p>
             <p className="text-memory-glow/80 text-sm mt-1">{currentRound?.title}</p>
             <p className="text-memory-muted/60 text-xs mt-1">{currentRound?.description}</p>
           </div>
@@ -298,7 +364,27 @@ const TapGame = ({ onComplete }) => {
             ))}
           </div>
 
-          <div className="relative">
+          {/* 进度点下方图片 - 修改 w-[120px] 调整大小 */}
+          {getRoundImage() && (
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <img
+                  src={getRoundImage()}
+                  alt=""
+                  className="w-[300px] h-auto object-contain"
+                />
+                {getOverlayImage() && (
+                  <img
+                    src={getOverlayImage()}
+                    alt=""
+                    className="absolute inset-0 w-[300px] h-auto object-contain"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="relative overflow-visible">
             <div className="relative w-full h-8 bg-memory-dark/80 rounded-full overflow-hidden border border-memory-accent/20">
               <div className="absolute inset-0 bg-gradient-to-r from-memory-accent/10 via-memory-accent/20 to-memory-accent/10" />
               
@@ -318,24 +404,22 @@ const TapGame = ({ onComplete }) => {
             </div>
 
             <motion.div
-              className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 select-none pointer-events-none"
+              className="absolute -bottom-9 transform -translate-x-1/2 select-none pointer-events-none"
               style={{ left: `${arrowPosition}%` }}
             >
-              <div className="w-8 h-8 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-full h-full text-memory-glow">
-                  <path
-                    fill="currentColor"
-                    d="M12 2L16 8h-3v10h-2V8H8L12 2z"
-                  />
-                </svg>
-              </div>
+              {/* 修改 w-[32px] 调整 pointer 大小 */}
+              <img
+                src="/images/tap/pointer.webp"
+                alt=""
+                className="w-[48px] h-auto object-contain"
+              />
             </motion.div>
           </div>
 
           {isPlaying && !isPaused && (
             <div className="mt-12">
               <motion.button
-                className="w-full py-4 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors text-lg font-medium border border-memory-info"
+                className="w-full py-2 rounded-lg bg-memory-info/10 text-memory-info hover:bg-memory-info/20 transition-colors text-lg font-medium border border-memory-info"
                 onClick={handleTap}
                 whileTap={{ scale: 0.95 }}
               >
@@ -353,9 +437,7 @@ const TapGame = ({ onComplete }) => {
               >
                 开始游戏
               </motion.button>
-            ) : !isPaused ? (
-              <p className="text-memory-muted/60 text-sm">点击箭头停下</p>
-            ) : (
+            ) : isPaused && (
               <AnimatePresence>
                 <motion.div
                   className="space-y-4"
@@ -371,7 +453,7 @@ const TapGame = ({ onComplete }) => {
                         onClick={handleNextRound}
                         whileTap={{ scale: 0.98 }}
                       >
-                        {currentRoundIndex < ROUNDS.length - 1 ? '下一轮' : '完成'}
+                        {currentRoundIndex < ROUNDS.length - 1 ? '下一关' : '完成'}
                       </motion.button>
                     </>
                   ) : (

@@ -154,4 +154,10 @@ cd backend && node server.js
 
 
 
+mkdir -p resized
+
+for file in *.webp; do
+    echo "Processing: $file"
+    cwebp "$file" -resize 900 0 -q 80 -o "resized/$file"
+done
 
