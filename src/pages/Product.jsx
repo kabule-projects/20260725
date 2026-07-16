@@ -496,6 +496,4 @@ const Product = ({ lights, setLights }) => {
   );
 };
 
-// 已刻印{Math.min(Math.round((currentLight / 500) * 100), 100)}%
-
 export default Product;

@@ -3,12 +3,44 @@ import { useState, useEffect } from 'react';
 // 7月17日19:25北京时间（UTC+8）= 11:25 UTC
 const UNLOCK_TIME = new Date('2026-07-17T19:25:00+08:00').getTime();
 
+// 判断当前是否在营业时间内（7:25 - 24:00）
+const isBusinessHours = () => {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  
+  // 0:00 - 7:25 关门
+  if (hours < 7 || (hours === 7 && minutes < 25)) {
+    return false;
+  }
+  // 7:25 - 24:00 营业
+  return true;
+};
+
+// 获取营业时间提示文字
+const getBusinessMessage = () => {
+  const now = Date.now();
+  
+  // 未到首次营业时间
+  if (now < UNLOCK_TIME) {
+    return '商店将于今晚19:25开始营业';
+  }
+  
+  // 已开业，关门时间显示打烊提示
+  if (!isBusinessHours()) {
+    return '商店打烊啦，大家都好好休息吧';
+  }
+  
+  return '';
+};
+
 const WelcomePage = ({ onStart }) => {
   const [phase, setPhase] = useState('idle'); // 'idle' | 'fading' | 'done'
   const [showButton, setShowButton] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [businessMessage, setBusinessMessage] = useState('');
 
-  // 后门：按 D 键强制显示推门按钮
+  // 后门：按 Q 键强制显示推门按钮
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'q' || e.key === 'Q') {
@@ -19,15 +51,31 @@ const WelcomePage = ({ onStart }) => {
     return () => window.removeEventListener('keydown', handleKey);
   }, []);
 
+  // 更新营业时间提示
+  useEffect(() => {
+    const updateMessage = () => {
+      setBusinessMessage(getBusinessMessage());
+    };
+    
+    updateMessage();
+    // 每分钟更新一次
+    const timer = setInterval(updateMessage, 60000);
+    return () => clearInterval(timer);
+  }, []);
+
   // 延迟1秒淡入推门按钮（需满足时间条件或后门触发）
   useEffect(() => {
     const now = Date.now();
     const isUnlocked = now >= UNLOCK_TIME || showButton;
-    if (isUnlocked) {
+    const isOpen = isBusinessHours() || showButton;
+    
+    if (isUnlocked && isOpen) {
       const timer = setTimeout(() => {
         setButtonVisible(true);
       }, 1000);
       return () => clearTimeout(timer);
+    } else {
+      setButtonVisible(false);
     }
   }, [showButton]);
 
@@ -58,6 +106,7 @@ const WelcomePage = ({ onStart }) => {
 
   const now = Date.now();
   const isTimeUnlocked = now >= UNLOCK_TIME || showButton;
+  const isOpen = isBusinessHours() || showButton;
 
   return (
     <div
@@ -136,8 +185,20 @@ const WelcomePage = ({ onStart }) => {
         ))}
       </div>
 
+      {/* 营业时间提示文字 */}
+      {phase === 'idle' && businessMessage && (
+        <div
+          className="absolute left-[50%] top-[85%] -translate-x-1/2 text-center"
+          style={{ opacity: 0, animation: 'fadeIn 1s ease-in 1s forwards' }}
+        >
+          <p className="text-white/80 font-medium text-lg md:text-xl drop-shadow-lg">
+            {businessMessage}
+          </p>
+        </div>
+      )}
+
       {/* 推门按钮 */}
-      {phase === 'idle' && isTimeUnlocked && buttonVisible && (
+      {phase === 'idle' && isTimeUnlocked && isOpen && buttonVisible && (
         <button
           className="absolute left-[50%] top-[80%] -translate-x-1/2 -translate-y-1/2 hover:scale-105 active:scale-95 transition-all duration-1000"
           style={{ opacity: 0, animation: 'fadeIn 1s ease-in forwards' }}

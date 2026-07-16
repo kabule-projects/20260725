@@ -1,10 +1,7 @@
 import { calculateThreshold } from './brightness';
 
-// ============ 测试后门 ============
-// 设置为 true 即可无视所有日期限制
-// 修改后刷新页面生效
-const BYPASS_DATE_LOCK = true;
-// ============ 测试后门 ============
+// backdoor
+const BYPASS_DATE_LOCK = false;
 
 // 阶段划分配置
 export const PHASES = [
@@ -17,8 +14,6 @@ export const PHASES = [
   { id: 'phase7', years: [2025, 2026], unlockDate: '2026-07-23T07:25:00+08:00' },
 ];
 
-// 基础开放日期（北京时间2026年7月17日零点）
-// 留空则不启用日期解锁机制（用于测试）
 export const BASE_UNLOCK_DATE = '2026-07-17T19:25:00+08:00';
 
 // 获取商品所在阶段
