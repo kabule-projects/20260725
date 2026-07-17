@@ -47,7 +47,7 @@ const ProductSilhouetteImage = ({ imagePath, accessStatus }) => {
         <LazyImage
           src={imageSrc}
           alt=""
-          className={`max-w-full max-h-full object-contain transition-all duration-300 ${accessStatus === 'accessible' ? 'brightness-[0.1] filter drop-shadow-[0_0_12px_rgba(137,128,246,1)]' : ''}`}
+          className={`max-w-full max-h-full object-contain transition-all duration-300 ${accessStatus === 'accessible' ? 'brightness-[0.1] filter drop-shadow-[0_0_8px_rgb(137,128,246)]' : ''}`}
         />
       ) : (
         <div className="w-full h-full bg-memory-dark/30 rounded" />
