@@ -165,3 +165,6 @@ done
 
 
 cd ~/20260725 && bash deploy/deploy-server.sh
+
+cd ~/20260725
+node scripts/fetch-store.js
