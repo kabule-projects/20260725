@@ -23,6 +23,9 @@ export const getBillboardMessage = (product, accessStatus) => {
     case 'locked':
       return DEFAULT_SILHOUETTE_MESSAGE;
     case 'accessible':
+      if (year === 2014) {
+        return '……';
+      }
       return `请去${year}加入回忆，解锁这件商品`;
     case 'unlocked':
       return description || '记忆已照亮';

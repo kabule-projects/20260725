@@ -1,7 +1,14 @@
 import { calculateThreshold } from './brightness';
 
-// backdoor
-const BYPASS_DATE_LOCK = false;
+const BYPASS_DATE_LOCK_KEY = 'memoryStore:bypassDateLock';
+
+export const getBypassDateLock = () => {
+  return localStorage.getItem(BYPASS_DATE_LOCK_KEY) === 'true';
+};
+
+export const setBypassDateLock = (value) => {
+  localStorage.setItem(BYPASS_DATE_LOCK_KEY, value ? 'true' : 'false');
+};
 
 // 阶段划分配置
 export const PHASES = [
@@ -28,8 +35,7 @@ export const getPhaseIndex = (phaseId) => {
 
 // 检查阶段是否通过日期开放（仅当开放日期已定义时生效）
 export const isPhaseUnlockedByDate = (phaseId) => {
-  // 测试后门：无视日期限制
-  if (BYPASS_DATE_LOCK) return true;
+  if (getBypassDateLock()) return true;
   
   if (!BASE_UNLOCK_DATE) return false;
   

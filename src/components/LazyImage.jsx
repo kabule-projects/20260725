@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+const ASSET_VERSION = 12;
+
 const LazyImage = ({ src, alt = '', className = '', onLoad, style }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -42,7 +44,7 @@ const LazyImage = ({ src, alt = '', className = '', onLoad, style }) => {
       )}
       {isInView && (
         <img
-          src={src}
+          src={`${src}${src.includes('?') ? '&' : '?'}v=${ASSET_VERSION}`}
           alt={alt}
           className={`w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
           onLoad={handleLoad}

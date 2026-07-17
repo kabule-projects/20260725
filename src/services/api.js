@@ -84,3 +84,5 @@ export const fetchAllLights = async () => {
     return storedLights ? JSON.parse(storedLights) : FALLBACK_LIGHTS;
   }
 };
+
+

@@ -5,12 +5,14 @@ import ProductCard from '../components/ProductCard';
 import Showcase from '../components/Showcase';
 import BillboardCharacter from '../components/BillboardCharacter';
 import { PRODUCTS } from '../data/products';
+import { setBypassDateLock, getBypassDateLock } from '../utils/accessControl';
 
 const Home = ({ lights }) => {
   const [dialogMessage, setDialogMessage] = useState('');
   const [messageKey, setMessageKey] = useState(0);
   const [totalLight, setTotalLight] = useState(0);
   const [allUnlocked, setAllUnlocked] = useState(false);
+  const [bypassActive, setBypassActive] = useState(getBypassDateLock());
 
   useEffect(() => {
     const stored = localStorage.getItem('memoryStore:fallbackLights');
@@ -30,6 +32,20 @@ const Home = ({ lights }) => {
     }).length;
     setAllUnlocked(unlockedCount === PRODUCTS.length);
   }, [lights]);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'e' || e.key === 'E') {
+        const newState = !bypassActive;
+        setBypassDateLock(newState);
+        setBypassActive(newState);
+        setMessageKey(prev => prev + 1);
+        setDialogMessage(newState ? '日期限制已解除' : '日期限制已启用');
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [bypassActive]);
 
   const handleProductClick = (product, message) => {
     setMessageKey(prev => prev + 1);

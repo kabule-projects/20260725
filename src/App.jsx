@@ -7,7 +7,7 @@ import WelcomePage from './pages/WelcomePage';
 import { fetchAllLights } from './services/api';
 import { usePolling } from './hooks/usePolling';
 
-const VERSION = 11;
+const VERSION = 12;
 const VERSION_KEY = 'memoryStore:version';
 const WELCOME_KEY = 'memoryStore:welcomeDate';
 
@@ -73,24 +73,18 @@ function App() {
       return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     };
 
-    const today = getTodayDate();
-    const lastRefresh = localStorage.getItem(LAST_REFRESH_KEY);
-
-    if (lastRefresh !== today) {
-      localStorage.setItem(LAST_REFRESH_KEY, today);
-      window.location.reload();
-      return;
-    }
-
     const now = new Date();
-    const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0);
-    const msUntilMidnight = midnight - now;
+    const nextRefresh = new Date(now);
+    nextRefresh.setHours(7, 25, 0, 0);
+    if (nextRefresh <= now) {
+      nextRefresh.setDate(nextRefresh.getDate() + 1);
+    }
+    const msUntilNextRefresh = nextRefresh - now;
 
     const timer = setTimeout(() => {
       localStorage.setItem(LAST_REFRESH_KEY, getTodayDate());
       window.location.reload();
-    }, msUntilMidnight);
+    }, msUntilNextRefresh);
 
     return () => clearTimeout(timer);
   }, []);
@@ -142,6 +136,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

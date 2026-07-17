@@ -5,7 +5,7 @@ import MiniGame from '../components/MiniGame';
 import PhotoGallery from '../components/PhotoGallery';
 import { contributeLight } from '../services/api';
 import { formatCooldown, calculateThreshold } from '../utils/brightness';
-import { getProductAccessStatus, calculateTotalLight, calculate2014Progress } from '../utils/accessControl';
+import { getProductAccessStatus, calculateTotalLight, calculate2014Progress, getProductPhase, isPhaseUnlockedByDate } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
 import ProductImage from '../components/ProductImage';
@@ -28,7 +28,7 @@ const GALLERY_IMAGES_2014 = [
 ];
 
 const COOLDOWN_KEY = (id) => `memoryStore:cooldown:${id}`;
-const COOLDOWN_DURATION = 30 * 1000;
+const COOLDOWN_DURATION = 120 * 1000;
 
 const Product = ({ lights, setLights }) => {
   const { id } = useParams();
@@ -39,6 +39,10 @@ const Product = ({ lights, setLights }) => {
   const [localFeedback, setLocalFeedback] = useState(false);
   const [cooldownRestored, setCooldownRestored] = useState(false);
   const [showFullscreenGame, setShowFullscreenGame] = useState(false);
+  const [showGalleryDialog, setShowGalleryDialog] = useState(false);
+
+  const GALLERY_DEADLINE = new Date('2026-07-18T00:00:00+08:00');
+  const isBeforeDeadline = new Date() < GALLERY_DEADLINE;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -94,8 +98,7 @@ const Product = ({ lights, setLights }) => {
       }));
       // Save cooldown timestamp to localStorage
       localStorage.setItem(COOLDOWN_KEY(id), Date.now().toString());
-      // setCooldown(600);
-      setCooldown(30);
+      setCooldown(Math.ceil(COOLDOWN_DURATION / 1000));
       // Reset gameCompleted after successful contribution
       setGameCompleted(false);
     } catch (error) {
@@ -116,23 +119,32 @@ const Product = ({ lights, setLights }) => {
 
   if (!product) return null;
 
-  // 判断 lights 是否已加载（非空对象）
+  const phase = getProductPhase(product.year);
+  const isDateUnlocked = phase ? isPhaseUnlockedByDate(phase.id) : false;
+
+  useEffect(() => {
+    if (!isDateUnlocked) {
+      window.location.href = '/';
+    }
+  }, [isDateUnlocked]);
+
+  if (!isDateUnlocked) {
+    return null;
+  }
+
   const isLightsLoaded = Object.keys(lights).length > 0;
   
-  // 只有在 lights 加载完成后才进行权限判断
   const accessStatus = isLightsLoaded ? getProductAccessStatus(product, lights, PRODUCTS) : 'loading';
   const isLocked = accessStatus === 'locked';
   const isUnlocked = accessStatus === 'unlocked';
   const isSilhouette = accessStatus === 'locked' || accessStatus === 'accessible';
 
-  // 锁定状态下重定向回首页（仅在数据加载完成后）
   useEffect(() => {
     if (isLightsLoaded && isLocked) {
       window.location.href = '/';
     }
   }, [isLightsLoaded, isLocked]);
 
-  // 数据未加载完成时显示加载状态
   if (!isLightsLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -406,8 +418,16 @@ const Product = ({ lights, setLights }) => {
               transition={{ duration: 0.5 }}
             >
               <h3 className="text-memory-accent text-lg mb-6 text-center">记忆刻印</h3>
-              <div className="pb-32">
+              <div className="pb-32 relative">
                 <PhotoGallery images={GALLERY_IMAGES_2014} lights={lights} products={PRODUCTS} />
+                {isBeforeDeadline && (
+                  <motion.div
+                    className="absolute inset-0 bg-transparent cursor-pointer z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={() => setShowGalleryDialog(true)}
+                  />
+                )}
               </div>
             </motion.div>
           )}
@@ -489,6 +509,41 @@ const Product = ({ lights, setLights }) => {
                   />
                 )}
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* 图集遮照对话框 */}
+        <AnimatePresence>
+          {showGalleryDialog && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowGalleryDialog(false)}
+            >
+              <motion.div
+                className="bg-memory-card/65 backdrop-blur-sm rounded-xl p-6 border border-memory-accent/30 shadow-lg max-w-sm mx-4"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="relative">
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-memory-card/95" />
+                  <p className="text-memory-glow/90 text-sm text-center leading-relaxed">
+                    似乎还没有什么能给他的……再等等看吧
+                  </p>
+                </div>
+                <motion.button
+                  className="mt-4 w-full py-2 text-memory-accent text-sm border border-memory-accent/50 rounded hover:bg-memory-accent/10 transition-colors"
+                  onClick={() => setShowGalleryDialog(false)}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  好的
+                </motion.button>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
