@@ -37,13 +37,11 @@ export const getPhaseIndex = (phaseId) => {
 export const isPhaseUnlockedByDate = (phaseId) => {
   if (getBypassDateLock()) return true;
   
-  if (!BASE_UNLOCK_DATE) return false;
-  
-  const phaseIndex = getPhaseIndex(phaseId);
-  const unlockDate = new Date(BASE_UNLOCK_DATE);
-  unlockDate.setDate(unlockDate.getDate() + phaseIndex);
+  const phase = PHASES.find(p => p.id === phaseId);
+  if (!phase || !phase.unlockDate) return false;
   
   const now = new Date();
+  const unlockDate = new Date(phase.unlockDate);
   return now >= unlockDate;
 };
 
