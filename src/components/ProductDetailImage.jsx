@@ -54,10 +54,11 @@ const ProductDetailImage = ({ year }) => {
           className="relative w-full max-w-[900px] mx-auto aspect-[3/4] rounded-lg overflow-hidden"
         >
           <LazyImage
-            src={url}
-            alt={`Detail ${index + 1}`}
-            className="w-full h-full object-contain bg-memory-dark/50"
-          />
+          src={url}
+          alt={`Detail ${index + 1}`}
+          className="w-full h-full object-contain bg-memory-dark/50"
+          preload={true}
+        />
         </div>
       ))}
     </div>

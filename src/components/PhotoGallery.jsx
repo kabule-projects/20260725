@@ -392,6 +392,7 @@ const PhotoGallery = ({ images, lights, products }) => {
                 src={image}
                 alt={`预览 ${index + 1}`}
                 className="w-full h-full object-cover"
+                preload={true}
               />
             ) : (
               <div className="w-full h-full bg-memory-dark flex items-center justify-center">

@@ -40,6 +40,7 @@ const ProductImage = ({ year, accessStatus, additionalClass = '' }) => {
           src={imageSrc}
           alt=""
           className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${additionalClass}`}
+          preload={true}
         />
       )}
     </div>

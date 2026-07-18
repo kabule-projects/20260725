@@ -8,6 +8,8 @@ import { formatCooldown, calculateThreshold } from '../utils/brightness';
 import { getProductAccessStatus, calculateTotalLight, calculate2014Progress, getProductPhase, isPhaseUnlockedByDate } from '../utils/accessControl';
 import { PRODUCTS } from '../data/products';
 import { GAME_CONFIGS } from '../data/gameConfigs';
+import { GAME_ASSETS } from '../data/gameAssets';
+import { usePreloadAssets } from '../hooks/usePreloadAssets';
 import ProductImage from '../components/ProductImage';
 import ProductDetailImage from '../components/ProductDetailImage';
 // 2014年图集图片
@@ -40,6 +42,9 @@ const Product = ({ lights, setLights }) => {
   const [cooldownRestored, setCooldownRestored] = useState(false);
   const [showFullscreenGame, setShowFullscreenGame] = useState(false);
   const [showGalleryDialog, setShowGalleryDialog] = useState(false);
+
+  const gameAssets = product?.gameType ? GAME_ASSETS[product.gameType] || [] : [];
+  const { loaded: gameLoaded, progress: gameProgress } = usePreloadAssets(gameAssets);
 
   const GALLERY_DEADLINE = new Date('2026-07-18T00:00:00+08:00');
   const isBeforeDeadline = new Date() < GALLERY_DEADLINE;
@@ -501,12 +506,22 @@ const Product = ({ lights, setLights }) => {
                     />
                   </div>
                 ) : (
-                  <MiniGame
-                    gameType={product.gameType}
-                    config={GAME_CONFIGS[product.id]}
-                    onComplete={() => setGameCompleted(true)}
-                    artist={product.gameArtist}
-                  />
+                  !gameLoaded ? (
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                      <svg className="w-12 h-12 text-memory-accent animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      <p className="text-memory-muted">加载游戏资源... {gameProgress}%</p>
+                    </div>
+                  ) : (
+                    <MiniGame
+                      gameType={product.gameType}
+                      config={GAME_CONFIGS[product.id]}
+                      onComplete={() => setGameCompleted(true)}
+                      artist={product.gameArtist}
+                    />
+                  )
                 )}
               </div>
             </motion.div>
