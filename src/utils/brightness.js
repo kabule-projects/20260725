@@ -2,7 +2,7 @@ export const calculateBrightness = (light, locked = false) => {
   if (locked) return 0.3;
 
   const minLight = 0;
-  const maxLight = 5200;
+  const maxLight = 2000;
   const minBrightness = 0.4;
   const maxBrightness = 1.0;
 
@@ -29,8 +29,8 @@ export const formatCooldown = (seconds) => {
 export const calculateThreshold = (year) => {
   const currentYear = 2026;
   const earliestYear = 2014;
-  const minThreshold = 2000;
-  const maxThreshold = 5200;
+  const minThreshold = 725;
+  const maxThreshold = 1920;
   
   const yearDifference = currentYear - year;
   const maxDifference = currentYear - earliestYear;
@@ -48,5 +48,5 @@ export const is2026Unlocked = (lights, products) => {
     return total + (lights[product.id] || 0);
   }, 0);
   
-  return totalLight >= 52000;
+  return totalLight >= 12900;
 };
