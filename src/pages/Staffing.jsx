@@ -47,7 +47,7 @@ const STAFFING_DATA = [
           { id: '@久不晚睡', years: '2018、2023' },
           { id: '@王久哔哔叭叭', years: '2019' },
           { id: '@茗酱白粥铺', years: '2019' },
-          { id: '@dontmind_冬麦', years: '2020' },
+          { id: '@冬麦dontmind', years: '2020' },
           { id: '@王工头又困了', years: '2021' },
           { id: '@大山深处的唢呐', years: '2022' },
           { id: '@邪恶小毛米', years: '2024' },
