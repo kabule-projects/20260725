@@ -219,7 +219,7 @@ const SortGame = ({ onComplete }) => {
       </div>
 
       <div className="flex justify-center">
-        <div className="relative w-[150px] h-[150px]">
+        <div className="relative w-[150px] h-[150px] border-2 border-memory-accent/50 rounded-xl">
           <div 
             className="absolute inset-0 rounded-xl bg-memory-dark/60 flex items-center justify-center"
             style={{ backgroundColor: isCorrect === false ? 'rgba(255, 100, 100, 0.3)' : undefined }}
@@ -249,8 +249,8 @@ const SortGame = ({ onComplete }) => {
             </AnimatePresence>
           </div>
           {!isDragging && (
-            <p className="absolute -bottom-6 left-0 right-0 text-center text-memory-accent/80 text-xs">
-              拖拽到正确的分类
+            <p className="absolute -bottom-9 -left-5 -right-5 text-center text-memory-accent/80 text-xs">
+              请将框内物品拖拽到正确的分类
             </p>
           )}
         </div>
