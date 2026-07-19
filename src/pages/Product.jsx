@@ -30,7 +30,7 @@ const GALLERY_IMAGES_2014 = [
 ];
 
 const COOLDOWN_KEY = (id) => `memoryStore:cooldown:${id}`;
-const COOLDOWN_DURATION = 120 * 1000;
+const COOLDOWN_DURATION = 60 * 1000;
 
 const Product = ({ lights, setLights }) => {
   const { id } = useParams();

@@ -49,7 +49,7 @@ const isOnCooldown = (productId, ip) => {
   if (!cooldown) return false;
 
   const elapsed = Date.now() - cooldown.timestamp;
-  return elapsed < 30 * 1000; // return elapsed < 10 * 60 * 1000;
+  return elapsed < 60 * 1000; // return elapsed < 10 * 60 * 1000;
 };
 
 const getRemainingCooldown = (productId, ip) => {
@@ -76,7 +76,7 @@ const setCooldown = (productId, ip) => {
 const cleanExpiredCooldowns = () => {
   const data = readData();
   const now = Date.now();
-  const expireTime = 5 * 60 * 1000;
+  const expireTime = 60 * 1000;
   let changed = false;
 
   for (const key in data.cooldowns) {
