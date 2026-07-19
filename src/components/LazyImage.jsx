@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const ASSET_VERSION = 12;
+const ASSET_VERSION = 13;
 
 const LazyImage = ({ src, alt = '', className = '', onLoad, style, preload = false }) => {
   const [isLoaded, setIsLoaded] = useState(false);
