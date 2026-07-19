@@ -7,7 +7,8 @@ const ROUNDS = [
   { id: 2, type: 'hold', title: '准备出国啦！', description: '有好好准备哦' },
   { id: 3, type: 'tap', title: '点击按下正确琴键', description: '什么时候开始学习都不晚' },
   { id: 4, type: 'hold', title: '巡回演唱会加油加油加油！', description: '终于要见面啦' },
-  { id: 5, type: 'tap', title: '点击发布专辑', description: '不能再改了！' },
+  { id: 5, type: 'tap', title: '点击拍摄写真', description: '摆好pose哦' },
+  { id: 6, type: 'hold', title: '按住发布专辑', description: '别松开！不能再改了！' },
 ];
 
 const TARGET_ZONE_WIDTH = 20; // 目标区域占bar宽度的百分比
@@ -192,6 +193,12 @@ const TapGame = ({ onComplete }) => {
       return isRoundSuccess ? '/images/tap/b2.webp' : '/images/tap/b1.webp';
     } else if (currentRoundIndex === 2) {
       return '/images/tap/c1.webp';
+    } else if (currentRoundIndex === 3) {
+      return isRoundSuccess ? '/images/tap/d2.webp' : '/images/tap/d1.webp';
+    } else if (currentRoundIndex === 4) {
+      return isRoundSuccess ? '/images/tap/f2.webp' : '/images/tap/f1.webp';
+    } else if (currentRoundIndex === 5) {
+      return isRoundSuccess ? '/images/tap/e2.webp' : '/images/tap/e1.webp';
     }
     return null;
   };
@@ -237,7 +244,7 @@ const TapGame = ({ onComplete }) => {
       {/* 进度点下方图片 - 修改 w-[120px] 调整大小 */}
       {getRoundImage() && (
         <div className="flex justify-center mb-4">
-          <div className="relative">
+          <div className="relative bg-white">
             <img
               src={getRoundImage()}
               alt=""
@@ -367,7 +374,7 @@ const TapGame = ({ onComplete }) => {
           {/* 进度点下方图片 - 修改 w-[120px] 调整大小 */}
           {getRoundImage() && (
             <div className="flex justify-center mb-4">
-              <div className="relative">
+              <div className="relative bg-white">
                 <img
                   src={getRoundImage()}
                   alt=""
