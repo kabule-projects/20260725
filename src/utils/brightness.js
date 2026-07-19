@@ -48,5 +48,5 @@ export const is2026Unlocked = (lights, products) => {
     return total + (lights[product.id] || 0);
   }, 0);
   
-  return totalLight >= 12900;
+  return totalLight >= 25700;
 };
