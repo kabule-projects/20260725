@@ -2,25 +2,38 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const BINS = [
-  { id: 'bin1', category: 'category1', label: '类别1', image: '/images/sort/bin1.webp' },
-  { id: 'bin2', category: 'category2', label: '类别2', image: '/images/sort/bin2.webp' },
-  { id: 'bin3', category: 'category3', label: '类别3', image: '/images/sort/bin3.webp' },
-  { id: 'bin4', category: 'category4', label: '类别4', image: '/images/sort/bin4.webp' },
+  { id: 'bin1', category: '9.29', label: '9.29Hz', image: '/images/sort/bin1.webp' },
+  { id: 'bin2', category: 'sss', label: '深深的', image: '/images/sort/bin2.webp' },
+  { id: 'bin3', category: 'cono', label: 'coco & nono', image: '/images/sort/bin3.webp' },
+  { id: 'bin4', category: 'single', label: '单曲', image: '/images/sort/bin4.webp' },
 ];
 
 const ITEMS = [
-  { id: 1, category: 'category1', image: '/images/sort/item1.webp' },
-  { id: 2, category: 'category2', image: '/images/sort/item2.webp' },
-  { id: 3, category: 'category3', image: '/images/sort/item3.webp' },
-  { id: 4, category: 'category4', image: '/images/sort/item4.webp' },
-  { id: 5, category: 'category1', image: '/images/sort/item5.webp' },
-  { id: 6, category: 'category2', image: '/images/sort/item6.webp' },
-  { id: 7, category: 'category3', image: '/images/sort/item7.webp' },
-  { id: 8, category: 'category4', image: '/images/sort/item8.webp' },
+  { id: 1, categories: ['9.29'], image: '/images/sort/1.webp' },
+  { id: 2, categories: ['9.29'], image: '/images/sort/2.webp' },
+  { id: 3, categories: ['9.29'], image: '/images/sort/3.webp' },
+  { id: 4, categories: ['sss'], image: '/images/sort/4.webp' },
+  { id: 5, categories: ['cono'], image: '/images/sort/5.webp' },
+  { id: 6, categories: ['cono'], image: '/images/sort/6.webp' },
+  { id: 7, categories: ['single'], image: '/images/sort/7.webp' },
+  { id: 8, categories: ['cono'], image: '/images/sort/8.webp' },
+  { id: 9, categories: ['single'], image: '/images/sort/9.webp' },
+  { id: 10, categories: ['9.29', 'sss'], image: '/images/sort/10.webp' },
+  { id: 11, categories: ['sss'], image: '/images/sort/11.webp' },
+  { id: 12, categories: ['single'], image: '/images/sort/12.webp' },
 ];
 
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 const SortGame = ({ onComplete }) => {
-  const [items, setItems] = useState([...ITEMS]);
+  const [items, setItems] = useState(() => shuffleArray([...ITEMS]));
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [targetBin, setTargetBin] = useState(null);
@@ -87,7 +100,7 @@ const SortGame = ({ onComplete }) => {
     
     if (targetBin) {
       const bin = BINS.find(b => b.id === targetBin);
-      if (bin && currentItem.category === bin.category) {
+      if (bin && currentItem.categories.includes(bin.category)) {
         setIsCorrect(true);
         setScore(prev => prev + 1);
         
@@ -150,17 +163,20 @@ const SortGame = ({ onComplete }) => {
 
   if (gameState === 'win') {
     return (
-      <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
-        <div className="text-center py-8">
-          <h2 className="text-memory-glow text-xl mb-4">分类完成！</h2>
-          <p className="text-memory-accent">所有物品已正确分类</p>
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="relative w-full px-[12%] py-[9%] bg-memory-dark/50 rounded-lg p-4 select-none">
+          <div className="text-center py-8">
+            <h2 className="text-memory-glow text-xl mb-4">分类完成！</h2>
+            <p className="text-memory-accent">所有物品已正确分类</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full max-w-[340px] mx-auto bg-memory-dark/50 rounded-lg surreal-border p-4 select-none">
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="relative w-full px-[12%] py-[9%] bg-memory-dark/50 rounded-lg p-4 select-none">
       <div className="flex justify-center mb-4">
         <h2 className="text-memory-glow text-lg">分类整理</h2>
       </div>
@@ -185,10 +201,10 @@ const SortGame = ({ onComplete }) => {
           <motion.div
             key={bin.id}
             data-bin={bin.id}
-            className={`relative aspect-square rounded-xl border-2 flex flex-col items-center justify-center p-2 transition-all ${
+            className={`relative aspect-square rounded-xl flex items-center justify-center transition-all ${
               targetBin === bin.id 
-                ? 'border-memory-accent bg-memory-accent/20 scale-105' 
-                : 'border-memory-accent/30 bg-memory-dark/40'
+                ? 'bg-memory-accent/20 scale-105' 
+                : 'bg-memory-dark/40'
             }`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -196,17 +212,16 @@ const SortGame = ({ onComplete }) => {
             <img
               src={bin.image}
               alt={bin.label}
-              className="w-[60px] h-[60px] object-contain"
+              className="w-full h-full object-cover rounded-xl"
             />
-            <p className="text-memory-glow/80 text-xs mt-2">{bin.label}</p>
           </motion.div>
         ))}
       </div>
 
       <div className="flex justify-center">
-        <div className="relative w-[120px] h-[120px]">
+        <div className="relative w-[150px] h-[150px]">
           <div 
-            className="absolute inset-0 rounded-xl bg-memory-dark/60 border-2 border-memory-accent/30 flex items-center justify-center"
+            className="absolute inset-0 rounded-xl bg-memory-dark/60 flex items-center justify-center"
             style={{ backgroundColor: isCorrect === false ? 'rgba(255, 100, 100, 0.3)' : undefined }}
           >
             <AnimatePresence mode="wait">
@@ -214,7 +229,7 @@ const SortGame = ({ onComplete }) => {
                 <div
                   key={currentItem.id}
                   ref={itemRef}
-                  className="w-[100px] h-[100px] cursor-grab active:cursor-grabbing"
+                  className="w-[150px] h-[150px] cursor-grab active:cursor-grabbing"
                   draggable={false}
                   onMouseDown={handleDragStart}
                   onTouchStart={handleDragStart}
@@ -234,11 +249,12 @@ const SortGame = ({ onComplete }) => {
             </AnimatePresence>
           </div>
           {!isDragging && (
-            <p className="absolute -bottom-6 left-0 right-0 text-center text-memory-muted/60 text-xs">
+            <p className="absolute -bottom-6 left-0 right-0 text-center text-memory-accent/80 text-xs">
               拖拽到正确的分类
             </p>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
