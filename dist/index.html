@@ -8,7 +8,23 @@
     <meta name="description" content="Shen'Storey - A surreal archive of memories from 2014-2026" />
     <title>Shen'Storey</title>
     <script type="text/javascript">
-      // Single Page Application routing fix for GitHub Pages
+      (function() {
+        var LAST_REFRESH_KEY = 'memoryStore:lastRefreshDate';
+        var now = new Date();
+        var today = now.getFullYear() + '-' + 
+          String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+          String(now.getDate()).padStart(2, '0');
+        var lastRefresh = localStorage.getItem(LAST_REFRESH_KEY);
+        
+        if (lastRefresh !== today) {
+          localStorage.setItem(LAST_REFRESH_KEY, today);
+          if (lastRefresh !== null) {
+            window.location.reload();
+          }
+        }
+      }());
+    </script>
+    <script type="text/javascript">
       (function() {
         var l = window.location;
         if (l.search) {
@@ -25,8 +41,8 @@
         }
       }());
     </script>
-    <script type="module" crossorigin src="/assets/index-BEE32U7J.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BhLnsnno.css">
+    <script type="module" crossorigin src="/assets/index-DmSk6NLg.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B8etC0M9.css">
   </head>
   <body>
     <div id="root"></div>
