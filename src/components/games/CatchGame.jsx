@@ -365,6 +365,9 @@ const CatchGame = ({ onComplete }) => {
           >
             <img src={PLAYER_TEXTURE} alt="" className="w-full h-auto" />
           </div>
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-memory-dark/80 text-memory-accent text-xs px-3 py-1 rounded-full z-30">
+            此处为自动播放
+          </div>
         </div>
       </div>
     );
@@ -527,6 +530,9 @@ const CatchGame = ({ onComplete }) => {
             onTouchMove={handleTouchMove}
             onDragStart={(e) => e.preventDefault()}
           >
+            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-memory-dark/80 text-memory-accent text-xs px-3 py-1 rounded-full z-30">
+              此处需要操作
+            </div>
             {blocks.map(block => (
               !block.caught && (
                 <motion.div

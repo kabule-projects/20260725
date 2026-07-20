@@ -28,35 +28,7 @@ curl http://43.129.250.140/api/export | python3 -m json.tool > backend/data/stor
 
 
 
-cd /root/20260725
 
-# 1. 丢弃不需要的修改
-git restore backend/data/store.json
-git restore docs/
-
-# 2. 删除 Linux 特定的 node_modules
-rm -rf node_modules/@esbuild/linux-x64/
-rm -rf node_modules/@rollup/rollup-linux-x64-gnu/
-rm -rf node_modules/@rollup/rollup-linux-x64-musl/
-rm -rf node_modules/.package-lock.json
-
-# 3. 拉取最新代码
-git pull
-
-# 4. 重新安装依赖
-npm install
-
-# 5. 构建
-npm run build
-
-# 复制 dist 到网站目录
-sudo mkdir -p /var/www/20260725
-sudo cp -r /root/20260725/dist/* /var/www/20260725/
-sudo chown -R www-data:www-data /var/www/20260725/
-sudo chmod -R 755 /var/www/20260725/
-
-# 重载 Nginx
-sudo systemctl reload nginx
 
 
 
@@ -168,3 +140,37 @@ cd ~/20260725 && bash deploy/deploy-server.sh
 
 cd ~/20260725
 node scripts/fetch-store.js
+
+
+
+
+
+cd /root/20260725
+
+# 1. 丢弃不需要的修改
+git restore backend/data/store.json
+git restore docs/
+
+# 2. 删除 Linux 特定的 node_modules
+rm -rf node_modules/@esbuild/linux-x64/
+rm -rf node_modules/@rollup/rollup-linux-x64-gnu/
+rm -rf node_modules/@rollup/rollup-linux-x64-musl/
+rm -rf node_modules/.package-lock.json
+
+# 3. 拉取最新代码
+git pull
+
+# 4. 重新安装依赖
+npm install
+
+# 5. 构建
+npm run build
+
+# 复制 dist 到网站目录
+sudo mkdir -p /var/www/20260725
+sudo cp -r /root/20260725/dist/* /var/www/20260725/
+sudo chown -R www-data:www-data /var/www/20260725/
+sudo chmod -R 755 /var/www/20260725/
+
+# 重载 Nginx
+sudo systemctl reload nginx
