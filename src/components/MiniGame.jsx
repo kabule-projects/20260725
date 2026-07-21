@@ -56,7 +56,7 @@ const MiniGame = ({ gameType, onComplete, config, artist }) => {
     <div className="relative w-full h-full">
       {initialized && renderGame()}
       {artist && (
-        <div className="absolute bottom-2 right-2 text-xs text-white/60 bg-black/30 px-2 py-1 rounded">
+        <div className="absolute bottom-2 right-2 text-xs text-white/60 bg-black/30 px-2 py-1 rounded pointer-events-none">
           {artist}
         </div>
       )}
