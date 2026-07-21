@@ -76,7 +76,7 @@ const setCooldown = (productId, ip) => {
 const cleanExpiredCooldowns = () => {
   const data = readData();
   const now = Date.now();
-  const expireTime = 60 * 1000;
+  const expireTime = 30 * 1000;
   let changed = false;
 
   for (const key in data.cooldowns) {
@@ -197,4 +197,5 @@ app.get('/api/export', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Memory Store backend running on port ${PORT}`);
+  setInterval(cleanExpiredCooldowns, 10 * 60 * 1000);
 });
