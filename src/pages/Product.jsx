@@ -163,7 +163,7 @@ const Product = ({ lights, setLights }) => {
   const isFullyIlluminated = isUnlocked;
 
   const totalLight = calculateTotalLight(lights, PRODUCTS);
-  const YEAR_2026_TOTAL_THRESHOLD = 72500;
+  const YEAR_2026_TOTAL_THRESHOLD = 25700;
   let progress = 0;
   
   if (product.year === 2014) {

@@ -26,7 +26,7 @@ const Home = ({ lights }) => {
     
     const unlockedCount = PRODUCTS.filter(product => {
       const light = currentLights[product.id] || 0;
-      const threshold = product.year === 2026 ? 72500 : 
+      const threshold = product.year === 2026 ? 25700 : 
         Math.round(product.year === 2014 ? 0 : (product.year - 2013) * 500);
       return light >= threshold;
     }).length;
