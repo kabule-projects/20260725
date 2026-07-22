@@ -187,7 +187,7 @@ export const PRODUCTS = [
     description: "镇店之宝？不是的。你现在看到的是本店的核心能源。\n老板向来精心养护，更不吝向世人展示它们的美丽。",
     image: '/images/2026.jpg',
     gameType: "whack",
-    videoUrl: "https://www.bilibili.com/video/BV11RKV6eETs/",
+    videoUrl: "https://player.bilibili.com/player.html?bvid=BV11RKV6eETs&page=1&autoplay=1&high_quality=1&danmaku=1",
     locked: true,
     moreInfo: {
       image: '/images/2026-reveal.jpg',
