@@ -42,6 +42,26 @@ const Product = ({ lights, setLights }) => {
   const [cooldownRestored, setCooldownRestored] = useState(false);
   const [showFullscreenGame, setShowFullscreenGame] = useState(false);
   const [showGalleryDialog, setShowGalleryDialog] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [forceMobile, setForceMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile(checkMobile);
+  }, []);
+
+  // 后门：按 M 键切换移动端视图（用于测试B站跳转按钮）
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'm' || e.key === 'M') {
+        setForceMobile(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
+  const showMobileView = isMobile || forceMobile;
 
   const gameAssets = product?.gameType ? GAME_ASSETS[product.gameType] || [] : [];
   const { loaded: gameLoaded, progress: gameProgress } = usePreloadAssets(gameAssets);
@@ -495,16 +515,46 @@ const Product = ({ lights, setLights }) => {
                   </motion.div>
                 ) : product.videoUrl ? (
                   // B站视频嵌入模式
-                  <div className="w-full max-w-3xl aspect-video">
-                    <iframe
-                      src={product.videoUrl}
-                      className="w-full h-full rounded-lg"
-                      allow="autoplay; fullscreen"
-                      scrolling="no"
-                      frameBorder="0"
-                      title="B站视频"
-                    />
-                  </div>
+                  showMobileView ? (
+                    // 移动端
+                    (() => {
+                      const bvid = 'BV11RKV6eETs';
+                      const videoLink = bvid ? `https://www.bilibili.com/video/${bvid}/` : product.videoUrl;
+                      return (
+                        <a
+                          href={videoLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col items-center justify-center w-full max-w-3xl aspect-video bg-memory-dark/80 border border-memory-muted/20 rounded-lg hover:bg-memory-dark/60 transition-colors group"
+                        >
+                          <div className="flex flex-col items-center space-y-3">
+                            <div className="w-16 h-16 rounded-full bg-memory-accent/20 flex items-center justify-center group-hover:bg-memory-accent/40 transition-colors">
+                              <svg className="w-8 h-8 text-memory-accent ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                            <p className="text-memory-light text-sm">监测到移动端</p>
+                            <p className="text-memory-light text-sm">点击跳转Bilibili观看视频</p>
+                          </div>
+                        </a>
+                      );
+                    })()
+                  ) : (
+                    // 桌面端：iframe 嵌入播放器
+                    <div className="w-full max-w-3xl aspect-video">
+                      <iframe
+                        src={product.videoUrl}
+                        className="w-full h-full rounded-lg"
+                        scrolling="no"
+                        border="0"
+                        frameBorder="no"
+                        framespacing="0"
+                        allowfullscreen="true"
+                        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                        title="B站视频"
+                      />
+                    </div>
+                  )
                 ) : (
                   !gameLoaded ? (
                     <div className="flex flex-col items-center justify-center space-y-4">
