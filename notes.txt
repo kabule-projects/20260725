@@ -210,3 +210,12 @@ for (const key in data.cooldowns) {
 fs.writeFileSync('data/store.json', JSON.stringify(data, null, 2));
 console.log('删除了', deleted, '条过期记录');
 "
+
+
+
+
+# 1. 杀死占用端口3001的进程
+lsof -ti:3001 | xargs kill -9
+
+# 2. 重启后端服务
+pm2 restart memory-store
