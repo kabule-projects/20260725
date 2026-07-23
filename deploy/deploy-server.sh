@@ -27,4 +27,7 @@ sudo chmod -R 755 $WEB_DIR
 echo "===== 5. 重载 Nginx ====="
 sudo nginx -t && sudo systemctl reload nginx
 
+echo "===== 6. 重启后端服务 ====="
+pm2 restart memory-store 2>/dev/null || pm2 start $PROJECT_DIR/backend/server.js --name memory-store
+
 echo "===== 部署完成 ====="

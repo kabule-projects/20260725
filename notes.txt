@@ -174,3 +174,39 @@ sudo chmod -R 755 /var/www/20260725/
 
 # 重载 Nginx
 sudo systemctl reload nginx
+
+
+
+
+
+# 1. 重启后端服务
+cd ~/20260725/backend
+pm2 restart 20260725  # 如果用 pm2 管理
+# 或者
+pkill -f "node server.js"
+nohup node server.js > /dev/null 2>&1 &
+
+# 2. 验证定时任务是否生效
+# 查看服务器日志，确认启动信息
+tail -20 ~/20260725/backend/server.log
+
+
+
+
+
+
+
+cd ~/20260725/backend && node -e "
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync('data/store.json', 'utf8'));
+const now = Date.now();
+let deleted = 0;
+for (const key in data.cooldowns) {
+  if (now - data.cooldowns[key].timestamp > 30000) {
+    delete data.cooldowns[key];
+    deleted++;
+  }
+}
+fs.writeFileSync('data/store.json', JSON.stringify(data, null, 2));
+console.log('删除了', deleted, '条过期记录');
+"
