@@ -50,16 +50,24 @@ const Product = ({ lights, setLights }) => {
     setIsMobile(checkMobile);
   }, []);
 
-  // 后门：按 M 键切换移动端视图（用于测试B站跳转按钮）
+  // 后门：两步激活模式 - 先按 Ctrl+Shift+\ 激活，然后5秒内按 M 键切换移动端视图
+  const [backdoorActive, setBackdoorActive] = useState(false);
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'm' || e.key === 'M') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\')) {
+        setBackdoorActive(true);
+        setTimeout(() => setBackdoorActive(false), 5000);
+        return;
+      }
+      if (backdoorActive && (e.key === 'm' || e.key === 'M')) {
         setForceMobile(prev => !prev);
+        setBackdoorActive(false);
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, []);
+  }, [backdoorActive]);
 
   const showMobileView = isMobile || forceMobile;
 

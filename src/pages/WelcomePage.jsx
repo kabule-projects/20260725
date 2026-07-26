@@ -40,16 +40,24 @@ const WelcomePage = ({ onStart }) => {
   const [buttonVisible, setButtonVisible] = useState(false);
   const [businessMessage, setBusinessMessage] = useState('');
 
-  // 后门：按 Q 键强制显示推门按钮
+  // 后门：两步激活模式 - 先按 Ctrl+Shift+\ 激活，然后5秒内按 Q 键强制显示推门按钮
+  const [backdoorActive, setBackdoorActive] = useState(false);
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'q' || e.key === 'Q') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\')) {
+        setBackdoorActive(true);
+        setTimeout(() => setBackdoorActive(false), 5000);
+        return;
+      }
+      if (backdoorActive && (e.key === 'q' || e.key === 'Q')) {
         setShowButton(true);
+        setBackdoorActive(false);
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, []);
+  }, [backdoorActive]);
 
   // 更新营业时间提示
   useEffect(() => {

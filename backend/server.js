@@ -198,20 +198,4 @@ app.get('/api/export', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Memory Store backend running on port ${PORT}`);
   setInterval(cleanExpiredCooldowns, 10 * 60 * 1000);
-}).on('error', (err) => {
-  console.error('Server listen error:', err);
-  if (err.code === 'EADDRINUSE') {
-    console.error('Port', PORT, 'is already in use. Trying to kill existing process...');
-    process.exit(1);
-  }
-});
-
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
-});
-
-process.on('SIGINT', () => {
-  console.log('Shutting down...');
-  process.exit(0);
 });

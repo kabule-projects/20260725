@@ -33,19 +33,27 @@ const Home = ({ lights }) => {
     setAllUnlocked(unlockedCount === PRODUCTS.length);
   }, [lights]);
 
+  const [backdoorActive, setBackdoorActive] = useState(false);
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'e' || e.key === 'E') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\')) {
+        setBackdoorActive(true);
+        setTimeout(() => setBackdoorActive(false), 5000);
+        return;
+      }
+      if (backdoorActive && (e.key === 'e' || e.key === 'E')) {
         const newState = !bypassActive;
         setBypassDateLock(newState);
         setBypassActive(newState);
         setMessageKey(prev => prev + 1);
         setDialogMessage(newState ? '日期限制已解除' : '日期限制已启用');
+        setBackdoorActive(false);
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [bypassActive]);
+  }, [bypassActive, backdoorActive]);
 
   const handleProductClick = (product, message) => {
     setMessageKey(prev => prev + 1);

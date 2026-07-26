@@ -109,16 +109,24 @@ function App() {
     setShowWelcome(false);
   };
 
-  // 后门：按 W 键回到 welcome page
+  // 后门：两步激活模式 - 先按 Ctrl+Shift+\ 激活，然后5秒内按 W 键回到 welcome page
+  const [backdoorActive, setBackdoorActive] = useState(false);
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'w' || e.key === 'W') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\')) {
+        setBackdoorActive(true);
+        setTimeout(() => setBackdoorActive(false), 5000);
+        return;
+      }
+      if (backdoorActive && (e.key === 'w' || e.key === 'W')) {
         setShowWelcome(true);
+        setBackdoorActive(false);
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, []);
+  }, [backdoorActive]);
 
   return (
     <div className="min-h-screen relative">
